@@ -6,8 +6,24 @@
   <meta name="color-scheme" content="light dark" />
   
   <title>Hacknight #355 – Enabling Citizen-Sourced Speeding Data Using Raspberry Pi and Motion Tracking</title>
-  <meta name="description" content="By using open source motion tracking software, regular citizens can now build their very own speed camera at a reasonable price. With vehicle collisions at an all-time high in Toronto and little enforcement (or innovation) to address the issue, we will review how citizens can share self-generated data to help fill a key data gap on the where, when and who of dangerous vehicle speeds. If you have interest in the road safety in our communities and/or experience with Raspberry Pi, python, sqlite, ML (opencv), project management or road design policy, we'd love to get your feedback and involvement in this project!" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="By using open source motion tracking software, regular citizens can now build their very own speed camera at a reasonable price. With vehicle collisions at an all-time high in Toronto and little enforcement (or innovation) to address the issue, we will review how citizens can share self-generated data to help fill a key data gap on the where, when and who of dangerous vehicle speeds. If you have interest in the road safety in our communities and/or experience with Raspberry Pi, python, sqlite, ML (opencv), project management or road design policy, we&#39;d love to get your feedback and involvement in this project!" />
+  <meta property="og:title" content="Hacknight #355 – Enabling Citizen-Sourced Speeding Data Using Raspberry Pi and Motion Tracking" />
+  <meta property="og:description" content="By using open source motion tracking software, regular citizens can now build their very own speed camera at a reasonable price. With vehicle collisions at an all-time high in Toronto and little enforcement (or innovation) to address the issue, we will review how citizens can share self-generated data to help fill a key data gap on the where, when and who of dangerous vehicle speeds. If you have interest in the road safety in our communities and/or experience with Raspberry Pi, python, sqlite, ML (opencv), project management or road design policy, we&#39;d love to get your feedback and involvement in this project!" />
+  <meta property="og:url" content="/hacknights/355/" />
+  <meta property="og:site_name" content="Civic Tech Toronto" />
   
+  
+    <meta property="og:video" content="https://www.youtube.com/watch?v=vMzFjyMBfLs" />
+    <meta property="og:image" content="https://img.youtube.com/vi/vMzFjyMBfLs/maxresdefault.jpg" />
+    <meta name="twitter:player" content="https://www.youtube.com/embed/vMzFjyMBfLs" />
+  
+  
+  <meta name="twitter:title" content="Hacknight #355 – Enabling Citizen-Sourced Speeding Data Using Raspberry Pi and Motion Tracking" />
+  <meta name="twitter:description" content="By using open source motion tracking software, regular citizens can now build their very own speed camera at a reasonable price. With vehicle collisions at an all-time high in Toronto and little enforcement (or innovation) to address the issue, we will review how citizens can share self-generated data to help fill a key data gap on the where, when and who of dangerous vehicle speeds. If you have interest in the road safety in our communities and/or experience with Raspberry Pi, python, sqlite, ML (opencv), project management or road design policy, we&#39;d love to get your feedback and involvement in this project!" />
+  <meta name="twitter:image" content="/hacknight_355.jpg" />  <!-- to be added default: '/assets/default-og.jpg' | -->
+
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.pumpkin.min.css" />
   <link rel="stylesheet" href="/assets/css/custom.css" />
 
@@ -328,155 +344,6 @@ David Cass is a techie, a tinkerer, a husband and a father. He believes, if wiel
         
           
         
-          
-        
-      
-    
-    
-  
-
-  
-  
-    
-    
-    
-  
-
-  
-  
-    
-    
-    
-  
-
-  
-  
-    
-    
-    
-  
-
-  
-  
-    
-    
-      
-      
-        
-          
-        
-          
-        
-          
-        
-      
-    
-    
-  
-
-  
-  
-    
-    
-    
-  
-
-  
-  
-    
-    
-      
-      
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      
-    
-    
-  
-
-  
-  
-    
-    
-    
-  
-
-  
-  
-    
-    
-    
-  
-
-  
-  
-    
-    
-      
-      
-        
-          
-        
-          
-        
-      
-    
-    
-  
-
-  
-  
-    
-    
-    
-  
-
-  
-  
-    
-    
-      
-      
-        
-          
-        
-          
-        
-      
-    
-    
-  
-
-  
-  
-    
-    
-    
-  
-
-  
-  
-    
-    
-    
-  
-
-  
-  
-    
-    
-      
-      
-        
-          
-        
       
     
     
@@ -523,6 +390,141 @@ David Cass is a techie, a tinkerer, a husband and a father. He believes, if wiel
   
     
     
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+    
+    
+  
+
+  
+  
+    
+    
+    
+  
+
+  
+  
+    
+    
+      
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+    
+    
+  
+
+  
+  
+    
+    
+    
+  
+
+  
+  
+    
+    
+      
+      
+        
+          
+        
+          
+        
+      
+    
+    
+  
+
+  
+  
+    
+    
+    
+  
+
+  
+  
+    
+    
+      
+      
+        
+          
+        
+          
+        
+      
+    
+    
+  
+
+  
+  
+    
+    
+      
+      
+        
+          
+        
+      
+    
+    
+  
+
+  
+  
+    
+    
+    
+  
+
+  
+  
+    
+    
+      
+      
+        
+          
+        
+      
+    
+    
+  
+
+  
+  
+    
+    
+      
+      
+        
+          
+        
+          
+        
+      
+    
     
   
 
@@ -550,6 +552,39 @@ David Cass is a techie, a tinkerer, a husband and a father. He believes, if wiel
   
   
     
+    
+    
+  
+
+  
+  
+    
+    
+    
+  
+
+  
+  
+    
+    
+    
+  
+
+  
+  
+    
+    
+    
+  
+
+  
+  
+    
+    
+      
+      
+        
+      
     
     
   
