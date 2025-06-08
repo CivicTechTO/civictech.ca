@@ -1,33 +1,50 @@
-/* === Badges (for Topic Tags) === */
-.badge {
+/* Mobile-first: hide desktop buttons, show mobile links */
+.mobile-only {
   display: inline-block;
-  padding: 0.25rem 0.5rem;
-  margin: 0.1rem 0.2rem;
-  font-size: 0.75rem;
-  border-radius: var(--pico-border-radius);
-  background-color: var(--pico-muted-border-color);
-  color: var(--pico-color);
-  text-decoration: none;
-  transition: background-color 0.2s ease, color 0.2s ease;
 }
-.badge:hover {
-  background-color: var(--pico-border-color);
-  color: var(--pico-color);
+.desktop-only {
+  display: none;
 }
 
-.topic-tags {
-  margin-top: 0.5rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+/* Show buttons inline on larger screens */
+@media (min-width: 768px) {
+  .mobile-only {
+    display: none;
+  }
+  .desktop-only {
+    display: inline-block;
+  }
+
+  nav .dropdown ul {
+    min-width: 12rem;
+  }
 }
 
-.badge-topic {
-  background-color: var(--pico-primary-background);
-  color: var(--pico-primary-inverse);
+
+
+/* ==========================================================================
+   CUSTOM.CSS
+   Last Updated: 2025-06-07
+   Purpose: Extend Pico.css with custom responsive layouts and components
+   --------------------------------------------------------------------------
+   TABLE OF CONTENTS
+   --------------------------------------------------------------------------
+   01. Utility Classes
+   02. Layouts
+   03. Components
+   04. Page-Specific Styles
+   05. Responsive Adjustments
+   ==========================================================================
+*/
+
+/* === 01. Utility Classes === */
+.custom_grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
-/* === Main Content + Sidebar Layout === */
+/* === 02. Layouts === */
 .main-with-sidebar {
   display: grid;
   grid-template-areas:
@@ -46,114 +63,50 @@
   grid-area: sidebar;
 }
 
-@media (min-width: 768px) {
-  .main-with-sidebar {
-    grid-template-areas: "main sidebar";
-    grid-template-columns: 3fr 1fr;
-  }
-}
-
-/* === Breadcrumb Margin === */
-nav[aria-label="breadcrumb"] {
-  margin-bottom: 1rem;
-}
-
-/* === Tag Collections / Namespace Tags === */
-.tag-collection,
-.namespace-tags {
-  margin-bottom: 2rem;
-}
-
-.tag-collection h3,
-.namespace-tags h3 {
-  margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.tag-collection ul,
-.namespace-tags ul {
-  list-style-type: disc;
-  padding-left: 1.5rem;
-}
-
-.tag-collection ul li,
-.namespace-tags ul li {
-  margin-bottom: 0.5rem;
-}
-
-/* === Related Articles Layout === */
-.related-articles article {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-@media (max-width: 575px) {
-  .related-articles article {
-    flex-direction: column;
-    align-items: stretch;
-    text-align: center;
-  }
-}
-
-/* === Person Page Sections === */
-.person-description,
-.person-organizations,
-.person-projects,
-.person-social,
-.person-backlinks {
-  margin-top: 2rem;
-}
-
-.person-description p,
-.person-description div {
-  margin-top: 0.5rem;
-}
-
-.person-organizations ul,
-.person-projects ul,
-.person-social ul,
-.person-backlinks ul {
-  list-style-type: disc;
-  padding-left: 1.5rem;
-}
-
-.person-organizations ul li,
-.person-projects ul li,
-.person-social ul li,
-.person-backlinks ul li {
-  margin-bottom: 0.5rem;
-}
-
-/* === Resource Page Styling === */
-.resource-details,
-.resource-tags,
-.resource-body {
-  margin-top: 2rem;
-}
-
-/* === Card Grid Layout === */
 .card-grid {
   display: grid;
   gap: 1rem;
   grid-template-columns: 1fr;
 }
 
-@media (min-width: 576px) {
-  .card-grid {
-    grid-template-columns: 1fr 1fr;
-  }
+/* === 03. Components === */
+
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  margin: 0.1rem 0.2rem;
+  font-size: 0.75rem;
+  border-radius: var(--pico-border-radius);
+  background-color: var(--pico-muted-border-color);
+  color: var(--pico-color);
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-@media (min-width: 1024px) {
-  .card-grid {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
+.badge:hover {
+  background-color: var(--pico-border-color);
+  color: var(--pico-color);
 }
 
-/* === Card Base Style === */
+.topic-tags {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.badge-topic {
+  background-color: var(--pico-primary-background);
+  color: var(--pico-primary-inverse);
+}
+
+/* Breadcrumb */
+nav[aria-label="breadcrumb"] {
+  margin-bottom: 1rem;
+}
+
+/* Card Base Style */
 .card,
 .card-row {
   display: flex;
@@ -171,7 +124,6 @@ nav[aria-label="breadcrumb"] {
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
 }
 
-/* === Card Content Areas === */
 .card-body {
   flex-grow: 1;
 }
@@ -183,7 +135,6 @@ nav[aria-label="breadcrumb"] {
   flex-wrap: wrap;
 }
 
-/* === Card Row (Responsive Inline Actions) === */
 .card-list {
   display: flex;
   flex-direction: column;
@@ -212,26 +163,13 @@ nav[aria-label="breadcrumb"] {
   flex-shrink: 0;
 }
 
-@media (max-width: 768px) {
-  .row-content {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .row-actions {
-    justify-content: flex-start;
-  }
-}
-
-
-/* Social Button Group */
+/* Social Buttons */
 .social-button-group {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
 }
 
-/* Social Button Style */
 .social-button {
   display: inline-flex;
   align-items: center;
@@ -256,9 +194,8 @@ nav[aria-label="breadcrumb"] {
   display: inline-block;
   width: 20px;
   height: 20px;
-  fill: currentColor; /* Make SVG respect text color */
+  fill: currentColor;
 }
-
 
 .social-links-footer ul {
   display: flex;
@@ -273,4 +210,121 @@ nav[aria-label="breadcrumb"] {
   align-items: center;
   gap: 0.25rem;
   font-size: 0.9rem;
+}
+
+/* === 04. Page-Specific Styles === */
+
+/* Person Page */
+.person-description,
+.person-organizations,
+.person-projects,
+.person-social,
+.person-backlinks {
+  margin-top: 2rem;
+}
+
+.person-description p,
+.person-description div {
+  margin-top: 0.5rem;
+}
+
+.person-organizations ul,
+.person-projects ul,
+.person-social ul,
+.person-backlinks ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+}
+
+.person-organizations ul li,
+.person-projects ul li,
+.person-social ul li,
+.person-backlinks ul li {
+  margin-bottom: 0.5rem;
+}
+
+/* Resource Page */
+.resource-details,
+.resource-tags,
+.resource-body {
+  margin-top: 2rem;
+}
+
+/* Tag Collections */
+.tag-collection,
+.namespace-tags {
+  margin-bottom: 2rem;
+}
+
+.tag-collection h3,
+.namespace-tags h3 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.tag-collection ul,
+.namespace-tags ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+}
+
+.tag-collection ul li,
+.namespace-tags ul li {
+  margin-bottom: 0.5rem;
+}
+
+/* Related Articles */
+.related-articles article {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* === 05. Responsive Adjustments === */
+@media (max-width: 1023px) {
+  .custom_grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .row-content {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .row-actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 575px) {
+  .custom_grid {
+    grid-template-columns: 1fr;
+  }
+  .related-articles article {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+}
+
+@media (min-width: 576px) {
+  .card-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 768px) {
+  .main-with-sidebar {
+    grid-template-areas: "main sidebar";
+    grid-template-columns: 3fr 1fr;
+  }
+}
+
+@media (min-width: 1024px) {
+  .card-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
 }
