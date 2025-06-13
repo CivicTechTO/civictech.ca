@@ -1,3 +1,31 @@
+
+/* Skip Link */
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateY(-200%);
+  background-color: #000;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  z-index: 100;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+
+.iconstyle svg{
+  color: inherit;
+  width: 1.2rem;
+  height: 1.2rem;
+  display: inline-block;
+  vertical-align: middle;
+}
+
 /* Mobile-first: hide desktop buttons, show mobile links */
 .mobile-only {
   display: inline-block;
@@ -45,23 +73,6 @@
 }
 
 /* === 02. Layouts === */
-.main-with-sidebar {
-  display: grid;
-  grid-template-areas:
-    "main"
-    "sidebar";
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.main-with-sidebar > .main-content {
-  grid-area: main;
-}
-
-.main-with-sidebar > aside {
-  grid-area: sidebar;
-}
 
 .card-grid {
   display: grid;
@@ -316,15 +327,38 @@ nav[aria-label="breadcrumb"] {
   }
 }
 
-@media (min-width: 768px) {
-  .main-with-sidebar {
-    grid-template-areas: "main sidebar";
-    grid-template-columns: 3fr 1fr;
-  }
-}
+
 
 @media (min-width: 1024px) {
   .card-grid {
     grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+
+/* Mobile-first: stacked layout */
+.main-with-sidebar {
+  display: grid;
+  grid-template-areas:
+    "main"
+    "sidebar";
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.main-with-sidebar > .main-content {
+  grid-area: main;
+}
+
+.main-with-sidebar > aside {
+  grid-area: sidebar;
+}
+
+/* Two-column layout on tablet+ */
+@media (min-width: 768px) {
+  .main-with-sidebar {
+    grid-template-areas: "main sidebar";
+    grid-template-columns: 2fr 1fr; /* or 3fr 1fr depending on your balance */
   }
 }
