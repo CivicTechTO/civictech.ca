@@ -126,12 +126,12 @@
 }
 
 
-.badge-type {
+.badge-status, .badge-contributors, .badge-format, .badge-type {
   border-color: var(--pico-secondary-border);
   color: var( --pico-secondary);
 }
 
-.badge-type:hover {
+.badge-status:hover, .badge-contributors:hover, .badge-format:hover, .badge-type:hover {
   background-color: var(--pico-secondary-hover-background);
   border-color: var(--pico-secondary-hover-border);
   color: var(--pico-secondary-inverse);
