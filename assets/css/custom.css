@@ -82,35 +82,61 @@
 
 /* === 03. Components === */
 
-/* Badges */
+
+
+/* Base badge style */
 .badge {
   display: inline-block;
   padding: 0.25rem 0.5rem;
-  margin: 0.1rem 0.2rem;
+  margin: 0.1rem;
   font-size: 0.75rem;
   border-radius: var(--pico-border-radius);
-  background-color: var(--pico-muted-border-color);
-  color: var(--pico-color);
+  border-color: var(--pico-primary-border);
+  border-width: var(--pico-border-width);
+  border-style: solid;
+  color: var(--pico-primary);
   text-decoration: none;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .badge:hover {
-  background-color: var(--pico-border-color);
-  color: var(--pico-color);
+  background-color: var(--pico-contrast-background);
+  border-color: var(--pico-contrast-border);
+  color: var(--pico-contrast-inverse);
 }
 
-.topic-tags {
-  margin-top: 0.5rem;
+/* Optional layout container */
+.tag-badges {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 
+/* Namespace-specific badge colors (extend as needed) */
 .badge-topic {
-  background-color: var(--pico-primary-background);
-  color: var(--pico-primary-inverse);
+  border-color: var(--pico-primary-border);
+  color: var(--pico-primary);
 }
+
+.badge-topic:hover {
+  background-color: var(--pico-primary-hover-background);
+  border-color: var(--pico-primary-hover-border);
+  color: var(  --pico-primary-inverse);
+}
+
+
+.badge-type {
+  border-color: var(--pico-secondary-border);
+  color: var( --pico-secondary);
+}
+
+.badge-type:hover {
+  background-color: var(--pico-secondary-hover-background);
+  border-color: var(--pico-secondary-hover-border);
+  color: var(--pico-secondary-inverse);
+}
+
 
 /* Breadcrumb */
 nav[aria-label="breadcrumb"] {
