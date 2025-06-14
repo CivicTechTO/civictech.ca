@@ -1,58 +1,6 @@
-
-/* Skip Link */
-.skip-link {
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform: translateY(-200%);
-  background-color: #000;
-  color: #fff;
-  padding: 0.5rem 1rem;
-  z-index: 100;
-  text-decoration: none;
-  transition: transform 0.3s ease;
-}
-
-.skip-link:focus {
-  transform: translateY(0);
-}
-
-
-.iconstyle svg{
-  color: inherit;
-  width: 1.2rem;
-  height: 1.2rem;
-  display: inline-block;
-  vertical-align: middle;
-}
-
-/* Mobile-first: hide desktop buttons, show mobile links */
-.mobile-only {
-  display: inline-block;
-}
-.desktop-only {
-  display: none;
-}
-
-/* Show buttons inline on larger screens */
-@media (min-width: 768px) {
-  .mobile-only {
-    display: none;
-  }
-  .desktop-only {
-    display: inline-block;
-  }
-
-  nav .dropdown ul {
-    min-width: 12rem;
-  }
-}
-
-
-
 /* ==========================================================================
    CUSTOM.CSS
-   Last Updated: 2025-06-07
+   Last Updated: 2025-06-13
    Purpose: Extend Pico.css with custom responsive layouts and components
    --------------------------------------------------------------------------
    TABLE OF CONTENTS
@@ -62,6 +10,8 @@
    03. Components
    04. Page-Specific Styles
    05. Responsive Adjustments
+   06. Navigation
+   07. Icons
    ==========================================================================
 */
 
@@ -81,7 +31,6 @@
 }
 
 /* === 03. Components === */
-
 
 
 /* Base badge style */
@@ -105,14 +54,6 @@
   color: var(--pico-contrast-inverse);
 }
 
-/* Optional layout container */
-.tag-badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-}
-
 /* Namespace-specific badge colors (extend as needed) */
 .badge-topic {
   border-color: var(--pico-primary-border);
@@ -122,13 +63,13 @@
 .badge-topic:hover {
   background-color: var(--pico-primary-hover-background);
   border-color: var(--pico-primary-hover-border);
-  color: var(  --pico-primary-inverse);
+  color: var(--pico-primary-inverse);
 }
 
 
 .badge-status, .badge-contributors, .badge-format, .badge-type {
   border-color: var(--pico-secondary-border);
-  color: var( --pico-secondary);
+  color: var(--pico-secondary);
 }
 
 .badge-status:hover, .badge-contributors:hover, .badge-format:hover, .badge-type:hover {
@@ -387,4 +328,86 @@ nav[aria-label="breadcrumb"] {
     grid-template-areas: "main sidebar";
     grid-template-columns: 2fr 1fr; /* or 3fr 1fr depending on your balance */
   }
+}
+
+
+/* === 06. Navigation === */
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateY(-200%);
+  background-color: #000;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  z-index: 100;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.mobile-only {
+  display: block;
+}
+.desktop-only {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .mobile-only {
+    display: none;
+  }
+  .desktop-only {
+    display: inline-block;
+  }
+}
+
+
+
+body.menu-open {
+  overflow: hidden;
+}
+
+
+.menu-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 9998;
+}
+
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 75%;
+  height: 100%;
+  padding: 1rem;
+  background: var(--pico-background-color);
+  z-index: 9999;
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+}
+
+.close-menu {
+  display: block;
+  margin-left: auto;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  color: var(--pico-primary);
+}
+
+
+/* === 07. Icons === */
+
+.iconstyle svg{
+  color: inherit;
+  width: 1.2rem;
+  height: 1.2rem;
+  display: inline-block;
+  vertical-align: middle;
 }
