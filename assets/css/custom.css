@@ -9,9 +9,9 @@
    02. Layouts
    03. Components
    04. Page-Specific Styles
-   05. Responsive Adjustments
-   06. Navigation
-   07. Icons
+   05. Navigation
+   06. Icons
+   07. Responsive Adjustments
    ==========================================================================
 */
 
@@ -31,7 +31,6 @@
 }
 
 /* === 03. Components === */
-
 
 /* Base badge style */
 .badge {
@@ -119,6 +118,13 @@ nav[aria-label="breadcrumb"] {
   gap: 0.5rem;
 }
 
+.button-list {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
 .row-content {
   display: flex;
   flex-direction: row;
@@ -132,6 +138,7 @@ nav[aria-label="breadcrumb"] {
 .row-text {
   flex-grow: 1;
   min-width: 200px;
+  width: 80%;
 }
 
 .row-actions {
@@ -260,49 +267,6 @@ nav[aria-label="breadcrumb"] {
   margin-bottom: 1rem;
 }
 
-/* === 05. Responsive Adjustments === */
-@media (max-width: 1023px) {
-  .custom_grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media (max-width: 768px) {
-  .row-content {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .row-actions {
-    justify-content: flex-start;
-  }
-}
-
-@media (max-width: 575px) {
-  .custom_grid {
-    grid-template-columns: 1fr;
-  }
-  .related-articles article {
-    flex-direction: column;
-    align-items: stretch;
-    text-align: center;
-  }
-}
-
-@media (min-width: 576px) {
-  .card-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-
-
-@media (min-width: 1024px) {
-  .card-grid {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-}
-
-
 /* Mobile-first: stacked layout */
 .main-with-sidebar {
   display: grid;
@@ -323,15 +287,14 @@ nav[aria-label="breadcrumb"] {
 }
 
 /* Two-column layout on tablet+ */
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .main-with-sidebar {
     grid-template-areas: "main sidebar";
     grid-template-columns: 2fr 1fr; /* or 3fr 1fr depending on your balance */
   }
 }
 
-
-/* === 06. Navigation === */
+/* === 05. Navigation === */
 .skip-link {
   position: absolute;
   top: 0;
@@ -348,23 +311,6 @@ nav[aria-label="breadcrumb"] {
 .skip-link:focus {
   transform: translateY(0);
 }
-
-.mobile-only {
-  display: block;
-}
-.desktop-only {
-  display: none;
-}
-
-@media (min-width: 768px) {
-  .mobile-only {
-    display: none;
-  }
-  .desktop-only {
-    display: inline-block;
-  }
-}
-
 
 
 body.menu-open {
@@ -399,10 +345,11 @@ body.menu-open {
   background: none;
   border: none;
   color: var(--pico-primary);
+  padding: 0.25rem 1rem;
 }
 
 
-/* === 07. Icons === */
+/* === 06. Icons === */
 
 .iconstyle svg{
   color: inherit;
@@ -410,4 +357,60 @@ body.menu-open {
   height: 1.2rem;
   display: inline-block;
   vertical-align: middle;
+}
+
+
+/* === 07. Responsive Adjustments === */
+
+.mobile-only {
+  display: block;
+}
+.desktop-only {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .custom_grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .row-content {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .row-actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 575px) {
+  .custom_grid {
+    grid-template-columns: 1fr;
+  }
+  .mobilenegativemargin {
+    margin: var(--pico-spacing) calc(var(--pico-spacing)*-1);
+  }
+}
+
+@media (min-width: 576px) {
+  .card-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 768px) {
+  .mobile-only {
+    display: none;
+  }
+  .desktop-only {
+    display: inline-block;
+  }
+}
+
+@media (min-width: 1024px) {
+  .card-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
 }
