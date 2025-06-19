@@ -26,35 +26,35 @@ redirect_from: /get-in-touch/
   </hgroup>
   <div class="grid">
     <article>
-      <figure>
+      <figure class="figure-image">
         <img
           src="{{ site.baseurl }}/assets/images/icon-happy-speech-bubble.png"
           alt="socializing icon"
         />
         <figcaption>
-          7:00 pm - Introductions to each other and Civic Tech Toronto
+          <strong>7:00 pm</strong> Introductions to each other and Civic Tech Toronto
         </figcaption>
       </figure>
     </article>
     <article>
-          <figure>
+      <figure class="figure-image">
         <img
           src="{{ site.baseurl }}/assets/images/icon-podium.png"
           alt="presentation icon"
         />
         <figcaption>
-          7:20 pm - Scheduled speaker presents to the group
+          <strong>7:20 pm</strong> Scheduled speaker presents to the group
         </figcaption>
       </figure>
     </article>
     <article>
-          <figure>
+      <figure class="figure-image">
         <img
           src="{{ site.baseurl }}/assets/images/icon-collaboration.png"
           alt="collaboration icon"
         />
         <figcaption>
-          7:50 pm - Attendees collaborate on projects
+          <strong>7:50 pm</strong> Attendees collaborate on projects
         </figcaption>
       </figure>
   </article>
