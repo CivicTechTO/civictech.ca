@@ -8,14 +8,29 @@ main:
   - label: "Hacknights"
     url: "/hacknights"
     collection: true
-  - label: "Announcements"
-    url: "/announcements"
-    collection: true
   - label: "Projects"
     url: "/projects"
     collection: true
   - label: "Resources"
     url: "/resources"
+    collection: true
+
+
+utility:
+  - label: "Slack"
+    url: "http://link.civictech.ca/slack"
+    type: "secondary"
+    external: true
+  - label: "RSVP"
+    url: "https://guild.host/ctto/events"
+    type: "primary"
+    external: true
+
+
+# Secondary navigation items are currently not used in navigation feautures.
+secondary:
+  - label: "Announcements"
+    url: "/announcements"
     collection: true
   - label: "People"
     url: "/people"
@@ -32,13 +47,3 @@ main:
   - label: "Categories"
     url: "/categories"
     collection: true
-
-utility:
-  - label: "Slack"
-    url: "http://link.civictech.ca/slack"
-    type: "secondary"
-    external: true
-  - label: "RSVP"
-    url: "https://guild.host/ctto/events"
-    type: "primary"
-    external: true
