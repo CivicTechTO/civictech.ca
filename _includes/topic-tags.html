@@ -24,6 +24,7 @@ Notes:
 {%- endcomment -%}
 
 {% if include.tags %}
+  <div>
   {% for full_tag in include.tags %}
     {% assign parts = full_tag | split: "/" %}
     {% assign namespace = parts[0] %}
@@ -36,4 +37,5 @@ Notes:
       </a>
     {% endif %}
   {% endfor %}
+  </div>
 {% endif %}

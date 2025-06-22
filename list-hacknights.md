@@ -105,17 +105,24 @@ permalink: "/hacknights/"
       <article class="card card-row filterRow" data-topics="{{ topics_string }}">
         <div class="row-content">
         {% if event.image %}
-          <div class="hacknight-thumbnail">
-            <img src="{{ site.baseurl }}/assets/images/hacknights/thumbnails/{{ event.image }}" alt="{{ event.topic }}" class="hacknight-image">
-          </div>
+          <a href="{{ event.url }}">
+            <div class="hacknight-thumbnail">
+              <img src="{{ site.baseurl }}/assets/images/hacknights/thumbnails/{{ event.image }}" alt="{{ event.topic }}" class="hacknight-image">
+            </div>
+          </a>
         {% endif %}
           <div class="row-text">
-            <small>{{ event.date | date: "%B %d, %Y" }}</small><br/>
-            <strong>Hacknight #{{ event.number }}</strong><br/>
-            <a href="{{ event.url }}"><strong>{{ event.topic }}</strong></a>
+            <small>
+              {{ event.date | date: "%B %d, %Y" }} – Hacknight #{{ event.number }}
+            </small>
+            <br/>
+            <h3>
+              <a href="{{ event.url }}">
+                {{ event.topic }}
+              </a>
+            </h3>
             {% include topic-tags.html tags=event.tags %}
             {% if event.speakers %}
-              <br/>
               {% assign speakers_list = "" | split: "" %}
               {% for speaker in event.speakers %}
                 {% assign speaker_name = speaker | remove: '[[' | remove: ']]' %}
@@ -123,10 +130,6 @@ permalink: "/hacknights/"
               {% endfor %}
               <small>with {{ speakers_list | join: ", " }}</small>
             {% endif %}
-          </div>
-
-          <div class="row-actions">
-            <a role="button" href="{{ event.url }}">View</a>
           </div>
         </div>
       </article>
