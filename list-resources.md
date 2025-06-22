@@ -30,12 +30,26 @@ permalink: "/resources/"
 {% endfor %}
 {% assign unique_topics = topic_tags | uniq | sort %}
 
+<section>
+  <ul>
+    {% for category in unique_categories %}
+      <li>
+        <a href="#{{ category | slugify }}">
+          {{ category | replace: "-", " " | capitalize }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+</section>
+
 <!-- Resources grouped by Category -->
 
 {% for category in unique_categories %}
 <section>
-  <header>
-    <h2>{{ category | replace: "-", " " | capitalize }}</h2>
+  <header class="sticky">
+    <h2 id="{{ category | slugify }}">
+      {{ category | replace: "-", " " | capitalize }}
+    </h2>
   </header>
 
   <div id="resourcesList" class="card-list">
@@ -53,7 +67,13 @@ permalink: "/resources/"
       <article class="card card-row filterRow" data-topics="{{ topics_string }}">
         <div class="row-content">
           <div class="row-text">
-            <h3><a href="{{ resource.url }}">{{ resource.title }}</a></h3>
+            <h3>
+              {% if resource.website %}
+                <a href="{{ resource.website }}" target="_BLANK">
+              {% endif %}
+                {{ resource.title }}
+              {% if resource.website %}</a>{% endif %}
+            </h3>
 
             {% if resource.description %}
               <p>{{ resource.description }}</p>
@@ -62,13 +82,6 @@ permalink: "/resources/"
             {% if resource.tags %}
               {% include topic-tags.html tags=resource.tags %}
             {% endif %}
-          </div>
-
-          <div class="row-actions">
-            {% if resource.website %}
-              <a role="button" class="outline" href="{{ resource.website }}" target="_blank" rel="noopener">Website</a>
-            {% endif %}
-            <a role="button" href="{{ resource.url }}">View</a>
           </div>
         </div>
       </article>
