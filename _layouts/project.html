@@ -12,6 +12,7 @@ layout: base
     {% assign resolved_hacknights = resolved_hacknights | push: instance_resolved %}
   {% endif %}
 {% endfor %}
+{% assign resolved_hacknights = resolved_hacknights | sort: "date" | reverse %}
 
 {% comment %} Resolve linked People {% endcomment %}
 {% assign resolved_people = "" | split: "" %}
@@ -57,7 +58,6 @@ layout: base
       </div>
       <aside>
         <h2>Project Information</h2>
-        <h3>Details</h3>
         <dl>
           <dt>Categories</dt>
           <dd>{% include namespaced-categories.html categories=page.categories namespaces="contributors,status" %}</dd>
@@ -81,25 +81,22 @@ layout: base
     </footer>
   </article>
 
+  {% if resolved_people.size > 0 and resolved_hacknights.size > 0 %}
   <section class="related-articles">
-    <h2>Related Articles</h2>
-
     {% if resolved_people.size > 0 %}
     <section>
       <h3>Related People</h3>
-      {% for person in resolved_people %}
+      
       <article>
-        <div>
-          <hgroup>
-            <h4><small>{{ person.title }}</small></h4>
-            <p>{{ person.excerpt }}</p>
-          </hgroup>
-        </div>
-        <div>
-          <a role="button" class="outline secondary" href="{{ person.url }}">View Person</a>
-        </div>
+        <ul>
+          {% for person in resolved_people %}
+            <li>
+              <a  href="{{ person.url }}">{{ person.title }}</a>
+            </li>
+          {% endfor %}
+        </ul>
       </article>
-      {% endfor %}
+
     </section>
     {% endif %}
 
@@ -108,18 +105,19 @@ layout: base
       <h3>Related Hacknights</h3>
       {% for hacknight in resolved_hacknights %}
       <article>
-        <div>
-          <hgroup>
-            <h4><small>Hacknight #{{ hacknight.number }}</small></h4>
-            <p>{{ hacknight.topic }}</p>
-          </hgroup>
-          <p>{{ hacknight.date | date: "%B %d, %Y" }}</p>
-        </div>
-        <div>
-          <a role="button" class="outline secondary" href="{{ hacknight.url }}">View Hacknight</a>
-        </div>
+        <hgroup>
+          <small>
+            {{ hacknight.date | date: "%B %d, %Y" }} - Hacknight #{{ hacknight.number }}
+          </small>
+          <h4>
+            <a href="{{ hacknight.url }}">
+              {{ hacknight.topic }}
+            </a>
+          </h4>
+        </hgroup>
       </article>
       {% endfor %}
     </section>
     {% endif %}
   </section>
+  {% endif %}

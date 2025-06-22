@@ -15,6 +15,15 @@
    ==========================================================================
 */
 
+hgroup:last-child,
+p:last-child,
+blockquote:last-child,
+ul:last-child,
+ol:last-child,
+dl:last-child {
+  margin-bottom: 0;
+}
+
 dd {
   margin: 0;
 }
@@ -294,6 +303,15 @@ header.sticky {
 }
 
 /* Related Articles */
+
+.related-articles {
+  margin-top: 2rem;
+}
+
+.related-articles h3 {
+  margin-top: 2rem;
+  margin-left: 1rem;
+}
 .related-articles article {
   display: flex;
   justify-content: space-between;
