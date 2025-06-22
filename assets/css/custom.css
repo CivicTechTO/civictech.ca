@@ -208,6 +208,16 @@ nav[aria-label='breadcrumb'] {
   font-size: 0.9rem;
 }
 
+/* Sticky list headers */
+
+header.sticky {
+  position: sticky;
+  top: 0;
+  background: var(--pico-card-background-color);
+  padding-top: 0.5rem;
+  border-bottom: 1px solid var(--pico-card-border-color);
+}
+
 /* === 04. Page-Specific Styles === */
 
 /* About Us */
