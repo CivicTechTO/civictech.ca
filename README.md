@@ -43,6 +43,12 @@ Before you start, consider taking a look at the [GitHub Pages documentation](htt
    ```
    bundle exec jekyll serve
    ```
+
+   Or use [incremental regeneration](https://jekyllrb.com/docs/configuration/incremental-regeneration/), which is faster but not stable:
+   ```
+   bundle exec jekyll serve  --incremental
+   ```
+
 5. **Visit Local Site**  
    Open your browser and go to `http://localhost:4000` to see the site.
 
