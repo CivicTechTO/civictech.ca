@@ -243,6 +243,22 @@ header.sticky {
   margin-bottom: var(--pico-block-spacing-vertical);
 }
 
+/* Hacknights */
+
+.hacknight-thumbnail {
+  background: var(--pico-muted-border-color);
+}
+
+.lazy-image {
+  min-height: 150px;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+}
+
+.lazy-image.show {
+  opacity: 1;
+}
+
 /* Person Page */
 .person-description,
 .person-organizations,
