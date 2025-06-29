@@ -5,12 +5,10 @@ layout: homepage
 <article class="grid">
   <figure>
     <img
-      src="assets/images/CivicTechTO-compressed-1020x615-1.jpg"
-      alt="screenshot of a Zoom call with participants waving at the fifth anniversary of Civic Tech"
+      src="assets/images/CivicTechTO-InPerson.jpg"
+      alt="Picture of a group of people sitting listening to a presentation at a Civic Tech Toronto Hacknight"
+      style="border-radius: 4px;"
     />
-    <figcaption>
-      Fifth Anniversary of Civic Tech
-    </figcaption>
   </figure>
   <div>
     <hgroup>
