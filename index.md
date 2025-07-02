@@ -13,11 +13,11 @@ layout: homepage
   <div>
     <hgroup>
     <h1>Community for public good.</h1>
-    <p>Every Tuesday from 7pm to 9pm — in person and online.</p>
+    <p>Every Tuesday from 7pm to 9pm – in person and online.</p>
     </hgroup>
-    <p>We meet every Tuesday to work on projects, hear from interesting speakers, and connect with others interested in how technology can improve our communities.</p>
-    <p>Many people in our community have no background in tech at all. You’re welcome no matter your experience.</p>
-    <p>Our events are hybrid, so you can join us in downtown Toronto or online from anywhere in the world.</p>
+    <p>We meet every Tuesday to work on projects, hear from thoughtful speakers, and connect with others who care about how technology can improve our communities.</p>
+    <p>You don’t need to be in tech to join us—everyone’s welcome, no matter your background or experience.</p>
+    <p>Our events are hybrid, join us in person or online.</p>
     <div class="button-list">
       <a role="button" class="outline" href="https://guild.host/ctto/events" target="_blank">Sign up on Guild<span aria-hidden="true">&nbsp;↗</span></a>
       <a role="button" class="secondary outline" href="{{'/hacknights' | relative_url }}">See past events</a>
