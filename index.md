@@ -1,5 +1,5 @@
 ---
-title: "Civic Tech Toronto | Hacknights, Projects & Community"
+title: "Civic Tech Toronto | A space to learn and collaborate"
 layout: homepage
 ---
 <article class="grid">
