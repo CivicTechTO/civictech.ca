@@ -12,13 +12,15 @@ layout: homepage
   </figure>
   <div>
     <hgroup>
-    <h1>Hacknights for everyone.</h1>
-    <p>Every Tuesday from 7pm to 9pm.</p>
+    <h1>Community for public good.</h1>
+    <p>Every Tuesday from 7pm to 9pm — in person and online.</p>
     </hgroup>
-    <p>We run Hacknights every Tuesday 7 pm – 9 pm for members of the community gather, hear from inspiring speakers and collaborate on projects aimed at improving Toronto.</p>
+    <p>We meet every Tuesday to work on projects, hear from interesting speakers, and connect with others interested in how technology can improve our communities.</p>
+    <p>Many people in our community have no background in tech at all. You’re welcome no matter your experience.</p>
+    <p>Our events are hybrid, so you can join us in downtown Toronto or online from anywhere in the world.</p>
     <div class="button-list">
-      <a role="button" class="outline" href="https://guild.host/ctto/events" target="_blank">Sign Up on Guild<span aria-hidden="true">&nbsp;↗</span></a>
-      <a role="button" class="secondary outline" href="{{'/hacknights' | relative_url }}">See past Hacknights</a>
+      <a role="button" class="outline" href="https://guild.host/ctto/events" target="_blank">Sign up on Guild<span aria-hidden="true">&nbsp;↗</span></a>
+      <a role="button" class="secondary outline" href="{{'/hacknights' | relative_url }}">See past events</a>
     </div>
   </div>
 </article>
@@ -32,7 +34,7 @@ layout: homepage
 
 <section>
   <header>
-    <h2>Recent Hacknights</h2>
+    <h2>Recent Events</h2>
   </header>
   <div id="pastHacknightsList" class="grid">
     {% for event in recent_hacknights limit: 3 %}
