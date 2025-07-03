@@ -60,6 +60,10 @@ dd {
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
+.badge:first-of-type {
+  margin-left: 0;
+}
+
 .badge:hover {
   background-color: var(--pico-contrast-background);
   border-color: var(--pico-contrast-border);
@@ -228,6 +232,12 @@ header.sticky {
 }
 
 /* === 04. Page-Specific Styles === */
+
+/* Index */
+
+.frontpage-action {
+  margin: 0 1rem 3rem 1rem;
+}
 
 /* About Us */
 
