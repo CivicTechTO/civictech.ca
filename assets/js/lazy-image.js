@@ -44,7 +44,7 @@ async function lazyImg() {
       if (entry.isIntersecting && imgTag.dataset.src) {
         imgTag.removeAttribute('data-src');
 
-        requestIdleCallback(() => {
+        setTimeout(() => {
           const img = new Image();
           img.src = src;
           img.onload = () => {
@@ -54,7 +54,7 @@ async function lazyImg() {
           img.onerror = () => {
             console.error(`Failed to load image: ${src}`);
           };
-        });
+        }, 0);
       }
     });
   }, observerOptions);
