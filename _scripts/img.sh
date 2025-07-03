@@ -81,10 +81,6 @@ mkdir -p "$THUMB_DIR"
 # Step 3: Process images
 echo "🚀 Processing ${#FILE_LIST[@]} image(s) for $TYPE_NAME..."
 
-touch "$THUMB_DIR/thumbs.json"
-truncate -s 0 "$THUMB_DIR/thumbs.json"
-echo "{" >> "$THUMB_DIR/thumbs.json"
-
 for img in "${FILE_LIST[@]}"; do
   [ -e "$img" ] || continue
 
@@ -98,14 +94,8 @@ for img in "${FILE_LIST[@]}"; do
 
   # Thumbnail image
   magick "$img" -resize "$THUMB_SIZE"\> -strip "$THUMB_DIR/$base.$OUTPUT_EXT"
-
-  # Record dimensions
-  DIMENSIONS=$(magick identify -format "%w,%h\n" "$THUMB_DIR/$base.$OUTPUT_EXT")
-
-  echo "\"$base.$OUTPUT_EXT\": \"$DIMENSIONS\"," >> "$THUMB_DIR/thumbs.json"
 done
 
-echo "\"coda\": ""}" >> "$THUMB_DIR/thumbs.json"
 
 echo "✅ Done! Images saved to:"
 echo "   - $FULL_DIR"
