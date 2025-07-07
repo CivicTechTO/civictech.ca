@@ -11,3 +11,7 @@ _site
 
 # Addtional Appended Ignores
 .DS_Store
+
+# Bundle vendor directory
+vendor/
+.bundle/

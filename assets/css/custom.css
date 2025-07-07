@@ -5,6 +5,7 @@
    --------------------------------------------------------------------------
    TABLE OF CONTENTS
    --------------------------------------------------------------------------
+   00. Brand Colors
    01. Utility Classes
    02. Layouts
    03. Components
@@ -14,6 +15,22 @@
    07. Responsive Adjustments
    ==========================================================================
 */
+
+/* === 00. Brand Colors === */
+:root {
+  /* Civic Tech Toronto Brand Orange - unified across all elements */
+  --ctto-brand-orange: #ff9500;
+  --ctto-brand-orange-hover: #e6850a;
+  --ctto-brand-orange-focus: #cc7600;
+  
+  /* Override Pico CSS primary colors to use our brand color */
+  --pico-primary: var(--ctto-brand-orange);
+  --pico-primary-background: var(--ctto-brand-orange);
+  --pico-primary-border: var(--ctto-brand-orange);
+  --pico-primary-hover-background: var(--ctto-brand-orange-hover);
+  --pico-primary-hover-border: var(--ctto-brand-orange-hover);
+  --pico-primary-focus: var(--ctto-brand-orange-focus);
+}
 
 hgroup:last-child,
 p:last-child,
