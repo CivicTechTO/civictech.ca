@@ -1,56 +1,62 @@
-name: Build and Deploy GitHub Pages
+name: Build artifacts
 
 on:
   push:
     branches:
-      - main  # Adjust if your default branch is different
+      - main # Adjust if your default branch is different
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository (with submodules)
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive
+      - name: Checkout repository (with submodules)
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: '3.2'
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
 
-    - name: Install Jekyll and Bundler
-      run: |
-        gem install bundler
-        bundle install
+      - name: Install Jekyll and Bundler
+        run: |
+          gem install bundler
+          bundle install
 
-    - name: Generate tag data (_data/tags.yml)
-      run: |
-        chmod +x _scripts/generate_tag_data.sh
-        ./_scripts/generate_tag_data.sh
+      - name: Generate tag data (_data/tags.yml)
+        run: |
+          chmod +x _scripts/generate_tag_data.sh
+          ./_scripts/generate_tag_data.sh
 
-    - name: Generate tag pages (/tags/)
-      run: |
-        chmod +x _scripts/generate_tag_pages.sh
-        ./_scripts/generate_tag_pages.sh
+      - name: Generate tag pages (/tags/)
+        run: |
+          chmod +x _scripts/generate_tag_pages.sh
+          ./_scripts/generate_tag_pages.sh
 
-    - name: Generate category data (_data/categories.yml)
-      run: |
-        chmod +x _scripts/generate_category_data.sh
-        ./_scripts/generate_category_data.sh
+      - name: Generate category data (_data/categories.yml)
+        run: |
+          chmod +x _scripts/generate_category_data.sh
+          ./_scripts/generate_category_data.sh
 
-    - name: Generate category pages (/categories/)
-      run: |
-        chmod +x _scripts/generate_category_pages.sh
-        ./_scripts/generate_category_pages.sh
+      - name: Generate category pages (/categories/)
+        run: |
+          chmod +x _scripts/generate_category_pages.sh
+          ./_scripts/generate_category_pages.sh
 
-    - name: Build Jekyll site
-      run: |
-        bundle exec jekyll build
+      - name: Generate thumbnail sizes
+        run: |
+          chmod +x _scripts/thumbnail_sizes.sh
+          ./_scripts/thumbnail_sizes.sh
 
-    - name: Deploy GitHub Pages
-      uses: peaceiris/actions-gh-pages@v4
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./_site
+      - name: 🚀 Commit and push changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add _data
+          git add assets/images/hacknights/thumbnails/thumbs.json
+          git commit -m "🔄 Auto-update Generated files $(date -u '+%Y-%m-%d %H:%M:%S')"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
