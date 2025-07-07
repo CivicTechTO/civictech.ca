@@ -259,6 +259,12 @@ header.sticky {
   background: var(--pico-muted-border-color);
 }
 
+.hacknight-thumbnail img {
+  width: 100%;
+  height: auto;
+  image-rendering: -webkit-optimize-contrast;
+}
+
 .lazy-image {
   min-height: 150px;
   transition: opacity 0.3s ease;

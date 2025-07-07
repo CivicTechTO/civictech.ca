@@ -33,7 +33,7 @@ read -p "Enter 1 or 2: " img_type
 if [ "$img_type" == "1" ]; then
   TYPE_NAME="Hacknight"
   FULL_SIZE="1200x1200" # Full size for Hacknight images
-  THUMB_SIZE="300x300" # Thumbnail size
+  THUMB_SIZE="600x600" # Thumbnail size - increased for better quality
   OUTPUT_EXT="jpg"
   FULL_DIR="assets/images/hacknights"
   THUMB_DIR="assets/images/hacknights/thumbnails"
@@ -94,13 +94,13 @@ for img in "${FILE_LIST[@]}"; do
   echo "→ Processing $filename..."
 
   # Standard image
-  magick "$img" -resize "$FULL_SIZE"\> -strip "$FULL_DIR/$base.$OUTPUT_EXT"
+  convert "$img" -resize "$FULL_SIZE>" -quality 95 -strip "$FULL_DIR/$base.$OUTPUT_EXT"
 
   # Thumbnail image
-  magick "$img" -resize "$THUMB_SIZE"\> -strip "$THUMB_DIR/$base.$OUTPUT_EXT"
+  convert "$img" -resize "$THUMB_SIZE>" -quality 90 -strip "$THUMB_DIR/$base.$OUTPUT_EXT"
 
   # Record dimensions
-  DIMENSIONS=$(magick identify -format "%w,%h\n" "$THUMB_DIR/$base.$OUTPUT_EXT")
+  DIMENSIONS=$(identify -format "%w,%h\n" "$THUMB_DIR/$base.$OUTPUT_EXT")
 
   echo "\"$base.$OUTPUT_EXT\": \"$DIMENSIONS\"," >> "$THUMB_DIR/thumbs.json"
 done
