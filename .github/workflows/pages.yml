@@ -45,6 +45,11 @@ jobs:
         chmod +x _scripts/generate_category_pages.sh
         ./_scripts/generate_category_pages.sh
 
+    - name: Generate thumbnail sizes
+      run: |
+        chmod +x _scripts/thumbnail_sizes.sh
+        ./_scripts/thumbnail_sizes.sh
+
     - name: Build Jekyll site
       run: |
         bundle exec jekyll build
