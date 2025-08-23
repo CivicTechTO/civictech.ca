@@ -151,18 +151,8 @@ nav[aria-label='breadcrumb'] {
 
 .row-content {
   display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-between;
-  width: 100%;
   gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.row-text {
-  flex-grow: 1;
-  min-width: 200px;
-  width: 80%;
+  flex-direction: row;
 }
 
 .row-actions {
