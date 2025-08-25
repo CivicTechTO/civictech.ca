@@ -30,45 +30,45 @@ Note:
     "@type": "CreativeWork",
     "name": {{ page.title | jsonify }},
     {% if page.excerpt %}
-    "description": {{ page.excerpt | strip_html | strip_newlines | jsonify }},
+      "description": {{ page.excerpt | strip_html | strip_newlines | jsonify }},
     {% endif %}
-    "url": {{ page.url | absolute_url | jsonify }},
     {% if page.dateActiveFirst %}
-    "dateCreated": "{{ page.dateActiveFirst }}",
+      "dateCreated": "{{ page.dateActiveFirst }}",
     {% endif %}
     {% if page.social.website %}
-    "mainEntityOfPage": {{ page.social.website | jsonify }},
+      "mainEntityOfPage": {{ page.social.website | jsonify }},
     {% endif %}
+    "url": {{ page.url | absolute_url | jsonify }}
 
   {% elsif page_tags contains "type/person" %}
     "@type": "Person",
     "name": {{ page.title | jsonify }},
     {% if page.description %}
-    "description": {{ page.description | strip_html | strip_newlines | jsonify }},
+      "description": {{ page.description | strip_html | strip_newlines | jsonify }},
     {% endif %}
-    "url": {{ page.url | absolute_url | jsonify }},
     {% if page.organization %}
-    "affiliation": [
-      {% for org in page.organization %}
-        { "@type": "Organization", "name": {{ org | replace: '[[' , '' | replace: ']]', '' | jsonify }} }
-        {% unless forloop.last %},{% endunless %}
-      {% endfor %}
-    ],
+      "affiliation": [
+        {% for org in page.organization %}
+          { "@type": "Organization", "name": {{ org | replace: '[[' , '' | replace: ']]', '' | jsonify }} }
+          {% unless forloop.last %},{% endunless %}
+        {% endfor %}
+      ],
     {% endif %}
+    "url": {{ page.url | absolute_url | jsonify }}
 
   {% elsif page_tags contains "type/organization" %}
     "@type": "Organization",
     "name": {{ page.title | jsonify }},
-    "url": {{ page.url | absolute_url | jsonify }},
     {% if page.social.website %}
-    "sameAs": [ {{ page.social.website | jsonify }} ],
+      "sameAs": [ {{ page.social.website | jsonify }} ],
     {% endif %}
     {% if page.parent_organization %}
-    "parentOrganization": {
-      "@type": "Organization",
-      "name": {{ page.parent_organization | replace: '[[' , '' | replace: ']]', '' | jsonify }}
-    },
+      "parentOrganization": {
+        "@type": "Organization",
+        "name": {{ page.parent_organization | replace: '[[' , '' | replace: ']]', '' | jsonify }}
+      },
     {% endif %}
+    "url": {{ page.url | absolute_url | jsonify }}
 
   {% elsif page_tags contains "type/hacknight" %}
     "@type": "Event",
@@ -77,34 +77,33 @@ Note:
     "endDate": "{{ page.date }}",
     "description": {{ page.description | strip_html | strip_newlines | jsonify }},
     {% if page.venue %}
-    "location": {
-      "@type": "Place",
-      "name": {{ page.venue | replace: '[[' , '' | replace: ']]', '' | jsonify }}
-    },
+      "location": {
+        "@type": "Place",
+        "name": {{ page.venue | replace: '[[' , '' | replace: ']]', '' | jsonify }}
+      },
     {% endif %}
-    "url": {{ page.url | absolute_url | jsonify }},
     {% if page.speakers %}
-    "performer": [
-      {% for speaker in page.speakers %}
-        { "@type": "Person", "name": {{ speaker | replace: '[[' , '' | replace: ']]', '' | jsonify }} }
-        {% unless forloop.last %},{% endunless %}
-      {% endfor %}
-    ],
+      "performer": [
+        {% for speaker in page.speakers %}
+          { "@type": "Person", "name": {{ speaker | replace: '[[' , '' | replace: ']]', '' | jsonify }} }
+          {% unless forloop.last %},{% endunless %}
+        {% endfor %}
+      ],
     {% endif %}
     {% if page.videoUrl %}
-    "video": {
-      "@type": "VideoObject",
-      "url": {{ page.videoUrl | jsonify }},
-      "name": {{ page.title | jsonify }},
-    },
-    {% endif %}
-    "organizer": { "@type": "Organization", "name": "Civic Tech Toronto", "url": "{{ '/' | absolute_url }}" }
+      "video": {
+        "@type": "VideoObject",
+        "url": {{ page.videoUrl | jsonify }},
+        "name": {{ page.title | jsonify }},
+      },
+      {% endif %}
+    "organizer": { "@type": "Organization", "name": "Civic Tech Toronto", "url": {{ page.url | absolute_url | jsonify }}
 
   {% elsif page_tags contains "type/venue" %}
     "@type": "Place",
     "name": {{ page.title | jsonify }},
     {% if page.address %}
-    "address": {{ page.address | jsonify }},
+      "address": {{ page.address | jsonify }},
     {% endif %}
     "url": {{ page.url | absolute_url | jsonify }}
 
