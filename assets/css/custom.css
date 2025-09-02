@@ -31,7 +31,7 @@ dd {
 /* === 01. Utility Classes === */
 .custom_grid {
   display: grid;
-  gap: 1rem;
+  gap: var(--pico-spacing);
   grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
@@ -39,7 +39,7 @@ dd {
 
 .card-grid {
   display: grid;
-  gap: 1rem;
+  gap: var(--pico-spacing);
   grid-template-columns: 1fr;
 }
 
@@ -101,7 +101,7 @@ dd {
 
 /* Breadcrumb */
 nav[aria-label='breadcrumb'] {
-  margin-bottom: 1rem;
+  margin-bottom: var(--pico-spacing);
 }
 
 /* Card Base Style */
@@ -109,7 +109,8 @@ nav[aria-label='breadcrumb'] {
 .card-row {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: var(--pico-spacing);
+  justify-content: top;
   padding: 1rem;
   border: 1px solid var(--pico-muted-border-color);
   border-radius: var(--pico-border-radius);
@@ -130,7 +131,7 @@ nav[aria-label='breadcrumb'] {
 }
 
 .card-footer {
-  margin-top: 1rem;
+  margin-top: var(--pico-spacing);
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
@@ -151,7 +152,7 @@ nav[aria-label='breadcrumb'] {
 
 .row-content {
   display: flex;
-  gap: 1rem;
+  gap: var(--pico-spacing);
   flex-direction: row;
 }
 
@@ -481,8 +482,6 @@ body.menu-open {
 }
 
 
-
-
 .announcement-bar{
   border-radius: var(--pico-border-radius);
   background-color: var(--pico-primary-background);
@@ -499,4 +498,18 @@ body.menu-open {
 }
 .announcement-bar a:hover { 
   color: var(--pico-primary-inverse-hover);
+}
+
+.ogimage{
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  object-fit: cover;
+}
+
+aside .ogimage{
+  margin-bottom: var(--pico-spacing);
+}
+
+.listed{
+  max-width: 450px;
 }
