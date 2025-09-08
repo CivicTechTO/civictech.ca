@@ -156,6 +156,12 @@ nav[aria-label='breadcrumb'] {
   flex-direction: row;
 }
 
+.row-content-column {
+  display: flex;
+  gap: var(--pico-spacing);
+  flex-direction: column;
+}
+
 .row-actions {
   display: flex;
   gap: 0.5rem;
