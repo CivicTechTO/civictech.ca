@@ -4217,10 +4217,6 @@
 <lastmod>2021-10-09T00:00:00-04:00</lastmod>
 </url>
 <url>
-<loc>/projects/Chalmers%20Cards/</loc>
-<lastmod>2022-01-01T00:00:00-05:00</lastmod>
-</url>
-<url>
 <loc>/projects/Tabs%20Toronto/</loc>
 <lastmod>2022-01-01T00:00:00-05:00</lastmod>
 </url>
@@ -4234,6 +4230,10 @@
 </url>
 <url>
 <loc>/projects/Can%20I%20Take%20my%20Bike%20on%20the%20TTC/</loc>
+</url>
+<url>
+<loc>/projects/Chalmers%20Cards/</loc>
+<lastmod>2022-01-01T00:00:00-05:00</lastmod>
 </url>
 <url>
 <loc>/projects/Chalmers%20Signal%20(OpenShelter.space)/</loc>
@@ -4263,6 +4263,9 @@
 </url>
 <url>
 <loc>/projects/Danforth%20Dad/</loc>
+</url>
+<url>
+<loc>/projects/Democracy%20Distributed/</loc>
 </url>
 <url>
 <loc>/projects/HousingNowTO/</loc>
