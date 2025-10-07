@@ -4,9 +4,24 @@ layout: page
 permalink: "/hacknights/"
 ---
 
-{% assign now = site.time %}
-{% assign future_hacknights = site.hacknights | where_exp: "item", "item.date > now" | sort: "date" %}
-{% assign past_hacknights = site.hacknights | where_exp: "item", "item.date <= now" | sort: "date" | reverse %}
+{% assign today = site.time | date: "%Y-%m-%d" %}
+
+{% assign future_hacknights = "" | split: "" %}
+{% assign recent_hacknights = "" | split: "" %}
+
+{% for item in site.hacknights %}
+  {% assign item_day = item.date | date: "%Y-%m-%d" %}
+  {% if item_day >= today %}
+    {% assign future_hacknights = future_hacknights | push: item %}
+  {% else %}
+    {% assign recent_hacknights = recent_hacknights | push: item %}
+  {% endif %}
+{% endfor %}
+
+{% assign future_hacknights = future_hacknights | sort: "date" %}
+{% assign recent_hacknights = recent_hacknights | sort: "date" | reverse %}
+
+
 
 <!-- Extract unique topics for filters -->
 {% assign all_events = site.hacknights %}
