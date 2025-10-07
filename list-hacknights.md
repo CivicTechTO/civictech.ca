@@ -118,7 +118,7 @@ permalink: "/hacknights/"
     <h2>Past Hacknights</h2>
   </header>
   <div id="pastHacknightsList" class="card-list">
-    {% for event in past_hacknights %}
+    {% for event in recent_hacknights %}
       {% assign formatted_topics = "" | split: "," %}
       {% for tag in event.tags %}
         {% if tag contains "topic/" %}
