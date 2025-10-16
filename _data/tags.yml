@@ -12,6 +12,7 @@ type:
   - venue
 topic:
   - accessibility
+  - advocacy
   - affordability
   - air-quality
   - archives
@@ -19,6 +20,7 @@ topic:
   - arts-and-culture
   - blockchain
   - budgets
+  - case-study
   - citizen-science
   - citizen-sensing
   - civic-tech-enablement
@@ -26,26 +28,35 @@ topic:
   - climate
   - co-operatives
   - community-building
+  - crowdsourcing
   - cybersecurity
   - cycling
   - data
+  - data-analysis
   - data-privacy
+  - decentralization
   - democracy
+  - digital-skills
   - economics
   - education
   - elections
   - employment
   - environment
   - example
+  - experience-design
   - food-security
+  - freedom-of-information
   - funding
   - futurism
+  - grants
   - health
   - homelessness
   - housing
   - immigration-and-citizenship
+  - improvement
   - indigenous-perspectives
   - infrastructure
+  - innovative-ideas
   - international-security
   - internet-access
   - internet-of-things
@@ -69,11 +80,15 @@ topic:
   - public-health
   - public-oversight
   - public-parks
+  - public-planning
   - public-safety
   - public-transparency
   - robotics
   - service-delivery
+  - service-design
   - shelters
+  - smart-cities
+  - social-media
   - standards
   - tax
   - transit
