@@ -18,6 +18,7 @@ topic:
   - archives
   - artificial-intelligence
   - arts-and-culture
+  - augmented-reality
   - blockchain
   - budgets
   - case-study
@@ -27,6 +28,7 @@ topic:
   - civictechto
   - climate
   - co-operatives
+  - collective-intelligence
   - community-building
   - crowdsourcing
   - cybersecurity
@@ -36,21 +38,29 @@ topic:
   - data-privacy
   - decentralization
   - democracy
+  - digital-delivery
   - digital-infrastructure
   - digital-skills
+  - discourse
+  - diversity-equity-inclusion
   - economics
   - education
   - elections
   - employment
+  - entrepreneurship
   - environment
   - example
   - experience-design
   - food-security
+  - forestry
   - freedom-of-information
+  - freedom-of-speech
   - funding
   - futurism
+  - gender-based-violence
   - grants
   - health
+  - history
   - homelessness
   - housing
   - immigration-and-citizenship
@@ -76,6 +86,7 @@ topic:
   - play
   - police
   - policy
+  - precarity
   - public-empowerment
   - public-engagement
   - public-health
@@ -85,6 +96,7 @@ topic:
   - public-safety
   - public-transparency
   - robotics
+  - sensemaking
   - service-delivery
   - service-design
   - shelters
@@ -93,8 +105,12 @@ topic:
   - standards
   - tax
   - transit
+  - transparency
   - transportation
+  - urban-design
+  - urban-planning
   - urbanism
   - volunteerism
   - waste
   - water
+  - youth
