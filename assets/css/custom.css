@@ -28,6 +28,11 @@ dd {
   margin: 0;
 }
 
+/* Fix spacing between heading and subtext in hgroup for better readability on mobile */
+hgroup p {
+  margin-top: var(--pico-typography-spacing-vertical);
+}
+
 /* === 01. Utility Classes === */
 .custom_grid {
   display: grid;
