@@ -257,10 +257,13 @@ header.sticky {
 }
 
 .hacknight-image {
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
+  /* Improve sharpness when scaling */
+  image-rendering: -webkit-optimize-contrast; /* WebKit browsers: better contrast and sharpness */
   width: 100%;
   height: auto;
+  object-fit: cover;
+  /* Subtle sharpening filter for all browsers */
+  filter: contrast(1.05) brightness(1.02);
 }
 
 .lazy-image {
