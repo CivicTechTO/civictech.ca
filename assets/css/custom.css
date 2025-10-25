@@ -259,6 +259,7 @@ header.sticky {
 .hacknight-image {
   /* Improve sharpness when scaling */
   image-rendering: -webkit-optimize-contrast; /* WebKit browsers: better contrast and sharpness */
+  /* Note: Not using crisp-edges as it makes photographs look pixelated */
   width: 100%;
   height: auto;
   object-fit: cover;
