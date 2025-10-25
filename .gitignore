@@ -11,3 +11,7 @@ _site
 
 # Addtional Appended Ignores
 .DS_Store
+
+# Ruby / Bundler
+vendor/bundle
+.bundle
