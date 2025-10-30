@@ -5,6 +5,9 @@ main:
     url: "/get-involved"
   - label: "Code of Conduct"
     url: "/code-of-conduct"
+  - label: "Announcements"
+    url: "/announcements"
+    collection: true
   - label: "Hacknights"
     url: "/hacknights"
     collection: true
@@ -29,9 +32,6 @@ utility:
 
 # Secondary navigation items are currently not used in navigation feautures.
 secondary:
-  - label: "Announcements"
-    url: "/announcements"
-    collection: true
   - label: "People"
     url: "/people"
     collection: true
