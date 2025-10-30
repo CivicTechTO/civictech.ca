@@ -2,6 +2,7 @@
 title: "Civic Tech Toronto | A space to learn and collaborate"
 layout: homepage
 ---
+
 <article class="grid">
   <figure>
     <img
@@ -35,17 +36,16 @@ layout: homepage
 {% assign recent_hacknights = "" | split: "" %}
 
 {% for item in site.hacknights %}
-  {% assign item_day = item.date | date: "%Y-%m-%d" %}
-  {% if item_day >= today %}
-    {% assign future_hacknights = future_hacknights | push: item %}
-  {% else %}
-    {% assign recent_hacknights = recent_hacknights | push: item %}
-  {% endif %}
+{% assign item_day = item.date | date: "%Y-%m-%d" %}
+{% if item_day >= today %}
+{% assign future_hacknights = future_hacknights | push: item %}
+{% else %}
+{% assign recent_hacknights = recent_hacknights | push: item %}
+{% endif %}
 {% endfor %}
 
 {% assign future_hacknights = future_hacknights | sort: "date" %}
 {% assign recent_hacknights = recent_hacknights | sort: "date" | reverse %}
-
 
 <section>
   <h2>Events</h2>
@@ -68,7 +68,7 @@ layout: homepage
           {% if event.image %}
             <a href="{{ event.url }}">
               <div class="hacknight-thumbnail">
-                <img src="{{ site.baseurl }}/assets/images/hacknights/thumbnails/{{ event.image }}" alt="{{ event.topic }}" class="hacknight-image">
+                <img src="{{ site.baseurl }}/assets/images/hacknights/{{ event.image }}" alt="{{ event.topic }}" class="hacknight-image">
               </div>
             </a>
           {% endif %}
@@ -119,7 +119,7 @@ layout: homepage
           {% if event.image %}
             <a href="{{ event.url }}">
               <div class="hacknight-thumbnail">
-                <img src="{{ site.baseurl }}/assets/images/hacknights/thumbnails/{{ event.image }}" alt="{{ event.topic }}" class="hacknight-image">
+                <img src="{{ site.baseurl }}/assets/images/hacknights/{{ event.image }}" alt="{{ event.topic }}" class="hacknight-image">
               </div>
             </a>
           {% endif %}
@@ -140,6 +140,7 @@ layout: homepage
         </div>
       </article>
     {% endfor %}
+
   </div>
 
   <div class="frontpage-action">
@@ -187,8 +188,8 @@ layout: homepage
       </article>
       {% endunless %}
     {% endfor %}
-  </div>
 
+  </div>
 
   <div class="frontpage-action">
     <a href="{{ '/projects' | relative_url }}">See all projects here.</a>
