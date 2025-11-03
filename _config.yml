@@ -22,16 +22,21 @@ exclude:
   - .obsidian
   - .gitignore
   - .gitmodules
+  - .ruby-version
+  - docs
+  - CNAME
+  - CONTRIBUTING.md
   - Gemfile
   - Gemfile.lock
-  - README.md
   - LICENSE
-  - templates
-  - utilities
-  - generate-csv copy.html
-  - generate-csv.html
-  - sh
-  - docs
+  - Makefile
+  - README.md
+  - archives/utilities
+  - archives/data
+  - archives/.gitignore
+  - archives/LICENSE
+  - archives/hacknights.base
+  - archives/README.md
 
 collections_dir: archives
 collections:

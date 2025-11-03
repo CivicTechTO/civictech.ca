@@ -1,93 +1,122 @@
-# CivicTech.ca GitHub Pages Migration Evaluation
+# CivicTech Toronto
 
-This repository contains a draft website created with Jekyll for evaluating the feasibility and process of migrating the [CivicTech.ca](https://civictech.ca) website from WordPress to GitHub Pages.
+The website repository for [CivicTech.ca](https://civictech.ca) — a community of Torontonians working on civic challenges through technology, design, and collaboration.
 
-## Purpose
+## Get Involved
 
-The goal of this project is to explore the advantages and limitations of using Jekyll with GitHub Pages as a potential alternative to WordPress. The objective is to create a static, secure, and low-maintenance website that is easy to update and contributes to open, accessible web content.
+Visit [civictech.ca](https://civictech.ca) to learn more about our community, attend events, and get connected.
 
-## Why GitHub Pages?
+See [CONTRIBUTING.md](CONTRIBUTING.md) for how to contribute to this website.
 
-Migrating to GitHub Pages offers multiple advantages:
+## Local Development
 
-- **Free Hosting** - GitHub Pages provides free hosting for public repositories, reducing hosting costs.
-- **Version Control** - Using Git and GitHub enhances content version control, transparency, and collaboration.
-- **Security** - Static websites are generally more secure than dynamic sites with databases, reducing some risks.
-- **Open Source Collaboration** - GitHub fosters open-source collaboration, enabling contributors to submit pull requests.
+### Prerequisites
 
-## Limitations and Considerations
+This site is built with Jekyll, which requires Ruby. Follow these steps to get set up:
 
-- **No Dynamic Content** - As a static site, GitHub Pages cannot handle server-side processing, so we rely on third-party services for dynamic features.
-- **Markdown Formatting** - Content editing requires familiarity with Markdown and Git workflows, which might increase the learning curve for non-technical contributors.
-- **Limited Plugin Support** - Jekyll has fewer plugins compared to WordPress, so certain functionalities may need custom solutions.
+#### 1. Install Ruby
 
-## Getting Started
+**This project requires Ruby 3.2.2** (specified in `.ruby-version`).
 
-Before you start, consider taking a look at the [GitHub Pages documentation](https://docs.github.com/en/pages)
+We strongly recommend using a Ruby version manager like [RVM](https://rvm.io) or [RBENV](https://rbenv.org) to avoid conflicts.
+
+Verify your Ruby version:
+
+```bash
+ruby -v
+# Should show: ruby 3.2.2
+```
+
+#### 2. Install Bundler
+
+Bundler manages Ruby gem dependencies:
+
+```bash
+gem install bundler
+```
+
+#### 3. Additional Resources
+
+- [GitHub Pages documentation](https://docs.github.com/en/pages)
+- [Jekyll installation guide](https://jekyllrb.com/docs/installation/)
+
+### Setup
 
 1. **Clone the Repository**
-   ```
-   git clone https://github.com/CivicTechTO/civictechto.github.io.git
-   ```
-2. **Install Jekyll and Bundler**  
-   Follow the [Jekyll installation guide](https://jekyllrb.com/docs/installation/) to set up Jekyll and Bundler.
 
-3. **Install Dependencies**
-
+   ```bash
+   git clone https://github.com/CivicTechTO/civictech.ca.git
+   cd civictech.ca
    ```
+
+2. **Install Dependencies**
+
+   ```bash
    bundle install
    ```
 
-4. **Run the Local Server**  
-   Start a local development server:
-   ```
+   If you see errors about missing Ruby version, make sure you've completed the Prerequisites section above.
+
+3. **Run the Local Server**
+
+   Standard mode:
+
+   ```bash
    bundle exec jekyll serve
    ```
 
-   Or use [incremental regeneration](https://jekyllrb.com/docs/configuration/incremental-regeneration/), which is faster but not stable:
+   Or use [incremental regeneration](https://jekyllrb.com/docs/configuration/incremental-regeneration/) (faster but less stable):
+
+   ```bash
+   bundle exec jekyll serve --incremental
    ```
-   bundle exec jekyll serve  --incremental
-   ```
 
-5. **Visit Local Site**  
-   Open your browser and go to `http://localhost:4000` to see the site.
+4. **View the Site**
 
-## Warnings and Pitfalls
+   Open your browser to [localhost:4000](http://localhost:4000)
 
-Using Jekyll with GitHub Pages offers simplicity but comes with certain setup considerations:
+### Common Issues
 
-1. **Ruby Version Management**  
-   If you encounter Ruby version conflicts, consider using a Ruby version manager like **RVM** or **rbenv**. For example, install RVM by following [these instructions](https://rvm.io/rvm/install) and use the required Ruby version specified in `.ruby-version`.
+**Ruby Version Management**
+If you encounter Ruby version conflicts, use a Ruby version manager like [RVM](https://rvm.io/rvm/install) or rbenv. Check `.ruby-version` for the required version.
 
-2. **Bundle Install Errors**  
-   If you encounter issues with `bundle install`, ensure that your Ruby environment matches the requirements in `Gemfile`. Older versions of certain gems may not be compatible with newer Ruby versions, so adjust as needed.
+**Bundle Install Errors**
+Ensure your Ruby environment matches the `Gemfile` requirements. Older gem versions may not be compatible with newer Ruby versions.
 
-3. **Jekyll-GitHub Pages Compatibility**  
-   GitHub Pages restricts Jekyll plugins for security reasons. Refer to the [GitHub Pages documentation](https://pages.github.com/versions/) for supported plugins and dependencies. Unsupported plugins will not work on the live site, which may require alternative solutions.
+**Jekyll-GitHub Pages Compatibility**
+GitHub Pages restricts Jekyll plugins for security. See [supported versions](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/about-github-pages-and-jekyll#plugins) for details.
 
----
+## Development Scripts
 
-## Contributing
+### Update Submodule
 
-This repository is currently under review, pending decision on next steps.
-
----
-
-Handy Notes ~ Submodule Updates
-
-```zsh
+```bash
 git submodule update --remote --merge
 ```
 
+### Generate Categories and Tags Data
 
-Local Development generative categories and tags data
-```zsh
+```bash
 ./_scripts/generate_category_data.sh
 ./_scripts/generate_tag_data.sh
 ```
 
-and pages
-```zsh
+### Generate Category and Tag Pages
+
+```bash
 ./_scripts/generate_category_pages.sh
 ./_scripts/generate_tag_pages.sh
 ```
+
+## Project Structure
+
+This site uses Jekyll with content managed in the `archives/` submodule. The archives contain historical data about events, people, projects, and organizations. See [archives/README.md](archives/README.md) for more details.
+
+## License
+
+This project uses a dual-license structure:
+
+- **Code** (Jekyll templates, scripts, stylesheets, etc.): [MIT License](LICENSE)
+- **Content** (website pages, documentation, archive content): [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+
+See [LICENSE](LICENSE) for full details.
