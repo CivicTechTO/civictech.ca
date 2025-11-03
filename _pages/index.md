@@ -1,12 +1,13 @@
 ---
 title: "Civic Tech Toronto | A space to learn and collaborate"
 layout: homepage
+permalink: "/"
 ---
 
 <article class="grid">
   <figure>
     <img
-      src="assets/images/CivicTechTO-InPerson.jpg"
+      src="{{ 'assets/images/CivicTechTO-InPerson.jpg' | relative_url }}"
       alt="Picture of a group of people sitting listening to a presentation at a Civic Tech Toronto Hacknight"
       style="border-radius: 4px;"
     />

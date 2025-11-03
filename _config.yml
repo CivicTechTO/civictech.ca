@@ -14,6 +14,9 @@ github_username: civictechto
 timezone: America/Toronto
 future: true
 
+include:
+  - _pages
+
 exclude:
   - Makefile
   - .obsidian
@@ -28,6 +31,7 @@ exclude:
   - generate-csv copy.html
   - generate-csv.html
   - sh
+  - docs
 
 collections_dir: archives
 collections:
