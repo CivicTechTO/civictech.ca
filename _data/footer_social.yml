@@ -24,6 +24,11 @@ bluesky:
   url: "https://bsky.app/profile/civictechto.bsky.social"
   icon: bluesky.svg
 
+mastodon:
+  label: Mastodon
+  url: "https://mstdn.ca/@CivicTechTO"
+  icon: mastodon.svg
+  
 instagram:
   label: Instagram
   url: "https://www.instagram.com/civictechto/"
