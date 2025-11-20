@@ -100,7 +100,7 @@ dd {
 }
 
 /* Breadcrumb */
-nav[aria-label="breadcrumb"] {
+nav[aria-label='breadcrumb'] {
   margin-bottom: var(--pico-spacing);
 }
 
@@ -253,24 +253,11 @@ header.sticky {
 /* Hacknights */
 
 .hacknight-thumbnail {
-  background: var(--pico-muted-border-color);
-}
-
-.hacknight-image {
-  image-rendering: -webkit-optimize-contrast; /* WebKit browsers: better contrast and sharpness */
   width: 100%;
+  max-width: 345px; /* sync with thumbnail preset in _data/picture.yml */
   height: auto;
-  object-fit: cover;
-}
-
-.lazy-image {
-  min-height: 150px;
-  transition: opacity 0.3s ease;
-  opacity: 0;
-}
-
-.lazy-image.show {
-  opacity: 1;
+  background: var(--pico-muted-border-color);
+  flex-shrink: 0;
 }
 
 /* Person Page */
@@ -354,8 +341,8 @@ header.sticky {
 .main-with-sidebar {
   display: grid;
   grid-template-areas:
-    "main"
-    "sidebar";
+    'main'
+    'sidebar';
   grid-template-columns: 1fr;
   gap: 1.5rem;
   margin-bottom: 2rem;
@@ -372,7 +359,7 @@ header.sticky {
 /* Two-column layout on tablet+ */
 @media (min-width: 1024px) {
   .main-with-sidebar {
-    grid-template-areas: "main sidebar";
+    grid-template-areas: 'main sidebar';
     grid-template-columns: 2fr 1fr; /* or 3fr 1fr depending on your balance */
   }
 }

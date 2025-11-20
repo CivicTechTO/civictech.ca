@@ -106,5 +106,13 @@ defaults:
 plugins:
   - jekyll-redirect-from
   - jekyll-sitemap
+  - jekyll_picture_tag
+  - jekyll-loading-lazy
+
+# jekyll_picture_tag settings
+picture:
+  source: 'assets/images'
+  output: 'assets/thumbs'
+  ignore_missing_images: true
 
 use_html_extension: false
