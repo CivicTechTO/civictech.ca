@@ -27,7 +27,7 @@ ruby -v
 # Should show: ruby 3.2.2
 ```
 
-#### 2. Install Bundler
+#### 2. Install dependencies
 
 Bundler manages Ruby gem dependencies:
 
@@ -35,10 +35,22 @@ Bundler manages Ruby gem dependencies:
 gem install bundler
 ```
 
-#### 3. Additional Resources
+Additional System Dependency: `libvips` `jekyll_picture_tag` depends on `libvips` for image processing. You’ll need to install it before running Jekyll locally.
 
-- [GitHub Pages documentation](https://docs.github.com/en/pages)
-- [Jekyll installation guide](https://jekyllrb.com/docs/installation/)
+If using **macOS**, you can get libvips from [homebrew](https://brew.sh)
+
+```sh
+brew install vips
+```
+
+For **Windows** or otherwise, please resolve and update the readme with your method.
+
+> [!TIP]
+>
+> Additional Resources
+>
+> - [GitHub Pages documentation](https://docs.github.com/en/pages)
+> - [Jekyll installation guide](https://jekyllrb.com/docs/installation/)
 
 ### Setup
 
