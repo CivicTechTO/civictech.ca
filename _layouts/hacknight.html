@@ -89,7 +89,7 @@ layout: base
 
       <aside>
         {% if page.image %}
-          <img style="margin-bottom: 2rem;" src="{{ site.baseurl }}/assets/images/hacknights/{{ page.image }}" alt="{{ page.topic }}" class="hacknight-image">
+          {% picture hacknight hacknights/{{ page.image }} alt="{{ event.topic }}" class="hacknight-image" %}
         {% endif %}
         <h2>Details</h2>
         {% if page.eventUrl %}
