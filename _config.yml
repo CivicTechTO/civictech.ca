@@ -111,7 +111,7 @@ plugins:
 
 # jekyll_picture_tag settings
 picture:
-  source: 'assets/images'
+  source: 'archives/images'
   output: 'assets/thumbs'
   ignore_missing_images: true
 

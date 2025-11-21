@@ -252,6 +252,10 @@ header.sticky {
 
 /* Hacknights */
 
+.hacknight-image {
+  margin-bottom: 2rem;
+}
+
 .hacknight-thumbnail {
   width: 100%;
   max-width: 345px; /* sync with thumbnail preset in _data/picture.yml */
