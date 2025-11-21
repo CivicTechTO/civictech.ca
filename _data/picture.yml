@@ -1,0 +1,23 @@
+presets:
+  # default:
+  #   formats: [webp]
+  #   widths: [1000]
+  #   sizes:
+  #     mobile: 100vw
+  #     default: 1000px
+  #   attributes:
+  #     loading: lazy
+  #     decoding: async
+
+  hacknight:
+    formats: [webp]
+    widths: [690]
+    sizes:
+      mobile: 100vw
+      # sync with .hacknight-thumbnail in custom.css - 2x width
+      default: 690px
+    attributes:
+      loading: lazy
+
+media_queries:
+  mobile: '(max-width: 600px)'

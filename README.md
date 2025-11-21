@@ -10,39 +10,22 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for how to contribute to this website.
 
 ## Local Development
 
-### Prerequisites
-
 This site is built with Jekyll, which requires Ruby. Follow these steps to get set up:
 
-#### 1. Install Ruby
+1. **Install Ruby**
 
-**This project requires Ruby 3.2.2** (specified in `.ruby-version`).
+   **This project requires Ruby 3.2.2** (specified in `.ruby-version`).
 
-We strongly recommend using a Ruby version manager like [RVM](https://rvm.io) or [RBENV](https://rbenv.org) to avoid conflicts.
+   We strongly recommend installing Ruby using a Ruby version manager like [RBENV](https://rbenv.org).
 
-Verify your Ruby version:
+   Verify your Ruby version:
 
-```bash
-ruby -v
-# Should show: ruby 3.2.2
-```
+   ```bash
+   ruby -v
+   # Should show: ruby 3.2.2
+   ```
 
-#### 2. Install Bundler
-
-Bundler manages Ruby gem dependencies:
-
-```bash
-gem install bundler
-```
-
-#### 3. Additional Resources
-
-- [GitHub Pages documentation](https://docs.github.com/en/pages)
-- [Jekyll installation guide](https://jekyllrb.com/docs/installation/)
-
-### Setup
-
-1. **Clone the Repository**
+2. **Clone the Repository**
 
    ```bash
    git clone https://github.com/CivicTechTO/civictech.ca.git
@@ -51,11 +34,30 @@ gem install bundler
 
 2. **Install Dependencies**
 
+   Bundler manages Ruby gem dependencies:
+
    ```bash
+   gem install bundler
    bundle install
    ```
 
    If you see errors about missing Ruby version, make sure you've completed the Prerequisites section above.
+
+   **Additional dependencies for image processing:**
+
+   If using **macOS**, you can get libvips from [homebrew](https://brew.sh):
+
+   ```sh
+   brew install vips imagemagick
+   ```
+
+   > [!TIP]
+   >
+   > Additional Resources
+   >
+   > - [GitHub Pages documentation](https://docs.github.com/en/pages)
+   > - [Jekyll installation guide](https://jekyllrb.com/docs/installation/)
+
 
 3. **Run the Local Server**
 

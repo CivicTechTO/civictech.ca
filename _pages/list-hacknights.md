@@ -76,11 +76,11 @@ permalink: "/hacknights/"
       <article class="card">
         <div class="row-content row-content-column">
           {% if event.image %}
-            <a href="{{ event.url }}">
-              <div class="hacknight-thumbnail">
-                <img data-src="{{ site.baseurl }}/assets/images/hacknights/thumbnails/{{ event.image }}" class="lazy-image" />
-              </div>
-            </a>
+            <div class="hacknight-thumbnail">
+              <a href="{{ event.url }}">
+                {% picture hacknight hacknights/{{ event.image }} alt="{{ event.topic }}" %}
+              </a>
+            </div>
           {% endif %}
           <div>
             <small>{{ event.date | date: "%B %d, %Y" }} – Hacknight #{{ event.number }}</small>
@@ -130,11 +130,11 @@ permalink: "/hacknights/"
       <article class="card card-row" data-topics="{{ topics_string }}">
         <div class="row-content">
           {% if event.image %}
-            <a href="{{ event.url }}">
-              <div class="hacknight-thumbnail">
-                <img data-src="{{ site.baseurl }}/assets/images/hacknights/thumbnails/{{ event.image }}" class="lazy-image" />
-              </div>
-            </a>
+            <div class="hacknight-thumbnail">
+              <a href="{{ event.url }}">
+                {% picture hacknight hacknights/{{ event.image }} alt="{{ event.topic }}" %}
+              </a>
+            </div>
           {% endif %}
           <div>
             <small>
