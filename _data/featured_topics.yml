@@ -1,0 +1,15 @@
+# Featured topics to display on the homepage
+# Each topic should match a slug from _data/tags.yml
+topics:
+  - slug: democracy
+    title: Democracy
+  - slug: climate
+    title: Climate
+  - slug: housing
+    title: Housing
+  - slug: open-data
+    title: Open Data
+  - slug: public-engagement
+    title: Public Engagement
+  - slug: artificial-intelligence
+    title: Artificial Intelligence
