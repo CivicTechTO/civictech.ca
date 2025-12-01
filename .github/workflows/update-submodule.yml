@@ -2,7 +2,7 @@ name: Update Archives Submodule and Trigger Pages Build
 
 on:
   schedule:
-    - cron: '0 * * * *'  # every hour
+    - cron: '0 0 * * *'  # daily at midnight UTC
   workflow_dispatch:
 
 jobs:
@@ -23,9 +23,17 @@ jobs:
       - name: Update 'archives' submodule
         run: |
           git submodule update --remote archives
-          git add archives
-          git commit -m "Auto-update archives submodule to latest master" || echo "No changes to commit"
 
-      - name: Push changes if any
-        run: |
-          git push || echo "Nothing to push"
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: "Auto-update archives submodule to latest master"
+          title: "Auto-update archives submodule"
+          body: |
+            Automated update of the archives submodule to the latest commit.
+
+            🤖 This PR was created automatically by the scheduled workflow.
+          branch: auto-update-archives
+          delete-branch: true
+          add-paths: |
+            archives
