@@ -1,5 +1,6 @@
 ---
 title: "Code of Conduct"
+layout: page
 permalink: "/code-of-conduct"
 ---
 
@@ -31,26 +32,24 @@ Examples of unacceptable behavior include:
 - Publishing others’ private information, such as a physical or email address, without their explicit permission
 - Other conduct which could reasonably be considered inappropriate in a professional setting
 
-
 ## How can I report an issue?
+
 Reach out in person or on Slack to one of the Code of Conduct Committee members to learn more about the process. They will share information that can help you decide whether to file a formal report.
 
 Current members of the Code of Conduct Committee are:
 
 - soon to be provided
 
-
 ## Outcome Guidelines
 
 Code of Conduct Committee members will follow these Outcome Guidelines, to determine the consequences for any action they deem in violation of this Code of Conduct:
 
-
-| Outcome | Community Impact | Consequence |
-| -- | -- | -- |
-| Correction | Use of inappropriate language or other behaviour deemed unprofessional or unwelcome in the community. | A private, written warning from community leaders, providing clarity around the nature of the violation and an explanation of why the behaviour was inappropriate. A public apology may be requested. |
-| Warning | A violation through a single incident or series of actions. | A warning with consequences for continued behaviour. No interaction with the people involved, including unsolicited interaction with those enforcing the Code of Conduct, for a specified period of time. This includes avoiding interactions in community spaces as well as external channels like social media. Violating these terms may lead to a temporary or permanent ban. |
-| Temporary Ban | A serious violation of community standards, including sustained inappropriate behaviour. | A temporary ban from any sort of interaction or public communication with the community for a specified period of time. No public or private interaction with the people involved, including unsolicited interaction with those enforcing the Code of Conduct, is allowed during this period. Violating these terms may lead to a permanent ban. |
-| Permanent Ban | Demonstrating a pattern of violation of community standards, including sustained inappropriate behaviour, harassment of an individual, or aggression toward or disparagement of classes of individuals. | A permanent ban from any sort of public interaction within the community. |
+| Outcome       | Community Impact                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                                                                                                                                                                       |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Correction    | Use of inappropriate language or other behaviour deemed unprofessional or unwelcome in the community.                                                                                                   | A private, written warning from community leaders, providing clarity around the nature of the violation and an explanation of why the behaviour was inappropriate. A public apology may be requested.                                                                                                                                                                             |
+| Warning       | A violation through a single incident or series of actions.                                                                                                                                             | A warning with consequences for continued behaviour. No interaction with the people involved, including unsolicited interaction with those enforcing the Code of Conduct, for a specified period of time. This includes avoiding interactions in community spaces as well as external channels like social media. Violating these terms may lead to a temporary or permanent ban. |
+| Temporary Ban | A serious violation of community standards, including sustained inappropriate behaviour.                                                                                                                | A temporary ban from any sort of interaction or public communication with the community for a specified period of time. No public or private interaction with the people involved, including unsolicited interaction with those enforcing the Code of Conduct, is allowed during this period. Violating these terms may lead to a permanent ban.                                  |
+| Permanent Ban | Demonstrating a pattern of violation of community standards, including sustained inappropriate behaviour, harassment of an individual, or aggression toward or disparagement of classes of individuals. | A permanent ban from any sort of public interaction within the community.                                                                                                                                                                                                                                                                                                         |
 
 ## Who does this apply to?
 
