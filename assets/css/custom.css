@@ -100,7 +100,7 @@ dd {
 }
 
 /* Breadcrumb */
-nav[aria-label='breadcrumb'] {
+nav[aria-label="breadcrumb"] {
   margin-bottom: var(--pico-spacing);
 }
 
@@ -345,8 +345,8 @@ header.sticky {
 .main-with-sidebar {
   display: grid;
   grid-template-areas:
-    'main'
-    'sidebar';
+    "main"
+    "sidebar";
   grid-template-columns: 1fr;
   gap: 1.5rem;
   margin-bottom: 2rem;
@@ -363,7 +363,7 @@ header.sticky {
 /* Two-column layout on tablet+ */
 @media (min-width: 1024px) {
   .main-with-sidebar {
-    grid-template-areas: 'main sidebar';
+    grid-template-areas: "main sidebar";
     grid-template-columns: 2fr 1fr; /* or 3fr 1fr depending on your balance */
   }
 }
@@ -520,4 +520,12 @@ aside .ogimage {
 
 .listed {
   max-width: 450px;
+}
+
+.feautured-topic-links {
+  /* Home page featured topic links */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding-bottom: 1rem;
 }

@@ -198,6 +198,24 @@ permalink: "/"
 
 </section>
 
+<!-- === Featured Topics ===  -->
+
+<section>
+  <header>
+    <h2>Explore Topics</h2>
+  </header>
+  <div class="feautured-topic-links">
+    {% for topic in site.data.featured_topics.topics %}
+      <a role="button" class="outline" href="{{ '/tags/topic/' | append: topic.slug | append: '/' | relative_url }}">
+        {{ topic.title }}
+      </a>
+    {% endfor %}
+  </div>
+  <div class="frontpage-action">
+    <a href="{{ '/tags/topic' | relative_url }}">See all topics here.</a>
+  </div>
+</section>
+
 <!-- === Call to Actions ===  -->
 
 <section>
