@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main # Adjust if your default branch is different
+  schedule:
+    - cron: '0 6 * * *'  # Daily at 6:00 AM UTC (1:00 AM EST / 2:00 AM EDT)
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
