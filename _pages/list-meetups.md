@@ -1,7 +1,7 @@
 ---
 title: "Meetups"
 layout: page
-permalink: "/hacknights/"
+permalink: "/events/"
 ---
 
 {% assign today = site.time | date: "%Y-%m-%d" %}
@@ -9,7 +9,7 @@ permalink: "/hacknights/"
 {% assign future_hacknights = "" | split: "" %}
 {% assign recent_hacknights = "" | split: "" %}
 
-{% for item in site.hacknights %}
+{% for item in site.meetups %}
 {% assign item_day = item.date | date: "%Y-%m-%d" %}
 {% if item_day >= today %}
 {% assign future_hacknights = future_hacknights | push: item %}
@@ -23,7 +23,7 @@ permalink: "/hacknights/"
 
 <!-- Extract unique topics for filters -->
 
-{% assign all_events = site.hacknights %}
+{% assign all_events = site.meetups %}
 {% assign topic_tags = "" | split: "," %}
 {% for event in all_events %}
 {% for tag in event.tags %}

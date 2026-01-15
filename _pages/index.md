@@ -36,7 +36,7 @@ permalink: "/"
 {% assign future_hacknights = "" | split: "" %}
 {% assign recent_hacknights = "" | split: "" %}
 
-{% for item in site.hacknights %}
+{% for item in site.meetups %}
 {% assign item_day = item.date | date: "%Y-%m-%d" %}
 {% if item_day >= today %}
 {% assign future_hacknights = future_hacknights | push: item %}

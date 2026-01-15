@@ -4,10 +4,10 @@ layout: base
 
 {% comment %} Resolve linked Hacknights {% endcomment %}
 {% assign resolved_hacknights = "" | split: "" %}
-{% for instance in page.hacknight %}
+{% for instance in page.meetups %}
   {% assign instance_name = instance | remove: '[[' | remove: ']]' %}
   {% assign path = '_hacknights/' | append: instance_name | append: '.md' %}
-  {% assign instance_resolved = site.hacknights | where: "relative_path", path | first %}
+  {% assign instance_resolved = site.meetups | where: "relative_path", path | first %}
   {% if instance_resolved %}
     {% assign resolved_hacknights = resolved_hacknights | push: instance_resolved %}
   {% endif %}
