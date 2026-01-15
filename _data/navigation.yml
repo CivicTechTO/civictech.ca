@@ -8,7 +8,7 @@ main:
   - label: "Announcements"
     url: "/announcements"
     collection: true
-  - label: "Hacknights"
+  - label: "Meetups"
     url: "/hacknights"
     collection: true
   - label: "Projects"
@@ -17,7 +17,6 @@ main:
   - label: "Resources"
     url: "/resources"
     collection: true
-
 
 utility:
   - label: "Slack"
@@ -28,7 +27,6 @@ utility:
     url: "https://guild.host/ctto/events"
     type: "primary"
     external: true
-
 
 # Secondary navigation items are currently not used in navigation feautures.
 secondary:

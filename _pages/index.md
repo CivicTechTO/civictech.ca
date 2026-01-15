@@ -8,7 +8,7 @@ permalink: "/"
   <figure>
     <img
       src="{{ 'assets/images/CivicTechTO-InPerson.jpg' | relative_url }}"
-      alt="Picture of a group of people sitting listening to a presentation at a Civic Tech Toronto Hacknight"
+      alt="Picture of a group of people sitting listening to a presentation at a Civic Tech Toronto Meetup"
       style="border-radius: 4px;"
     />
   </figure>
@@ -74,7 +74,7 @@ permalink: "/"
             </div>
           {% endif %}
           <div>
-            <small>{{ event.date | date: "%B %d, %Y" }} – Hacknight #{{ event.number }}</small>
+            <small>{{ event.date | date: "%B %d, %Y" }} – Meetup #{{ event.number }}</small>
             <br/>
             <a href="{{ event.url }}"><strong>{{ event.topic }}</strong></a>
             {% include topic-tags.html tags=event.tags %}
@@ -125,7 +125,7 @@ permalink: "/"
             </div>
           {% endif %}
           <div>
-            <small>{{ event.date | date: "%B %d, %Y" }} — Hacknight #{{ event.number }}</small>
+            <small>{{ event.date | date: "%B %d, %Y" }} — Meetup #{{ event.number }}</small>
             <br/>
             <a href="{{ event.url }}"><strong>{{ event.topic }}</strong></a>
             {% include topic-tags.html tags=event.tags %}
@@ -145,7 +145,7 @@ permalink: "/"
   </div>
 
   <div class="frontpage-action">
-    <a href="{{ '/hacknights' | relative_url }}">See all Hacknights here.</a>
+    <a href="{{ '/hacknights' | relative_url }}">See all Meetups here.</a>
   </div>
 </section>
 
