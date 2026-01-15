@@ -27,35 +27,35 @@ permalink: "/"
   </div>
 </article>
 
-<!-- === Recent Hacknights ===  -->
+<!-- === Recent Meetups ===  -->
 
-<!-- Past Hacknights -->
+<!-- Past Meetups -->
 
 {% assign today = site.time | date: "%Y-%m-%d" %}
 
-{% assign future_hacknights = "" | split: "" %}
-{% assign recent_hacknights = "" | split: "" %}
+{% assign future_meetups = "" | split: "" %}
+{% assign recent_meetups = "" | split: "" %}
 
 {% for item in site.meetups %}
 {% assign item_day = item.date | date: "%Y-%m-%d" %}
 {% if item_day >= today %}
-{% assign future_hacknights = future_hacknights | push: item %}
+{% assign future_meetups = future_meetups | push: item %}
 {% else %}
-{% assign recent_hacknights = recent_hacknights | push: item %}
+{% assign recent_meetups = recent_meetups | push: item %}
 {% endif %}
 {% endfor %}
 
-{% assign future_hacknights = future_hacknights | sort: "date" %}
-{% assign recent_hacknights = recent_hacknights | sort: "date" | reverse %}
+{% assign future_meetups = future_meetups | sort: "date" %}
+{% assign recent_meetups = recent_meetups | sort: "date" | reverse %}
 
 <section>
   <h2>Events</h2>
-  {% if future_hacknights.size > 0 %}
+  {% if future_meetups.size > 0 %}
   <header>
     <h3>Upcoming</h3>
   </header>
-  <div id="hacknightsGrid" class="card-grid">
-    {% for event in future_hacknights limit: 3 %}
+  <div id="meetupsGrid" class="card-grid">
+    {% for event in future_meetups limit: 3 %}
       {% assign formatted_topics = "" | split: "," %}
       {% for tag in event.tags %}
         {% if tag contains "topic/" %}
@@ -104,8 +104,8 @@ permalink: "/"
   <header>
     <h3>Recent</h3>
   </header>
-  <div id="pastHacknightsList" class="grid">
-    {% for event in recent_hacknights limit: 3 %}
+  <div id="pastMeetupsList" class="grid">
+    {% for event in recent_meetups limit: 3 %}
       {% assign formatted_topics = "" | split: "," %}
       {% for tag in event.tags %}
         {% if tag contains "topic/" %}
