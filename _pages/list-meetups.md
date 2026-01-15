@@ -74,9 +74,9 @@ permalink: "/events/"
       <article class="card">
         <div class="row-content row-content-column">
           {% if event.image %}
-            <div class="hacknight-thumbnail">
+            <div class="meetup-thumbnail">
               <a href="{{ event.url }}">
-                {% picture hacknight hacknights/{{ event.image }} alt="{{ event.topic }}" %}
+                {% picture events /events/{{ event.image }} alt="{{ event.topic }}" %}
               </a>
             </div>
           {% endif %}
@@ -127,9 +127,9 @@ permalink: "/events/"
       <article class="card card-row" data-topics="{{ topics_string }}">
         <div class="row-content">
           {% if event.image %}
-            <div class="hacknight-thumbnail">
+            <div class="meetup-thumbnail">
               <a href="{{ event.url }}">
-                {% picture hacknight hacknights/{{ event.image }} alt="{{ event.topic }}" %}
+                {% picture events /events/{{ event.image }} alt="{{ event.topic }}" %}
               </a>
             </div>
           {% endif %}

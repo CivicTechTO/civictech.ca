@@ -250,13 +250,13 @@ header.sticky {
   margin-bottom: var(--pico-block-spacing-vertical);
 }
 
-/* Hacknights */
+/* Meetups */
 
-.hacknight-image {
+.meetup-image {
   margin-bottom: 2rem;
 }
 
-.hacknight-thumbnail {
+.meetup-thumbnail {
   width: 100%;
   max-width: 345px; /* sync with thumbnail preset in _data/picture.yml */
   height: auto;
