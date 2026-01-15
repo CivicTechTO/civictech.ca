@@ -22,7 +22,7 @@ permalink: "/"
     <p>Our events are hybrid – join us in person or online.</p>
     <div class="button-list">
       <a role="button" class="outline" href="https://guild.host/ctto/events" target="_blank">Sign up on Guild<span aria-hidden="true">&nbsp;↗</span></a>
-      <a role="button" class="secondary outline" href="{{'/hacknights' | relative_url }}">See past events</a>
+      <a role="button" class="secondary outline" href="{{'/events' | relative_url }}">See past events</a>
     </div>
   </div>
 </article>
@@ -145,7 +145,7 @@ permalink: "/"
   </div>
 
   <div class="frontpage-action">
-    <a href="{{ '/hacknights' | relative_url }}">See all Meetups here.</a>
+    <a href="{{ '/events' | relative_url }}">See all Meetups here.</a>
   </div>
 </section>
 
