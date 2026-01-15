@@ -12,6 +12,10 @@ format:
   - practitioner
   - resource-list
   - volunteering
+venue-category:
+  - Industry
+  - Nonprofit
+  - Online
 contributors:
   - open
   - paused

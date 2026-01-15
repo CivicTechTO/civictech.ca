@@ -6,7 +6,7 @@ It determines the appropriate @type based on page.tags:
   - "type/project" → CreativeWork
   - "type/person" → Person
   - "type/organization" → Organization
-  - "type/hacknight" → Event
+  - "type/meetup" → Event
   - "type/venue" → Place
   - (fallback) → WebPage
 
@@ -70,7 +70,7 @@ Note:
     {% endif %}
     "url": {{ page.url | absolute_url | jsonify }}
 
-  {% elsif page_tags contains "type/hacknight" %}
+  {% elsif page_tags contains "type/meetup" %}
     "@type": "Event",
     "name": {{ page.title | jsonify }},
     "startDate": "{{ page.date }}",
