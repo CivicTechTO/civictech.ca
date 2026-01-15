@@ -100,12 +100,12 @@ layout: base
 
     {% if resolved_hacknights.size > 0 %}
     <section>
-      <h3>Related Hacknights</h3>
+      <h3>Related Meetups</h3>
       {% for hacknight in resolved_hacknights %}
       <article>
         <hgroup>
           <small>
-            {{ hacknight.date | date: "%B %d, %Y" }} - Hacknight #{{ hacknight.number }}
+            {{ hacknight.date | date: "%B %d, %Y" }} - Meetup #{{ hacknight.number }}
           </small>
           <h4>
             <a href="{{ hacknight.url }}">

@@ -28,15 +28,15 @@ layout: base
   <nav aria-label="breadcrumb">
     <ul>
       <li><a href="{{ site.baseurl }}/">Home</a></li>
-      <li><a href="{{ site.baseurl }}/hacknights/">Hacknights</a></li>
-      <li>Hacknight #{{ page.number }}</li>
+      <li><a href="{{ site.baseurl }}/hacknights/">Meetups</a></li>
+      <li>Meetup #{{ page.number }}</li>
     </ul>
   </nav>
 
   <article class="mobilenegativemargin">
     <header>
       <hgroup>
-        <p><small>Hacknight #{{ page.number }}</small></p>
+        <p><small>Meetup #{{ page.number }}</small></p>
         <h1>{{ page.topic }}</h1>
 
         {% if resolved_speakers.size > 0 %}
