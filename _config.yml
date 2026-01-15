@@ -44,10 +44,10 @@ collections:
     output: true
     sort_by: date
     permalink: /:collection/:path/
-  hacknights:
+  meetups:
     output: true
     sort_by: date
-    permalink: /:collection/:path/
+    permalink: /events/:path/
   organizations:
     output: true
     permalink: /:collection/:path/
@@ -73,9 +73,9 @@ defaults:
       sort_by: date
   - scope:
       path: ""
-      type: hacknights
+      type: meetups
     values:
-      layout: hacknight
+      layout: meetup
       sort_by: date
   - scope:
       path: ""
@@ -111,8 +111,8 @@ plugins:
 
 # jekyll_picture_tag settings
 picture:
-  source: 'archives/images'
-  output: 'assets/thumbs'
+  source: "archives/images"
+  output: "assets/thumbs"
   ignore_missing_images: true
 
 use_html_extension: false
