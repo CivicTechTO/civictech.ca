@@ -2,6 +2,7 @@
 title: "Meetups"
 layout: page
 permalink: "/events/"
+redirect_from: /hacknights/
 ---
 
 {% assign today = site.time | date: "%Y-%m-%d" %}
