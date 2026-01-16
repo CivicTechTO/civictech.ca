@@ -5,7 +5,6 @@ permalink: "/about-us/"
 redirect_from: /get-in-touch/
 ---
 
-
 <section>
   <h2>What is Civic Tech Toronto?</h2>
   <p><strong>Civic Tech Toronto</strong> is a community dedicated to exploring, understanding, and addressing civic challenges through technology, design, and creative collaboration. We connect Torontonians passionate about making their city better for everyone, whether they bring technical skills or simply curiosity and enthusiasm.</p>
@@ -19,7 +18,6 @@ redirect_from: /get-in-touch/
   <p>We are committed to providing a safe, inclusive, and respectful environment for everyone.</p>
   <a href="/code-of-conduct" class="secondary">Read our Code of Conduct →</a>
 </section>
-
 
 <section>
   <h2>What to Expect</h2>
@@ -39,23 +37,25 @@ redirect_from: /get-in-touch/
 <div class="custom_grid">
   {% assign featured_speakers = site.people | where_exp: "person", "person.categories contains 'meta/feature'" | sort: "date" | reverse %}
 
-  {% for speaker in featured_speakers limit:9 %}
-    <hgroup>
-      <a href="{{speaker.url}}" alt="{{speark.title}}"><h4>{{ speaker.title }}</h4></a>
-      <p>
-        {% if speaker.organization %}
-          {% assign organization_list = "" | split: "" %}
-          {% for organization in speaker.organization %}
-            {% assign organization_name = organization | remove: '[[' | remove: ']]' %}
-            {% assign organization_list = organization_list | push: organization_name %}
-          {% endfor %}
-          {{ organization_list | join: ", " }}
-        {% else %}
-          Unassociated
-        {% endif %}
-      </p>
-    </hgroup>
-  {% endfor %}
+{% for speaker in featured_speakers limit:9 %}
+
+<hgroup>
+<a href="{{speaker.url}}" alt="{{speark.title}}"><h4>{{ speaker.title }}</h4></a>
+<p>
+{% if speaker.organization %}
+{% assign organization_list = "" | split: "" %}
+{% for organization in speaker.organization %}
+{% assign organization_name = organization | remove: '[[' | remove: ']]' %}
+{% assign organization_list = organization_list | push: organization_name %}
+{% endfor %}
+{{ organization_list | join: ", " }}
+{% else %}
+Unassociated
+{% endif %}
+</p>
+</hgroup>
+{% endfor %}
+
 </div>
 <a href="{{ '/people' | relative_url }}">See all past speakers here!</a>
 </section>
@@ -66,23 +66,25 @@ redirect_from: /get-in-touch/
 <div class="custom_grid">
   {% assign featured_sponsors = site.organizations | where_exp: "organization", "organization.categories contains 'meta/feature'" | sort: "date" | reverse %}
 
-  {% for sponsor in featured_sponsors limit:9 %}
-    <div>
-      <hgroup>
-        <h4>{{ sponsor.title }}</h4>
-        {% if sponsor.social.website %}
-          <p>
-            {% if sponsor.image %}
-              <div class="hacknight-thumbnail">
-                <img src="{{ site.baseurl }}/assets/images/organizations/{{ sponsor.image }}" alt="{{ sponsor.title }} Logo" class="hacknight-image">
-              </div>
-            {% endif %}
-            <a href="{{ sponsor.social.website }}">Visit {{ sponsor.title }} website</a>
-          </p>
-        {% endif %}
-      </hgroup>
-    </div>
-  {% endfor %}
+{% for sponsor in featured_sponsors limit:9 %}
+
+<div>
+<hgroup>
+<h4>{{ sponsor.title }}</h4>
+{% if sponsor.social.website %}
+<p>
+{% if sponsor.image %}
+<div class="meetup-thumbnail">
+<img src="{{ site.baseurl }}/assets/images/organizations/{{ sponsor.image }}" alt="{{ sponsor.title }} Logo" class="meetup-image">
+</div>
+{% endif %}
+<a href="{{ sponsor.social.website }}">Visit {{ sponsor.title }} website</a>
+</p>
+{% endif %}
+</hgroup>
+</div>
+{% endfor %}
+
 </div>
 </section>
 

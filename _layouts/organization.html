@@ -57,7 +57,7 @@ layout: base
     {% include social-links.html social=page.social %}
     {% endif %}
 
-    {% assign all_collections = site.hacknights | concat: site.projects | concat: site.people | concat: site.venues %}
+    {% assign all_collections = site.meetups | concat: site.projects | concat: site.people | concat: site.venues %}
 
     <footer>
       {% include edit-link.html %}

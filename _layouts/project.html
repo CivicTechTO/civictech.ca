@@ -2,17 +2,17 @@
 layout: base
 ---
 
-{% comment %} Resolve linked Hacknights {% endcomment %}
-{% assign resolved_hacknights = "" | split: "" %}
-{% for instance in page.hacknight %}
+{% comment %} Resolve linked Meetups {% endcomment %}
+{% assign resolved_meetups = "" | split: "" %}
+{% for instance in page.meetups %}
   {% assign instance_name = instance | remove: '[[' | remove: ']]' %}
-  {% assign path = '_hacknights/' | append: instance_name | append: '.md' %}
-  {% assign instance_resolved = site.hacknights | where: "relative_path", path | first %}
+  {% assign path = '_meetups/' | append: instance_name | append: '.md' %}
+  {% assign instance_resolved = site.meetups | where: "relative_path", path | first %}
   {% if instance_resolved %}
-    {% assign resolved_hacknights = resolved_hacknights | push: instance_resolved %}
+    {% assign resolved_meetups = resolved_meetups | push: instance_resolved %}
   {% endif %}
 {% endfor %}
-{% assign resolved_hacknights = resolved_hacknights | sort: "date" | reverse %}
+{% assign resolved_meetups = resolved_meetups | sort: "date" | reverse %}
 
 {% comment %} Resolve linked People {% endcomment %}
 {% assign resolved_people = "" | split: "" %}
@@ -79,7 +79,7 @@ layout: base
     </footer>
   </article>
 
-  {% if resolved_people.size > 0 and resolved_hacknights.size > 0 %}
+  {% if resolved_people.size > 0 and resolved_meetups.size > 0 %}
   <section class="related-articles">
     {% if resolved_people.size > 0 %}
     <section>
@@ -98,18 +98,18 @@ layout: base
     </section>
     {% endif %}
 
-    {% if resolved_hacknights.size > 0 %}
+    {% if resolved_meetups.size > 0 %}
     <section>
       <h3>Related Meetups</h3>
-      {% for hacknight in resolved_hacknights %}
+      {% for meetup in resolved_meetups %}
       <article>
         <hgroup>
           <small>
-            {{ hacknight.date | date: "%B %d, %Y" }} - Meetup #{{ hacknight.number }}
+            {{ meetup.date | date: "%B %d, %Y" }} - Meetup #{{ meetup.number }}
           </small>
           <h4>
-            <a href="{{ hacknight.url }}">
-              {{ hacknight.topic }}
+            <a href="{{ meetup.url }}">
+              {{ meetup.topic }}
             </a>
           </h4>
         </hgroup>

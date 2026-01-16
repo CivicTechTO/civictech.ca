@@ -28,7 +28,7 @@ layout: base
   <nav aria-label="breadcrumb">
     <ul>
       <li><a href="{{ site.baseurl }}/">Home</a></li>
-      <li><a href="{{ site.baseurl }}/hacknights/">Meetups</a></li>
+      <li><a href="{{ site.baseurl }}/events/">Meetups</a></li>
       <li>Meetup #{{ page.number }}</li>
     </ul>
   </nav>
@@ -89,7 +89,7 @@ layout: base
 
       <aside>
         {% if page.image %}
-          {% picture hacknight hacknights/{{ page.image }} alt="{{ event.topic }}" class="hacknight-image" %}
+          {% picture events /events/{{ page.image }} alt="{{ event.topic }}" class="meetup-image" %}
         {% endif %}
         <h2>Details</h2>
         {% if page.eventUrl %}

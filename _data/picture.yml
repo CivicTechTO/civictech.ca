@@ -9,15 +9,15 @@ presets:
   #     loading: lazy
   #     decoding: async
 
-  hacknight:
+  events:
     formats: [webp]
     widths: [690]
     sizes:
       mobile: 100vw
-      # sync with .hacknight-thumbnail in custom.css - 2x width
+      # sync with .meetup-thumbnail in custom.css - 2x width
       default: 690px
     attributes:
       loading: lazy
 
 media_queries:
-  mobile: '(max-width: 600px)'
+  mobile: "(max-width: 600px)"

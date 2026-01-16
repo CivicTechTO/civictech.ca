@@ -2,14 +2,14 @@
 backlinks.html
 
 Usage:
-  {% include backlinks.html collections=site.hacknights fields="team,speakers" title="Mentioned In" %}
+  {% include backlinks.html collections=site.meetups fields="team,speakers" title="Mentioned In" %}
 
 Description:
   Displays a list of documents that reference the current page via wikilinks (`[[slug]]`) in specified fields.
   Useful for building "backlink" or "mentioned in" sections to show where a person, team, or project is referenced.
 
 Parameters:
-  - `collections`: The collection(s) to scan for backlinks (e.g. `site.hacknights`)
+  - `collections`: The collection(s) to scan for backlinks (e.g. `site.meetups`)
   - `fields`: Comma-separated list of front matter fields to check for wikilinks (e.g. `team,speakers`)
   - `title`: Optional section heading (defaults to "Mentioned In")
   - `current_slug`: Optional override for the page slug (otherwise uses current page path)

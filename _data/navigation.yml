@@ -9,7 +9,7 @@ main:
     url: "/announcements"
     collection: true
   - label: "Meetups"
-    url: "/hacknights"
+    url: "/events"
     collection: true
   - label: "Projects"
     url: "/projects"

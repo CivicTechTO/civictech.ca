@@ -1,29 +1,30 @@
 ---
 title: "Meetups"
 layout: page
-permalink: "/hacknights/"
+permalink: "/events/"
+redirect_from: /hacknights/
 ---
 
 {% assign today = site.time | date: "%Y-%m-%d" %}
 
-{% assign future_hacknights = "" | split: "" %}
-{% assign recent_hacknights = "" | split: "" %}
+{% assign future_meetups = "" | split: "" %}
+{% assign recent_meetups = "" | split: "" %}
 
-{% for item in site.hacknights %}
+{% for item in site.meetups %}
 {% assign item_day = item.date | date: "%Y-%m-%d" %}
 {% if item_day >= today %}
-{% assign future_hacknights = future_hacknights | push: item %}
+{% assign future_meetups = future_meetups | push: item %}
 {% else %}
-{% assign recent_hacknights = recent_hacknights | push: item %}
+{% assign recent_meetups = recent_meetups | push: item %}
 {% endif %}
 {% endfor %}
 
-{% assign future_hacknights = future_hacknights | sort: "date" %}
-{% assign recent_hacknights = recent_hacknights | sort: "date" | reverse %}
+{% assign future_meetups = future_meetups | sort: "date" %}
+{% assign recent_meetups = recent_meetups | sort: "date" | reverse %}
 
 <!-- Extract unique topics for filters -->
 
-{% assign all_events = site.hacknights %}
+{% assign all_events = site.meetups %}
 {% assign topic_tags = "" | split: "," %}
 {% for event in all_events %}
 {% for tag in event.tags %}
@@ -54,15 +55,15 @@ permalink: "/hacknights/"
 {% endif %}
 {% endcapture %}
 
-<!-- Upcoming Hacknights -->
+<!-- Upcoming Meetups -->
 
 <section>
   <header>
-    <h2>Upcoming Hacknights</h2>
+    <h2>Upcoming Meetups</h2>
   </header>
-  {% if future_hacknights.size > 0 %}
-  <div id="hacknightsGrid" class="card-grid">
-    {% for event in future_hacknights limit: 3 %}
+  {% if future_meetups.size > 0 %}
+  <div id="meetupsGrid" class="card-grid">
+    {% for event in future_meetups limit: 3 %}
       {% assign formatted_topics = "" | split: "," %}
       {% for tag in event.tags %}
         {% if tag contains "topic/" %}
@@ -74,14 +75,14 @@ permalink: "/hacknights/"
       <article class="card">
         <div class="row-content row-content-column">
           {% if event.image %}
-            <div class="hacknight-thumbnail">
+            <div class="meetup-thumbnail">
               <a href="{{ event.url }}">
-                {% picture hacknight hacknights/{{ event.image }} alt="{{ event.topic }}" %}
+                {% picture events /events/{{ event.image }} alt="{{ event.topic }}" %}
               </a>
             </div>
           {% endif %}
           <div>
-            <small>{{ event.date | date: "%B %d, %Y" }} – Hacknight #{{ event.number }}</small>
+            <small>{{ event.date | date: "%B %d, %Y" }} – Meetup #{{ event.number }}</small>
             <br/>
             <a href="{{ event.url }}"><strong>{{ event.topic }}</strong></a>
             {% include topic-tags.html tags=event.tags %}
@@ -109,13 +110,13 @@ permalink: "/hacknights/"
   <p>All upcoming events will be listed on the <a href="https://guild.host/civic-tech-toronto/events" target="_blank" rel="noopener">Events Registration Page<span aria-hidden="true">&nbsp;↗</span></a></p>
 </section>
 
-<!-- Past Hacknights -->
+<!-- Past Meetups -->
 <section>
   <header>
-    <h2>Past Hacknights</h2>
+    <h2>Past Meetups</h2>
   </header>
-  <div id="pastHacknightsList" class="card-list">
-    {% for event in recent_hacknights %}
+  <div id="pastMeetupsList" class="card-list">
+    {% for event in recent_meetups %}
       {% assign formatted_topics = "" | split: "," %}
       {% for tag in event.tags %}
         {% if tag contains "topic/" %}
@@ -127,15 +128,15 @@ permalink: "/hacknights/"
       <article class="card card-row" data-topics="{{ topics_string }}">
         <div class="row-content">
           {% if event.image %}
-            <div class="hacknight-thumbnail">
+            <div class="meetup-thumbnail">
               <a href="{{ event.url }}">
-                {% picture hacknight hacknights/{{ event.image }} alt="{{ event.topic }}" %}
+                {% picture events /events/{{ event.image }} alt="{{ event.topic }}" %}
               </a>
             </div>
           {% endif %}
           <div>
             <small>
-              {{ event.date | date: "%B %d, %Y" }} – Hacknight #{{ event.number }}
+              {{ event.date | date: "%B %d, %Y" }} – Meetup #{{ event.number }}
             </small>
             <br/>
             <h3>

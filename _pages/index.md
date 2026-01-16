@@ -22,40 +22,40 @@ permalink: "/"
     <p>Our events are hybrid – join us in person or online.</p>
     <div class="button-list">
       <a role="button" class="outline" href="https://guild.host/ctto/events" target="_blank">Sign up on Guild<span aria-hidden="true">&nbsp;↗</span></a>
-      <a role="button" class="secondary outline" href="{{'/hacknights' | relative_url }}">See past events</a>
+      <a role="button" class="secondary outline" href="{{'/events' | relative_url }}">See past events</a>
     </div>
   </div>
 </article>
 
-<!-- === Recent Hacknights ===  -->
+<!-- === Recent Meetups ===  -->
 
-<!-- Past Hacknights -->
+<!-- Past Meetups -->
 
 {% assign today = site.time | date: "%Y-%m-%d" %}
 
-{% assign future_hacknights = "" | split: "" %}
-{% assign recent_hacknights = "" | split: "" %}
+{% assign future_meetups = "" | split: "" %}
+{% assign recent_meetups = "" | split: "" %}
 
-{% for item in site.hacknights %}
+{% for item in site.meetups %}
 {% assign item_day = item.date | date: "%Y-%m-%d" %}
 {% if item_day >= today %}
-{% assign future_hacknights = future_hacknights | push: item %}
+{% assign future_meetups = future_meetups | push: item %}
 {% else %}
-{% assign recent_hacknights = recent_hacknights | push: item %}
+{% assign recent_meetups = recent_meetups | push: item %}
 {% endif %}
 {% endfor %}
 
-{% assign future_hacknights = future_hacknights | sort: "date" %}
-{% assign recent_hacknights = recent_hacknights | sort: "date" | reverse %}
+{% assign future_meetups = future_meetups | sort: "date" %}
+{% assign recent_meetups = recent_meetups | sort: "date" | reverse %}
 
 <section>
   <h2>Events</h2>
-  {% if future_hacknights.size > 0 %}
+  {% if future_meetups.size > 0 %}
   <header>
     <h3>Upcoming</h3>
   </header>
-  <div id="hacknightsGrid" class="card-grid">
-    {% for event in future_hacknights limit: 3 %}
+  <div id="meetupsGrid" class="card-grid">
+    {% for event in future_meetups limit: 3 %}
       {% assign formatted_topics = "" | split: "," %}
       {% for tag in event.tags %}
         {% if tag contains "topic/" %}
@@ -67,9 +67,9 @@ permalink: "/"
       <article class="card">
         <div class="row-content row-content-column">
           {% if event.image %}
-            <div class="hacknight-thumbnail">
+            <div class="meetup-thumbnail">
               <a href="{{ event.url }}">
-                {% picture hacknight hacknights/{{ event.image }} alt="{{ event.topic }}" %}
+                {% picture events /events/{{ event.image }} alt="{{ event.topic }}" %}
               </a>
             </div>
           {% endif %}
@@ -104,8 +104,8 @@ permalink: "/"
   <header>
     <h3>Recent</h3>
   </header>
-  <div id="pastHacknightsList" class="grid">
-    {% for event in recent_hacknights limit: 3 %}
+  <div id="pastMeetupsList" class="grid">
+    {% for event in recent_meetups limit: 3 %}
       {% assign formatted_topics = "" | split: "," %}
       {% for tag in event.tags %}
         {% if tag contains "topic/" %}
@@ -118,9 +118,9 @@ permalink: "/"
       <article class="card card-row">
         <div class="row-content row-content-column">
           {% if event.image %}
-            <div class="hacknight-thumbnail">
+            <div class="meetup-thumbnail">
               <a href="{{ event.url }}">
-                {% picture hacknight hacknights/{{ event.image }} alt="{{ event.topic }}" %}
+                {% picture events /events/{{ event.image }} alt="{{ event.topic }}" %}
               </a>
             </div>
           {% endif %}
@@ -145,7 +145,7 @@ permalink: "/"
   </div>
 
   <div class="frontpage-action">
-    <a href="{{ '/hacknights' | relative_url }}">See all Meetups here.</a>
+    <a href="{{ '/events' | relative_url }}">See all Meetups here.</a>
   </div>
 </section>
 
