@@ -79,7 +79,7 @@ layout: base
     </footer>
   </article>
 
-  {% if resolved_people.size > 0 and resolved_meetups.size > 0 %}
+  {% if resolved_people.size > 0 or resolved_meetups.size > 0 %}
   <section class="related-articles">
     {% if resolved_people.size > 0 %}
     <section>
