@@ -16,6 +16,7 @@ future: true
 
 include:
   - _pages
+  - llms.txt
 
 exclude:
   - Makefile
