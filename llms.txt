@@ -28,7 +28,7 @@ We are a volunteer-run group that:
 - Completely volunteer-run and unincorporated
 - Meets every Tuesday evening (both in-person and online)
 - Supported by generous individuals, organizations, and venue sponsors
-- Governed by a volunteer organizing committee that meets monthly
+- Governed by a volunteer organizing committee that meets quarterly
 
 ---
 
@@ -93,23 +93,20 @@ The site uses Jekyll collections to organize different types of content:
    - Tagged by topic and technology
    - Includes project status, links, and descriptions
 
-3. **People** (https://civictech.ca/people/)
-   - Speakers who have presented at meetups
-   - Community organizers and contributors
-   - Organizational affiliations listed where applicable
 
-4. **Organizations** (https://civictech.ca/organizations/)
+
+3. **Organizations** (https://civictech.ca/organizations/)
    - Venue sponsors and supporters
    - Partner organizations in the civic tech ecosystem
    - Past and current sponsors
 
-5. **Resources** (https://civictech.ca/resources/)
+4. **Resources** (https://civictech.ca/resources/)
    - Curated resources for civic tech engagement
    - Tools, guides, and reference materials
 
-6. **Venues** (https://civictech.ca/venues/)
+5. **Venues** (https://civictech.ca/venues/)
    - Locations that have hosted Civic Tech Toronto events
-   - Venues rotate monthly and provide space + usually sponsor dinner
+   - Venues rotate monthly and provide space + sponsors occasionally sponsor food
 
 **Content Organization:**
 
@@ -149,7 +146,7 @@ The site uses Jekyll collections to organize different types of content:
 4. **Provide Venue or Sponsorship**
    - Venues rotate monthly
    - Need to accommodate ~80 people with AV equipment
-   - Sponsors typically also provide dinner (usually pizza)
+   - Sponsors occasionally sponsor food
    - Contact: hi@civictech.ca for hosting opportunities
 
 **Code of Conduct:**
