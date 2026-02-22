@@ -38,7 +38,13 @@ Optional:
       {% assign label = social_data.label | default: key %}
 
       {% if url %}
-        <a href="{{ url }}" target="_blank" rel="noopener" class="social-button">
+        {% assign extra_rel = details.rel %}
+        {% if extra_rel %}
+          {% assign rel_value = extra_rel | append: " noopener" %}
+        {% else %}
+          {% assign rel_value = "noopener" %}
+        {% endif %}
+        <a href="{{ url }}" target="_blank" rel="{{ rel_value }}" class="social-button">
           {% if custom_icon %}
             <span class="iconstyle">{% include icons/{{ custom_icon }} %}</span>
           {% elsif custom_emoji %}

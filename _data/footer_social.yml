@@ -28,7 +28,9 @@ mastodon:
   label: Mastodon
   url: "https://mstdn.ca/@CivicTechTO"
   icon: mastodon.svg
-  
+  rel: "me"
+
+
 instagram:
   label: Instagram
   url: "https://www.instagram.com/civictechto/"
