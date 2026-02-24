@@ -186,3 +186,32 @@ permalink: "/feedback/"
 <div id="error-message" role="alert" hidden>
   <p>Something went wrong. You can try again or email <a href="mailto:hi@civictech.ca">hi@civictech.ca</a>.</p>
 </div>
+
+<script>
+(function () {
+  var form = document.getElementById('feedback-form');
+  var submitBtn = document.getElementById('submit-btn');
+  var meetupSelect = document.getElementById('meetup');
+  var newAttendeeSection = document.getElementById('new-attendee-section');
+  var onlineSection = document.getElementById('online-section');
+
+  // Enable submit button once a meetup is selected
+  meetupSelect.addEventListener('change', function () {
+    submitBtn.disabled = !meetupSelect.value;
+  });
+
+  // Show/hide new-attendee section based on first_time radio
+  form.querySelectorAll('input[name="first_time"]').forEach(function (input) {
+    input.addEventListener('change', function () {
+      newAttendeeSection.hidden = (input.value !== 'yes');
+    });
+  });
+
+  // Show/hide online section based on attendance_mode radio
+  form.querySelectorAll('input[name="attendance_mode"]').forEach(function (input) {
+    input.addEventListener('change', function () {
+      onlineSection.hidden = (input.value !== 'online');
+    });
+  });
+})();
+</script>
