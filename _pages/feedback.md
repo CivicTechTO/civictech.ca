@@ -13,9 +13,7 @@ permalink: "/feedback/"
     <option value="">Select a meetup…</option>
     {% assign recent_meetups = site.meetups | sort: "date" | reverse %}
     {% for meetup in recent_meetups limit:10 %}
-    <option value="{{ meetup.number }}">
-      Hacknight #{{ meetup.number }} – {{ meetup.date | date: "%B %d, %Y" }}{% if meetup.topic %} – {{ meetup.topic }}{% endif %}
-    </option>
+    <option value="{{ meetup.number }}">Hacknight #{{ meetup.number }} – {{ meetup.date | date: "%B %d, %Y" }}{% if meetup.topic %} – {{ meetup.topic }}{% endif %}</option>
     {% endfor %}
   </select>
 
@@ -181,10 +179,10 @@ permalink: "/feedback/"
 
 </form>
 
-<div id="success-message" hidden>
+<div id="success-message" role="alert" hidden>
   <p>Thanks — your feedback helps us improve every week.</p>
 </div>
 
-<div id="error-message" hidden>
+<div id="error-message" role="alert" hidden>
   <p>Something went wrong. You can try again or email <a href="mailto:hi@civictech.ca">hi@civictech.ca</a>.</p>
 </div>
