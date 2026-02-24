@@ -71,11 +71,12 @@ Note:
     "url": {{ page.url | absolute_url | jsonify }}
 
   {% elsif page_tags contains "type/meetup" %}
+    {% assign meetup_description = page.description | default: page.content | strip_html | strip_newlines | truncatewords: 50 %}
     "@type": "Event",
     "name": {{ page.title | jsonify }},
     "startDate": "{{ page.date }}",
     "endDate": "{{ page.date }}",
-    "description": {{ page.description | strip_html | strip_newlines | jsonify }},
+    "description": {{ meetup_description | jsonify }},
     {% if page.venue %}
       "location": {
         "@type": "Place",
