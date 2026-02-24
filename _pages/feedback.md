@@ -5,57 +5,29 @@ permalink: "/feedback/"
 excerpt: "Help us make Civic Tech Toronto better. This form is completely anonymous — we never collect names or email addresses."
 ---
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
-
 <style>
 /* ================================================================
-   FEEDBACK PAGE — "The Public Square"
-   Warm editorial civic design: DM Serif Display + DM Sans
-   Toronto red (#C8102E) accent on cream ground
+   FEEDBACK PAGE STYLES
+   Uses Pico CSS variables to match the rest of the site.
    ================================================================ */
 
-/* Override layout h1 with display serif */
-article > header hgroup h1 {
-  font-family: 'DM Serif Display', Georgia, serif;
-  font-weight: 400;
-  line-height: 1.1;
-}
-
-/* ---- Wrapper + custom properties ---- */
+/* ---- Wrapper ---- */
 .feedback-wrapper {
-  --fb-cream:       #F7F3EE;
-  --fb-white:       #FFFFFF;
-  --fb-ink:         #1A1A2E;
-  --fb-muted:       #6B6B7A;
-  --fb-red:         #C8102E;
-  --fb-red-light:   #FFF5F5;
-  --fb-red-mid:     #FDDDE2;
-  --fb-border:      #E2DDD8;
-  --fb-green:       #2D6A4F;
-  --fb-green-light: #EDFAF4;
-  --fb-radius:      12px;
-  --fb-serif:       'DM Serif Display', Georgia, serif;
-  --fb-sans:        'DM Sans', system-ui, sans-serif;
-
-  font-family: var(--fb-sans);
-  color: var(--fb-ink);
   max-width: 600px;
 }
 
 /* ---- Card base ---- */
 .fb-card {
-  background: var(--fb-white);
-  border: 1.5px solid var(--fb-border);
-  border-radius: var(--fb-radius);
+  background: var(--pico-card-background-color);
+  border: 1.5px solid var(--pico-muted-border-color);
+  border-radius: var(--pico-border-radius);
   padding: 1.5rem;
   margin-bottom: 1rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 .fb-card:focus-within {
-  border-color: var(--fb-red);
-  box-shadow: 0 0 0 3px var(--fb-red-mid);
+  border-color: var(--pico-primary);
+  box-shadow: 0 0 0 3px var(--pico-primary-background);
 }
 .fb-card fieldset {
   border: none;
@@ -65,17 +37,16 @@ article > header hgroup h1 {
 .fb-card fieldset + fieldset {
   margin-top: 1.25rem;
   padding-top: 1.25rem;
-  border-top: 1px solid var(--fb-border);
+  border-top: 1px solid var(--pico-muted-border-color);
 }
 
 /* ---- Legend ---- */
 .fb-card legend,
 .fb-conditional legend,
 .fb-expander-body legend {
-  font-family: var(--fb-sans);
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--fb-ink);
+  color: var(--pico-color);
   margin-bottom: 0.75rem;
   padding: 0;
   float: none;
@@ -89,25 +60,24 @@ article > header hgroup h1 {
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--fb-muted);
+  color: var(--pico-muted-color);
   margin-bottom: 0.5rem;
 }
 #meetup {
   width: 100%;
-  font-family: var(--fb-sans);
   font-size: 1rem;
   font-weight: 500;
   padding: 0.75rem 1rem;
-  border: 2px solid var(--fb-border);
-  border-radius: 8px;
-  background-color: var(--fb-cream);
-  color: var(--fb-ink);
+  border: 2px solid var(--pico-muted-border-color);
+  border-radius: var(--pico-border-radius);
+  background-color: var(--pico-form-element-background-color);
+  color: var(--pico-color);
   transition: border-color 0.2s ease;
   margin: 0;
 }
 #meetup:focus {
   outline: none;
-  border-color: var(--fb-red);
+  border-color: var(--pico-primary);
 }
 
 /* ---- Pill radio toggles ---- */
@@ -132,32 +102,31 @@ article > header hgroup h1 {
   display: inline-flex;
   align-items: center;
   padding: 0.5rem 1.25rem;
-  border: 1.5px solid var(--fb-border);
+  border: 1.5px solid var(--pico-muted-border-color);
   border-radius: 100px;
-  font-family: var(--fb-sans);
   font-size: 0.9rem;
   font-weight: 500;
-  color: var(--fb-muted);
-  background: var(--fb-cream);
+  color: var(--pico-muted-color);
+  background: var(--pico-muted-background-color);
   transition: all 0.15s ease;
   user-select: none;
   white-space: nowrap;
 }
 .pill-group input[type="radio"]:checked + .pill-btn {
-  background: var(--fb-red);
-  border-color: var(--fb-red);
-  color: #fff;
+  background: var(--pico-primary);
+  border-color: var(--pico-primary);
+  color: var(--pico-primary-inverse);
 }
 .pill-group label:hover .pill-btn {
-  border-color: var(--fb-red);
-  color: var(--fb-red);
+  border-color: var(--pico-primary);
+  color: var(--pico-primary);
 }
 .pill-group input[type="radio"]:checked + .pill-btn:hover {
-  background: var(--fb-red);
-  color: #fff;
+  background: var(--pico-primary);
+  color: var(--pico-primary-inverse);
 }
 .pill-group input[type="radio"]:focus-visible + .pill-btn {
-  outline: 2px solid var(--fb-red);
+  outline: 2px solid var(--pico-primary);
   outline-offset: 2px;
 }
 
@@ -186,33 +155,32 @@ article > header hgroup h1 {
   justify-content: center;
   width: 2.75rem;
   height: 2.75rem;
-  border: 1.5px solid var(--fb-border);
-  border-radius: 8px;
-  font-family: var(--fb-serif);
+  border: 1.5px solid var(--pico-muted-border-color);
+  border-radius: var(--pico-border-radius);
   font-size: 1.1rem;
-  color: var(--fb-muted);
-  background: var(--fb-cream);
+  color: var(--pico-muted-color);
+  background: var(--pico-muted-background-color);
   transition: all 0.15s ease;
   user-select: none;
 }
 .rating-scale input[type="radio"]:checked + .rating-btn {
-  background: var(--fb-red);
-  border-color: var(--fb-red);
-  color: #fff;
+  background: var(--pico-primary);
+  border-color: var(--pico-primary);
+  color: var(--pico-primary-inverse);
   transform: scale(1.1);
 }
 .rating-scale label:hover .rating-btn {
-  border-color: var(--fb-red);
-  color: var(--fb-red);
-  background: var(--fb-red-light);
+  border-color: var(--pico-primary);
+  color: var(--pico-primary);
+  background: var(--pico-primary-background);
 }
 .rating-scale input[type="radio"]:focus-visible + .rating-btn {
-  outline: 2px solid var(--fb-red);
+  outline: 2px solid var(--pico-primary);
   outline-offset: 2px;
 }
 .rating-hint {
   font-size: 0.75rem;
-  color: var(--fb-muted);
+  color: var(--pico-muted-color);
   margin: 0;
 }
 
@@ -231,17 +199,15 @@ article > header hgroup h1 {
 }
 .fb-conditional-inner {
   padding: 1.25rem 1.5rem;
-  background: var(--fb-white);
-  border: 1.5px solid var(--fb-border);
-  border-left: 3px solid var(--fb-red);
-  border-radius: var(--fb-radius);
+  background: var(--pico-card-background-color);
+  border: 1.5px solid var(--pico-muted-border-color);
+  border-left: 3px solid var(--pico-primary);
+  border-radius: var(--pico-border-radius);
 }
 .fb-conditional h3 {
-  font-family: var(--fb-serif);
   font-size: 1.05rem;
-  font-weight: 400;
-  font-style: italic;
-  color: var(--fb-red);
+  font-weight: 600;
+  color: var(--pico-primary);
   margin: 0 0 1.25rem;
 }
 .fb-conditional fieldset {
@@ -254,13 +220,13 @@ article > header hgroup h1 {
 }
 .fb-conditional fieldset + fieldset {
   padding-top: 1.25rem;
-  border-top: 1px solid var(--fb-border);
+  border-top: 1px solid var(--pico-muted-border-color);
 }
 
 /* ---- Expanders (details/summary) ---- */
 .fb-expander {
-  border: 1.5px solid var(--fb-border);
-  border-radius: var(--fb-radius);
+  border: 1.5px solid var(--pico-muted-border-color);
+  border-radius: var(--pico-border-radius);
   margin-bottom: 1rem;
   overflow: hidden;
 }
@@ -269,22 +235,21 @@ article > header hgroup h1 {
   align-items: center;
   justify-content: space-between;
   padding: 1rem 1.5rem;
-  font-family: var(--fb-sans);
   font-weight: 500;
   font-size: 0.9rem;
   cursor: pointer;
   list-style: none;
-  background: var(--fb-cream);
-  color: var(--fb-ink);
+  background: var(--pico-muted-background-color);
+  color: var(--pico-color);
   user-select: none;
   transition: background 0.15s ease;
 }
 .fb-expander summary::-webkit-details-marker { display: none; }
-.fb-expander summary:hover { background: var(--fb-red-mid); }
+.fb-expander summary:hover { background: var(--pico-primary-background); }
 .fb-expander summary::after {
   content: '+';
   font-size: 1.4rem;
-  color: var(--fb-red);
+  color: var(--pico-primary);
   font-weight: 300;
   line-height: 1;
 }
@@ -292,8 +257,8 @@ article > header hgroup h1 {
 
 .fb-expander-body {
   padding: 1.5rem;
-  background: var(--fb-white);
-  border-top: 1.5px solid var(--fb-border);
+  background: var(--pico-card-background-color);
+  border-top: 1.5px solid var(--pico-muted-border-color);
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
@@ -304,19 +269,18 @@ article > header hgroup h1 {
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--fb-muted);
+  color: var(--pico-muted-color);
   margin-bottom: -0.85rem; /* tighten label–input gap within the flex column */
 }
 .fb-expander-body textarea,
 .fb-expander-body input[type="text"] {
   width: 100%;
-  font-family: var(--fb-sans);
   font-size: 0.95rem;
   padding: 0.65rem 0.9rem;
-  border: 1.5px solid var(--fb-border);
-  border-radius: 8px;
-  background: var(--fb-cream);
-  color: var(--fb-ink);
+  border: 1.5px solid var(--pico-muted-border-color);
+  border-radius: var(--pico-border-radius);
+  background: var(--pico-form-element-background-color);
+  color: var(--pico-color);
   transition: border-color 0.2s ease;
   resize: vertical;
   box-sizing: border-box;
@@ -325,20 +289,19 @@ article > header hgroup h1 {
 .fb-expander-body textarea:focus,
 .fb-expander-body input[type="text"]:focus {
   outline: none;
-  border-color: var(--fb-red);
+  border-color: var(--pico-primary);
 }
 .fb-expander-body select {
   width: 100%;
-  font-family: var(--fb-sans);
   font-size: 0.95rem;
   padding: 0.65rem 2.5rem 0.65rem 0.9rem;
-  border: 1.5px solid var(--fb-border);
-  border-radius: 8px;
-  background-color: var(--fb-cream);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%231A1A2E' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  border: 1.5px solid var(--pico-muted-border-color);
+  border-radius: var(--pico-border-radius);
+  background-color: var(--pico-form-element-background-color);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='currentColor' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 1rem center;
-  color: var(--fb-ink);
+  color: var(--pico-color);
   appearance: none;
   cursor: pointer;
   transition: border-color 0.2s ease;
@@ -346,7 +309,7 @@ article > header hgroup h1 {
 }
 .fb-expander-body select:focus {
   outline: none;
-  border-color: var(--fb-red);
+  border-color: var(--pico-primary);
 }
 .fb-expander-body fieldset {
   border: none;
@@ -355,33 +318,31 @@ article > header hgroup h1 {
 }
 .privacy-note {
   font-size: 0.8rem;
-  color: var(--fb-muted);
+  color: var(--pico-muted-color);
   line-height: 1.5;
   margin: 0;
   padding: 0.75rem;
-  background: var(--fb-cream);
-  border-radius: 6px;
+  background: var(--pico-muted-background-color);
+  border-radius: var(--pico-border-radius);
 }
 
 /* ---- Submit button ---- */
 .fb-submit-row { margin-top: 1.5rem; }
 #submit-btn {
   width: 100%;
-  font-family: var(--fb-sans);
   font-size: 1rem;
   font-weight: 600;
   padding: 1rem 2rem;
-  background: var(--fb-red);
-  color: #fff;
+  background: var(--pico-primary);
+  color: var(--pico-primary-inverse);
   border: none;
-  border-radius: var(--fb-radius);
+  border-radius: var(--pico-border-radius);
   cursor: pointer;
-  letter-spacing: 0.03em;
   transition: background 0.2s ease, transform 0.1s ease, opacity 0.2s ease;
   margin: 0;
 }
 #submit-btn:not(:disabled):hover {
-  background: #A60D26;
+  background: var(--pico-primary-hover);
   transform: translateY(-1px);
 }
 #submit-btn:not(:disabled):active { transform: translateY(0); }
@@ -394,13 +355,12 @@ article > header hgroup h1 {
 #success-message {
   text-align: center;
   padding: 3rem 2rem;
-  background: var(--fb-green-light);
-  border: 1.5px solid var(--fb-green);
-  border-radius: var(--fb-radius);
+  background: #EDFAF4;
+  border: 1.5px solid #2D6A4F;
+  border-radius: var(--pico-border-radius);
 }
 #success-message p {
-  color: var(--fb-green);
-  font-family: var(--fb-sans);
+  color: #2D6A4F;
   font-weight: 600;
   font-size: 1.1rem;
   margin: 0;
@@ -409,18 +369,18 @@ article > header hgroup h1 {
 
 #error-message {
   padding: 1rem 1.25rem;
-  background: var(--fb-red-light);
-  border: 1.5px solid var(--fb-red);
-  border-radius: 8px;
+  background: #fff5f5;
+  border: 1.5px solid #c0392b;
+  border-radius: var(--pico-border-radius);
   margin-top: 0.75rem;
 }
 #error-message p {
-  color: var(--fb-red);
+  color: #c0392b;
   font-size: 0.9rem;
   margin: 0;
 }
 #error-message a {
-  color: var(--fb-red);
+  color: #c0392b;
   font-weight: 600;
 }
 </style>
