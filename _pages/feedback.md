@@ -184,6 +184,42 @@ excerpt: "Help us make Civic Tech Toronto better. This form is completely anonym
   margin: 0;
 }
 
+/* ---- Inline follow-up fields (within a conditional section) ---- */
+.fb-followup {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.3s ease, opacity 0.25s ease;
+}
+.fb-followup.is-visible {
+  max-height: 200px;
+  opacity: 1;
+}
+.fb-followup label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--pico-muted-color);
+  margin: 0.75rem 0 0.35rem;
+}
+.fb-followup textarea {
+  width: 100%;
+  font-size: 0.9rem;
+  padding: 0.5rem 0.75rem;
+  border: 1.5px solid var(--pico-muted-border-color);
+  border-radius: var(--pico-border-radius);
+  background: var(--pico-form-element-background-color);
+  color: var(--pico-color);
+  resize: vertical;
+  box-sizing: border-box;
+  margin: 0;
+  transition: border-color 0.2s ease;
+}
+.fb-followup textarea:focus {
+  outline: none;
+  border-color: var(--pico-primary);
+}
+
 /* ---- Conditional sections (CSS-driven show/hide) ---- */
 .fb-conditional {
   overflow: hidden;
@@ -462,6 +498,14 @@ excerpt: "Help us make Civic Tech Toronto better. This form is completely anonym
           <label><input type="radio" name="would_return" value="maybe"><span class="pill-btn">Maybe</span></label>
           <label><input type="radio" name="would_return" value="no"><span class="pill-btn">No</span></label>
         </div>
+        <div id="return-maybe-followup" class="fb-followup">
+          <label for="return_maybe_reason">What's giving you pause?</label>
+          <textarea id="return_maybe_reason" name="return_maybe_reason" rows="2"></textarea>
+        </div>
+        <div id="return-no-followup" class="fb-followup">
+          <label for="return_no_reason">What put you off?</label>
+          <textarea id="return_no_reason" name="return_no_reason" rows="2"></textarea>
+        </div>
       </fieldset>
     </div>
   </section>
@@ -631,6 +675,16 @@ excerpt: "Help us make Civic Tech Toronto better. This form is completely anonym
     submitBtn.disabled = !meetupInput.value || dayOfWeek !== 2;
   });
 
+  // Show/hide would_return follow-up questions
+  var returnMaybeFollowup = document.getElementById('return-maybe-followup');
+  var returnNoFollowup = document.getElementById('return-no-followup');
+  form.querySelectorAll('input[name="would_return"]').forEach(function (input) {
+    input.addEventListener('change', function () {
+      returnMaybeFollowup.classList.toggle('is-visible', input.value === 'maybe');
+      returnNoFollowup.classList.toggle('is-visible', input.value === 'no');
+    });
+  });
+
   // Show/hide new-attendee section
   form.querySelectorAll('input[name="first_time"]').forEach(function (input) {
     input.addEventListener('change', function () {
@@ -721,6 +775,13 @@ excerpt: "Help us make Civic Tech Toronto better. This form is completely anonym
       if (fw) newAttendee.felt_welcome = parseInt(fw, 10);
       if (un) newAttendee.understood_what_was_happening = parseInt(un, 10);
       if (wr) newAttendee.would_return = wr;
+      if (wr === 'maybe') {
+        var maybeReason = getText('return_maybe_reason');
+        if (maybeReason) newAttendee.would_return_reason = maybeReason;
+      } else if (wr === 'no') {
+        var noReason = getText('return_no_reason');
+        if (noReason) newAttendee.would_return_reason = noReason;
+      }
       if (Object.keys(newAttendee).length) data.new_attendee = newAttendee;
     }
 
