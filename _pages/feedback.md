@@ -189,29 +189,148 @@ permalink: "/feedback/"
 
 <script>
 (function () {
+  var GITHUB_TOKEN = '{{ site.feedback_token }}';
+  var FEEDBACK_REPO = 'CivicTechTO/feedback';
+
   var form = document.getElementById('feedback-form');
   var submitBtn = document.getElementById('submit-btn');
   var meetupSelect = document.getElementById('meetup');
   var newAttendeeSection = document.getElementById('new-attendee-section');
   var onlineSection = document.getElementById('online-section');
+  var successMessage = document.getElementById('success-message');
+  var errorMessage = document.getElementById('error-message');
 
   // Enable submit button once a meetup is selected
   meetupSelect.addEventListener('change', function () {
     submitBtn.disabled = !meetupSelect.value;
   });
 
-  // Show/hide new-attendee section based on first_time radio
+  // Show/hide new-attendee section
   form.querySelectorAll('input[name="first_time"]').forEach(function (input) {
     input.addEventListener('change', function () {
       newAttendeeSection.hidden = (input.value !== 'yes');
     });
   });
 
-  // Show/hide online section based on attendance_mode radio
+  // Show/hide online section
   form.querySelectorAll('input[name="attendance_mode"]').forEach(function (input) {
     input.addEventListener('change', function () {
       onlineSection.hidden = (input.value !== 'online');
     });
   });
+
+  // Form submission
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+    errorMessage.hidden = true;
+
+    var data = buildFormData();
+    var meetupNumber = meetupSelect.value;
+    var now = new Date();
+    var dateStr = now.toISOString().slice(0, 10);
+    var randomSuffix = Math.random().toString(36).slice(2, 8);
+    var filename = 'submissions/' + dateStr + '-hacknight-' + meetupNumber + '-' + randomSuffix + '.json';
+    var jsonStr = JSON.stringify(data, null, 2);
+    // btoa with unicode support
+    var encoded = btoa(unescape(encodeURIComponent(jsonStr)));
+
+    fetch('https://api.github.com/repos/' + FEEDBACK_REPO + '/contents/' + filename, {
+      method: 'PUT',
+      headers: {
+        'Authorization': 'Bearer ' + GITHUB_TOKEN,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message: 'Add feedback for hacknight #' + meetupNumber,
+        content: encoded
+      })
+    })
+    .then(function (response) {
+      if (!response.ok) throw new Error('GitHub API error: ' + response.status);
+      form.hidden = true;
+      successMessage.hidden = false;
+    })
+    .catch(function () {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit Feedback';
+      errorMessage.hidden = false;
+    });
+  });
+
+  function getRadio(name) {
+    var el = form.querySelector('input[name="' + name + '"]:checked');
+    return el ? el.value : undefined;
+  }
+
+  function getText(id) {
+    var el = form.querySelector('#' + id);
+    return (el && el.value.trim()) ? el.value.trim() : undefined;
+  }
+
+  function getSelect(id) {
+    var el = form.querySelector('#' + id);
+    return (el && el.value) ? el.value : undefined;
+  }
+
+  function buildFormData() {
+    var firstTime = getRadio('first_time');
+    var attendanceMode = getRadio('attendance_mode');
+    var overallRating = getRadio('overall_rating');
+
+    var data = {
+      meetup_number: meetupSelect.value,
+      submitted_at: new Date().toISOString(),
+    };
+
+    if (attendanceMode) data.attendance_mode = attendanceMode;
+    if (firstTime !== undefined) data.first_time = firstTime === 'yes';
+    if (overallRating) data.overall_rating = parseInt(overallRating);
+
+    if (firstTime === 'yes') {
+      var newAttendee = {};
+      var fw = getRadio('felt_welcome');
+      var un = getRadio('understood');
+      var wr = getRadio('would_return');
+      if (fw) newAttendee.felt_welcome = parseInt(fw);
+      if (un) newAttendee.understood_what_was_happening = parseInt(un);
+      if (wr) newAttendee.would_return = wr;
+      if (Object.keys(newAttendee).length) data.new_attendee = newAttendee;
+    }
+
+    if (attendanceMode === 'online') {
+      var online = {};
+      var av = getRadio('av_quality');
+      var fi = getRadio('felt_included');
+      if (av) online.av_quality = parseInt(av);
+      if (fi) online.felt_included = parseInt(fi);
+      if (Object.keys(online).length) data.online = online;
+    }
+
+    var general = {};
+    var liked = getText('liked');
+    var improve = getText('improve');
+    if (liked) general.liked = liked;
+    if (improve) general.improve = improve;
+    if (Object.keys(general).length) data.general = general;
+
+    var equity = {};
+    var gi = getText('gender_identity');
+    var ar = getSelect('age_range');
+    var ra = getRadio('racialized');
+    var di = getRadio('disability');
+    var bh = getRadio('belongs_here');
+    var tr = getRadio('topics_relevant');
+    if (gi) equity.gender_identity = gi;
+    if (ar) equity.age_range = ar;
+    if (ra) equity.racialized = ra;
+    if (di) equity.disability = di;
+    if (bh) equity.belongs_here = parseInt(bh);
+    if (tr) equity.topics_relevant = parseInt(tr);
+    if (Object.keys(equity).length) data.equity = equity;
+
+    return data;
+  }
 })();
 </script>
