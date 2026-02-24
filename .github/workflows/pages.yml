@@ -71,7 +71,7 @@ jobs:
       #     ./_scripts/thumbnail_sizes.sh
 
       - name: Inject feedback token
-        run: echo "feedback_token: $FEEDBACK_TOKEN" >> _config.yml
+        run: echo "feedback_token: \"$FEEDBACK_TOKEN\"" >> _config.yml
         env:
           FEEDBACK_TOKEN: ${{ secrets.FEEDBACK_TOKEN }}
 
