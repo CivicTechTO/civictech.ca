@@ -529,3 +529,16 @@ aside .ogimage {
   gap: 0.5rem;
   padding-bottom: 1rem;
 }
+
+/* Feedback form: inline rating scale */
+.rating-row {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.25rem;
+}
+.rating-row label {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
