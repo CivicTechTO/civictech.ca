@@ -42,8 +42,8 @@ permalink: "/feedback/"
   </fieldset>
 
   <!-- Conditional: new attendee questions -->
-  <section id="new-attendee-section" hidden>
-    <h3>As a first-timer…</h3>
+  <section id="new-attendee-section" aria-labelledby="new-attendee-heading" hidden>
+    <h3 id="new-attendee-heading">As a first-timer…</h3>
 
     <fieldset>
       <legend>Did you feel welcome tonight?</legend>
@@ -78,8 +78,8 @@ permalink: "/feedback/"
   </section>
 
   <!-- Conditional: online attendee questions -->
-  <section id="online-section" hidden>
-    <h3>Online experience</h3>
+  <section id="online-section" aria-labelledby="online-heading" hidden>
+    <h3 id="online-heading">Online experience</h3>
 
     <fieldset>
       <legend>Could you hear and see what was happening clearly?</legend>
