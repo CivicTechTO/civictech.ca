@@ -4,9 +4,11 @@ author:
   email: hi@civictech.ca
 
 description: >-
-  Civic Tech Toronto is a vibrant and diverse community of Torontonians engaged 
-  in understanding and creating solutions for civic challenges through technology, 
+  Civic Tech Toronto is a vibrant and diverse community of Torontonians engaged
+  in understanding and creating solutions for civic challenges through technology,
   design, and other innovative means.
+
+feedback_token: ""
 
 baseurl: ""
 github_username: civictechto
