@@ -499,11 +499,11 @@ excerpt: "Help us make Civic Tech Toronto better. This form is completely anonym
           <label><input type="radio" name="would_return" value="no"><span class="pill-btn">No</span></label>
         </div>
         <div id="return-maybe-followup" class="fb-followup">
-          <label for="return_maybe_reason">What's giving you pause?</label>
+          <label for="return_maybe_reason">What would need to be different?</label>
           <textarea id="return_maybe_reason" name="return_maybe_reason" rows="2"></textarea>
         </div>
         <div id="return-no-followup" class="fb-followup">
-          <label for="return_no_reason">What put you off?</label>
+          <label for="return_no_reason">Why not?</label>
           <textarea id="return_no_reason" name="return_no_reason" rows="2"></textarea>
         </div>
       </fieldset>
