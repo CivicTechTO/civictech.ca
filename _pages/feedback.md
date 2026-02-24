@@ -2,7 +2,7 @@
 title: "Share Your Feedback"
 layout: page
 permalink: "/feedback/"
-excerpt: "Help us make Civic Tech Toronto better. This form is completely anonymous — we never collect names or email addresses."
+excerpt: "Help us make Civic Tech Toronto better. Responses are anonymous — we never collect names or email addresses — but are stored in a public repository."
 ---
 
 <style>
@@ -358,6 +358,21 @@ excerpt: "Help us make Civic Tech Toronto better. This form is completely anonym
   border-radius: var(--pico-border-radius);
 }
 
+/* ---- Public notice banner ---- */
+.fb-public-notice {
+  font-size: 0.875rem;
+  color: var(--pico-color);
+  line-height: 1.5;
+  margin: 0 0 1.25rem;
+  padding: 0.75rem 1rem;
+  background: var(--pico-muted-background-color);
+  border-left: 3px solid var(--pico-primary);
+  border-radius: var(--pico-border-radius);
+}
+.fb-public-notice a {
+  color: var(--pico-primary);
+}
+
 /* ---- Submit button ---- */
 .fb-submit-row { margin-top: 1.5rem; }
 #submit-btn {
@@ -418,6 +433,8 @@ excerpt: "Help us make Civic Tech Toronto better. This form is completely anonym
 </style>
 
 <div class="feedback-wrapper">
+
+<p class="fb-public-notice"><strong>Public notice:</strong> Responses are anonymous but stored openly in a <a href="https://github.com/CivicTechTO/feedback" target="_blank" rel="noopener">public GitHub repository</a>. Do not include any personal information.</p>
 
 <form id="feedback-form" novalidate>
 
