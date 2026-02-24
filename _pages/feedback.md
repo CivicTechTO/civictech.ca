@@ -226,9 +226,9 @@ permalink: "/feedback/"
     submitBtn.textContent = 'Sending…';
     errorMessage.hidden = true;
 
-    var data = buildFormData();
-    var meetupNumber = meetupSelect.value;
     var now = new Date();
+    var data = buildFormData(now);
+    var meetupNumber = meetupSelect.value;
     var dateStr = now.toISOString().slice(0, 10);
     var randomSuffix = Math.random().toString(36).slice(2, 8);
     var filename = 'submissions/' + dateStr + '-hacknight-' + meetupNumber + '-' + randomSuffix + '.json';
@@ -274,27 +274,27 @@ permalink: "/feedback/"
     return (el && el.value) ? el.value : undefined;
   }
 
-  function buildFormData() {
+  function buildFormData(now) {
     var firstTime = getRadio('first_time');
     var attendanceMode = getRadio('attendance_mode');
     var overallRating = getRadio('overall_rating');
 
     var data = {
       meetup_number: meetupSelect.value,
-      submitted_at: new Date().toISOString(),
+      submitted_at: now.toISOString(),
     };
 
     if (attendanceMode) data.attendance_mode = attendanceMode;
     if (firstTime !== undefined) data.first_time = firstTime === 'yes';
-    if (overallRating) data.overall_rating = parseInt(overallRating);
+    if (overallRating) data.overall_rating = parseInt(overallRating, 10);
 
     if (firstTime === 'yes') {
       var newAttendee = {};
       var fw = getRadio('felt_welcome');
       var un = getRadio('understood');
       var wr = getRadio('would_return');
-      if (fw) newAttendee.felt_welcome = parseInt(fw);
-      if (un) newAttendee.understood_what_was_happening = parseInt(un);
+      if (fw) newAttendee.felt_welcome = parseInt(fw, 10);
+      if (un) newAttendee.understood_what_was_happening = parseInt(un, 10);
       if (wr) newAttendee.would_return = wr;
       if (Object.keys(newAttendee).length) data.new_attendee = newAttendee;
     }
@@ -303,8 +303,8 @@ permalink: "/feedback/"
       var online = {};
       var av = getRadio('av_quality');
       var fi = getRadio('felt_included');
-      if (av) online.av_quality = parseInt(av);
-      if (fi) online.felt_included = parseInt(fi);
+      if (av) online.av_quality = parseInt(av, 10);
+      if (fi) online.felt_included = parseInt(fi, 10);
       if (Object.keys(online).length) data.online = online;
     }
 
@@ -326,8 +326,8 @@ permalink: "/feedback/"
     if (ar) equity.age_range = ar;
     if (ra) equity.racialized = ra;
     if (di) equity.disability = di;
-    if (bh) equity.belongs_here = parseInt(bh);
-    if (tr) equity.topics_relevant = parseInt(tr);
+    if (bh) equity.belongs_here = parseInt(bh, 10);
+    if (tr) equity.topics_relevant = parseInt(tr, 10);
     if (Object.keys(equity).length) data.equity = equity;
 
     return data;
