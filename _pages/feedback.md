@@ -56,11 +56,9 @@ excerpt: "Help us make Civic Tech Toronto better. This form is completely anonym
 /* ---- Hacknight date picker ---- */
 .fb-select-label {
   display: block;
-  font-size: 0.7rem;
+  font-size: 0.875rem;
   font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--pico-muted-color);
+  color: var(--pico-color);
   margin-bottom: 0.5rem;
 }
 #meetup {
@@ -197,9 +195,9 @@ excerpt: "Help us make Civic Tech Toronto better. This form is completely anonym
 }
 .fb-followup label {
   display: block;
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   font-weight: 600;
-  color: var(--pico-muted-color);
+  color: var(--pico-color);
   margin: 0.75rem 0 0.35rem;
 }
 .fb-followup textarea {
@@ -243,7 +241,7 @@ excerpt: "Help us make Civic Tech Toronto better. This form is completely anonym
 .fb-conditional h3 {
   font-size: 1.05rem;
   font-weight: 600;
-  color: var(--pico-primary);
+  color: var(--pico-color);
   margin: 0 0 1.25rem;
 }
 .fb-conditional fieldset {
@@ -301,11 +299,9 @@ excerpt: "Help us make Civic Tech Toronto better. This form is completely anonym
 }
 .fb-expander-body > label {
   display: block;
-  font-size: 0.7rem;
+  font-size: 0.875rem;
   font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--pico-muted-color);
+  color: var(--pico-color);
   margin-bottom: -0.85rem; /* tighten label–input gap within the flex column */
 }
 .fb-expander-body textarea,
@@ -543,7 +539,7 @@ excerpt: "Help us make Civic Tech Toronto better. This form is completely anonym
 
   <!-- Optional expander: general feedback -->
   <details class="fb-expander">
-    <summary>Tell us more <span style="font-size:0.8em;color:var(--fb-muted);font-weight:400;">(optional)</span></summary>
+    <summary>Tell us more <span style="font-size:0.8em;color:var(--pico-muted-color);font-weight:400;">(optional)</span></summary>
     <div class="fb-expander-body">
       <label for="liked">What worked well tonight?</label>
       <textarea id="liked" name="liked" rows="3"></textarea>
@@ -554,7 +550,7 @@ excerpt: "Help us make Civic Tech Toronto better. This form is completely anonym
 
   <!-- Optional expander: equity questions -->
   <details class="fb-expander">
-    <summary>About you <span style="font-size:0.8em;color:var(--fb-muted);font-weight:400;">(optional)</span></summary>
+    <summary>About you <span style="font-size:0.8em;color:var(--pico-muted-color);font-weight:400;">(optional)</span></summary>
     <div class="fb-expander-body">
       <p class="privacy-note">All fields in this section are completely optional and anonymous. This information helps us understand who is showing up and whether everyone feels included.</p>
 
