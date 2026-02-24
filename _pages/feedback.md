@@ -82,7 +82,7 @@ article > header hgroup h1 {
   width: 100%;
 }
 
-/* ---- Meetup select ---- */
+/* ---- Hacknight date picker ---- */
 .fb-select-label {
   display: block;
   font-size: 0.7rem;
@@ -97,16 +97,11 @@ article > header hgroup h1 {
   font-family: var(--fb-sans);
   font-size: 1rem;
   font-weight: 500;
-  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  padding: 0.75rem 1rem;
   border: 2px solid var(--fb-border);
   border-radius: 8px;
   background-color: var(--fb-cream);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%231A1A2E' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 1rem center;
   color: var(--fb-ink);
-  appearance: none;
-  cursor: pointer;
   transition: border-color 0.2s ease;
   margin: 0;
 }
@@ -435,12 +430,8 @@ article > header hgroup h1 {
 <form id="feedback-form" novalidate>
 
   <div class="fb-card">
-    <label class="fb-select-label" for="meetup">Which meetup are you rating?</label>
-    <select id="meetup" name="meetup">
-      <option value="">Select a meetup…</option>
-      {% assign recent_meetups = site.meetups | sort: "date" | reverse %}
-      {% for meetup in recent_meetups limit:10 %}<option value="{{ meetup.number }}">Hacknight #{{ meetup.number }} – {{ meetup.date | date: "%B %d, %Y" }}{% if meetup.topic %} – {{ meetup.topic }}{% endif %}</option>{% endfor %}
-    </select>
+    <label class="fb-select-label" for="meetup">Which Tuesday are you giving feedback on?</label>
+    <input type="date" id="meetup" name="meetup">
   </div>
 
   <div class="fb-card">
@@ -644,15 +635,40 @@ article > header hgroup h1 {
 
   var form = document.getElementById('feedback-form');
   var submitBtn = document.getElementById('submit-btn');
-  var meetupSelect = document.getElementById('meetup');
+  var meetupInput = document.getElementById('meetup');
   var newAttendeeSection = document.getElementById('new-attendee-section');
   var onlineSection = document.getElementById('online-section');
   var successMessage = document.getElementById('success-message');
   var errorMessage = document.getElementById('error-message');
 
-  // Enable submit button once a meetup is selected
-  meetupSelect.addEventListener('change', function () {
-    submitBtn.disabled = !meetupSelect.value;
+  // Initialise date picker: default to most recent Tuesday, restrict to Tuesdays
+  function toLocalDateString(d) {
+    // Avoids UTC-offset errors that toISOString() causes for western timezones
+    var y = d.getFullYear();
+    var m = String(d.getMonth() + 1).padStart(2, '0');
+    var day = String(d.getDate()).padStart(2, '0');
+    return y + '-' + m + '-' + day;
+  }
+  function getMostRecentTuesday() {
+    var d = new Date();
+    var daysBack = (d.getDay() + 5) % 7; // days since last Tuesday (0 when today is Tue)
+    d.setDate(d.getDate() - daysBack);
+    return toLocalDateString(d);
+  }
+  var recentTuesday = getMostRecentTuesday();
+  meetupInput.value = recentTuesday;
+  // min is 10 weeks before the most recent Tuesday (still a Tuesday, so step=7 aligns)
+  var minDate = new Date(recentTuesday);
+  minDate.setDate(minDate.getDate() - 70);
+  meetupInput.setAttribute('min', toLocalDateString(minDate));
+  meetupInput.setAttribute('step', '7');
+  submitBtn.disabled = false;
+
+  // Validate selection is a Tuesday (fallback for browsers that ignore step)
+  meetupInput.addEventListener('change', function () {
+    var parts = meetupInput.value.split('-');
+    var dayOfWeek = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10)).getDay();
+    submitBtn.disabled = !meetupInput.value || dayOfWeek !== 2;
   });
 
   // Show/hide new-attendee section
@@ -678,10 +694,9 @@ article > header hgroup h1 {
 
     var now = new Date();
     var data = buildFormData(now);
-    var meetupNumber = meetupSelect.value;
-    var dateStr = now.toISOString().slice(0, 10);
+    var hacknightDate = meetupInput.value;
     var randomSuffix = Math.random().toString(36).slice(2, 8);
-    var filename = 'submissions/' + dateStr + '-hacknight-' + meetupNumber + '-' + randomSuffix + '.json';
+    var filename = 'submissions/' + hacknightDate + '-feedback-' + randomSuffix + '.json';
     var jsonStr = JSON.stringify(data, null, 2);
     // btoa with unicode support
     var encoded = btoa(unescape(encodeURIComponent(jsonStr)));
@@ -693,7 +708,7 @@ article > header hgroup h1 {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        message: 'Add feedback for hacknight #' + meetupNumber,
+        message: 'Add feedback for hacknight on ' + hacknightDate,
         content: encoded
       })
     })
@@ -730,7 +745,7 @@ article > header hgroup h1 {
     var overallRating = getRadio('overall_rating');
 
     var data = {
-      meetup_number: meetupSelect.value,
+      hacknight_date: meetupInput.value,
       submitted_at: now.toISOString(),
     };
 
