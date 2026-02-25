@@ -314,3 +314,159 @@ body.menu-open { overflow: hidden; }
   .mobile-only  { display: none; }
   .desktop-only { display: flex; }
 }
+
+/* === 06. Components === */
+
+/* --- Cards --- */
+
+.card,
+.card-row {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-warm);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.card:hover,
+.card-row:hover {
+  box-shadow: var(--shadow-warm-lg);
+  transform: translateY(-2px);
+}
+
+.card-body  { flex-grow: 1; }
+
+.card-footer {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* --- Badges --- */
+
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  margin: 0.1rem;
+  font-size: 0.7rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: var(--radius-button);
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.badge-topic {
+  background-color: var(--color-mist);
+  color: var(--color-sage-dark);
+  border: 1px solid var(--color-sage);
+}
+.badge-topic:hover {
+  background-color: var(--color-sage);
+  color: #fff;
+}
+
+.badge-status {
+  background-color: transparent;
+  color: var(--color-clay);
+  border: 1px solid var(--color-clay);
+}
+.badge-status:hover {
+  background-color: var(--color-clay);
+  color: #fff;
+}
+
+.badge-contributors,
+.badge-format,
+.badge-type {
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+  border: 1px solid var(--color-border);
+}
+
+/* --- Buttons --- */
+
+[role="button"],
+button,
+input[type="submit"],
+input[type="button"] {
+  border-radius: var(--radius-button);
+  font-family: var(--font-body);
+  font-weight: 600;
+  transition: background-color 0.2s, border-color 0.2s, transform 0.1s;
+}
+
+[role="button"]:active,
+button:not(.close-menu):not(.menu-toggle):active {
+  transform: scale(0.98);
+}
+
+a[role="button"].outline {
+  border-color: var(--color-sage);
+  color: var(--color-sage);
+}
+a[role="button"].outline:hover {
+  background-color: var(--color-sage);
+  color: #fff;
+}
+
+/* --- Button list --- */
+.button-list {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* --- Social buttons --- */
+.social-button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.social-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+.social-button:hover {
+  background-color: var(--color-sage);
+  border-color: var(--color-sage);
+  color: #fff;
+}
+
+/* --- Announcement bar --- */
+.announcement-bar {
+  border-radius: 0;
+  background-color: var(--color-clay);
+  color: #fff;
+  padding: 0.6rem 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+}
+.announcement-bar a {
+  color: #fff;
+  font-weight: 600;
+}
