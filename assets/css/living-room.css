@@ -470,3 +470,55 @@ a[role="button"].outline:hover {
   color: #fff;
   font-weight: 600;
 }
+
+/* === 07. Homepage === */
+
+/* Hero */
+.home-hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  background-color: var(--color-plum);
+  margin: 0 calc(var(--pico-spacing) * -1);
+  padding: 4rem var(--pico-spacing);
+  margin-bottom: 4rem;
+}
+
+@media (min-width: 768px) {
+  .home-hero {
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    padding: 5rem var(--pico-spacing);
+    align-items: center;
+  }
+}
+
+.home-hero__headline {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 700;
+  font-variation-settings: 'opsz' 144, 'wght' 700;
+  color: #fff;
+  line-height: 1.1;
+  margin-bottom: 1.25rem;
+}
+
+.home-hero__sub {
+  color: rgba(255,255,255,0.85);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.home-hero__sub strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+.home-hero__photo {
+  width: 100%;
+  border-radius: var(--radius-card);
+  object-fit: cover;
+  aspect-ratio: 4/3;
+  box-shadow: var(--shadow-warm-lg);
+}

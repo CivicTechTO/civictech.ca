@@ -4,28 +4,21 @@ layout: homepage
 permalink: "/"
 ---
 
-<article class="grid">
-  <figure>
-    <img
-      src="{{ 'assets/images/CivicTechTO-InPerson.jpg' | relative_url }}"
-      alt="Picture of a group of people sitting listening to a presentation at a Civic Tech Toronto Meetup"
-      style="border-radius: 4px;"
-    />
-  </figure>
-  <div>
-    <hgroup>
-    <h1>Community for public good.</h1>
-    <p>Every Tuesday from 7pm to 9pm – in person and online.</p>
-    </hgroup>
-    <p>We meet every Tuesday to work on projects, hear from thoughtful speakers, and connect with others who care about how technology can improve our communities.</p>
-    <p>You don’t need to be in tech to join us—everyone’s welcome, no matter your background or experience.</p>
-    <p>Our events are hybrid – join us in person or online.</p>
+<section class="home-hero">
+  <div class="home-hero__content">
+    <h1 class="home-hero__headline">Toronto’s civic community, building together.</h1>
+    <p class="home-hero__sub">We bring technologists, designers, and community advocates together to work on the issues that matter.<br><strong>No tech background required.</strong></p>
     <div class="button-list">
-      <a role="button" class="outline" href="https://guild.host/ctto/events" target="_blank">Sign up on Guild<span aria-hidden="true">&nbsp;↗</span></a>
-      <a role="button" class="secondary outline" href="{{'/events' | relative_url }}">See past events</a>
+      <a role="button" href="{{ ‘/projects’ | relative_url }}">Find your project →</a>
+      <a role="button" class="outline" href="{{ ‘/events’ | relative_url }}">See what we’re working on</a>
     </div>
   </div>
-</article>
+  <div class="home-hero__mosaic" aria-hidden="true">
+    <img src="{{ ‘assets/images/CivicTechTO-InPerson.jpg’ | relative_url }}"
+         alt="Community members at a Civic Tech Toronto meetup"
+         class="home-hero__photo" />
+  </div>
+</section>
 
 <!-- === Recent Meetups ===  -->
 
