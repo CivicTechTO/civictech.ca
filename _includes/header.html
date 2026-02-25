@@ -1,10 +1,6 @@
 {%- comment -%}
 Usage:
   {% include header.html %}
-This include adds a responsive site header with:
-  - A "Skip to main content" accessibility link
-  - Logo and site title (via logo.svg and site.title)
-
 Requirements:
   - `logo.svg` include available
   - `site.title` set in _config.yml
@@ -12,83 +8,57 @@ Requirements:
 {%- endcomment -%}
 
 <a href="#main-content" class="skip-link">Skip to main content</a>
-<header class="container">
-  <nav role="navigation">
-    <ul>
-      <li>
-        <a href="{{ '/' | relative_url }}" class="contrast">
-          {% include logo.svg %}{{ site.title | escape }}
-        </a>
-      </li>
-    </ul>
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a href="{{ '/' | relative_url }}" class="site-header__logo">
+      {% include logo.svg %}<span class="site-header__wordmark"><span class="wordmark-civic">Civic</span> <span class="wordmark-tech">Tech</span> <span class="wordmark-toronto">Toronto</span></span>
+    </a>
 
     <!-- Desktop Nav -->
-    <ul class="desktop-only">
-      <li>
-        <details class="dropdown">
-          <summary>≡&nbsp;Menu</summary>
-          <ul>
-            {% for item in site.data.navigation.main %}
-              <li>
-                <a href="{{ item.url | relative_url }}">
-                  {{ item.label }}
-                </a>
-              </li>
-            {% endfor %}
-          </ul>
-        </details>
-      </li>
-      {% for item in site.data.navigation.utility %}
-        <li>
-          <button class="{{ item.type | default: 'secondary' }}"
-            {% if item.external %}
-              onclick="window.open('{{ item.url }}', '_blank')"
-            {% else %}
-              onclick="window.location='{{ item.url | relative_url }}'"
-            {% endif %}>
-            {{ item.label }}{% if item.external %}<span aria-hidden="true">&nbsp;↗</span>{% endif %}
-          </button>
-        </li>
-      {% endfor %}
-    </ul>
+    <nav class="site-nav desktop-only" role="navigation" aria-label="Main navigation">
+      <ul class="site-nav__list">
+        {% for item in site.data.navigation.main %}
+          <li><a href="{{ item.url | relative_url }}" class="site-nav__link">{{ item.label }}</a></li>
+        {% endfor %}
+        {% for item in site.data.navigation.utility %}
+          <li>
+            <a class="site-nav__cta"
+              href="{{ item.url }}"
+              {% if item.external %}target="_blank" rel="noopener"{% endif %}>
+              {{ item.label }}{% if item.external %}<span aria-hidden="true">&nbsp;↗</span>{% endif %}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
 
     <!-- Mobile Toggle -->
-    <ul class="mobile-only">
-      <li>
-        <button class="menu-toggle primary" aria-controls="mobile-menu" aria-expanded="false" aria-label="Open navigation menu">
-          ☰ Menu
-        </button>
-      </li>
-    </ul>
-  </nav>
+    <button class="menu-toggle mobile-only" aria-controls="mobile-menu" aria-expanded="false" aria-label="Open navigation menu">
+      ☰ Menu
+    </button>
+  </div>
 </header>
 
 <!-- Mobile Menu -->
-<div id="mobile-menu" class="mobile-menu mobile-only" hidden>
-  <button class="close-menu" aria-label="Close menu">&times;</button>
-<aside>
-  <nav>
-    <ul>
-      {% for item in site.data.navigation.main %}
-        <li>
-          <a href="{{ item.url | relative_url }}">
-            {{ item.label }}
-          </a>
-        </li>
-      {% endfor %}
-      {% for item in site.data.navigation.utility %}
-        <li>
-          <a role="button" class="{{ item.type | default: 'secondary' }}"
-             href="{{ item.url }}"
-             {% if item.external %}target="_blank"{% endif %}>
-            {{ item.label }}{% if item.external %}<span aria-hidden="true">&nbsp;↗</span>{% endif %}
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
-  </nav>
-</aside>
+<div id="mobile-menu" class="mobile-menu" hidden>
+  <div class="mobile-menu__inner">
+    <button class="close-menu" aria-label="Close menu">&times;</button>
+    <nav>
+      <ul>
+        {% for item in site.data.navigation.main %}
+          <li><a href="{{ item.url | relative_url }}">{{ item.label }}</a></li>
+        {% endfor %}
+        {% for item in site.data.navigation.utility %}
+          <li>
+            <a href="{{ item.url }}" {% if item.external %}target="_blank" rel="noopener"{% endif %}>
+              {{ item.label }}{% if item.external %}<span aria-hidden="true">&nbsp;↗</span>{% endif %}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+    <p class="mobile-menu__tagline">Building Toronto, together.</p>
+  </div>
 </div>
 
-<div id="menu-backdrop" class="menu-backdrop mobile-only" hidden></div>
-
+<div id="menu-backdrop" class="menu-backdrop" hidden></div>
