@@ -673,6 +673,15 @@ ol:last-child, dl:last-child { margin-bottom: 0; }
 
 dd { margin: 0; }
 
+/* Fix spacing between heading and subtext in hgroup for readability on mobile */
+hgroup p {
+  margin-top: var(--pico-typography-spacing-vertical);
+}
+
+.listed {
+  max-width: 450px;
+}
+
 .ogimage {
   aspect-ratio: 1.91 / 1;
   width: 100%;
