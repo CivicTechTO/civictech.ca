@@ -33,42 +33,70 @@ layout: base
     </ul>
   </nav>
 
-  <article class="mobilenegativemargin">
-    <header>
-      <hgroup>
-        <h1>{{ page.title }}</h1>
-        {% if page.excerpt %}
-          <p>{{ page.excerpt }}</p>
-        {% endif %}
-      </hgroup>
-    </header>
+  <!-- Impact banner -->
+  <header class="project-banner">
+    <div class="project-banner__category">
+      {% for tag in page.tags %}{% if tag contains "topic/" %}<span>{{ tag | replace: "topic/", "" | upcase }}</span>{% endif %}{% endfor %}
+    </div>
+    <h1 class="project-banner__title">{{ page.title }}</h1>
+    {% if page.excerpt %}
+      <p class="project-banner__impact">{{ page.excerpt }}</p>
+    {% endif %}
+  </header>
+
+  <article>
     <div class="main-with-sidebar">
       <div class="main-content">
         <section class="project-description">
           {{ content }}
         </section>
       </div>
-      <aside>
+      <aside class="project-sidebar">
         {% if page.image %}
-        <img class="ogimage" src="{{ page.image }}">
+          <img class="ogimage" src="{{ page.image }}" alt="{{ page.title }}">
         {% endif %}
-        <h2>Project Information</h2>
-        <dl>
-          <dt>Categories</dt>
-          <dd>{% include namespaced-categories.html categories=page.categories namespaces="contributors,status" %}</dd>
-        </dl>
-        <dl>
-          <dt>Tags</dt>
-          <dd>{% include tags.html tags=page.tags %}</dd>
-        </dl>
-        <dl>
-          <dt>Since</dt>
-          <dd>{{ page.dateActiveFirst | date: "%B %d, %Y" }}</dd>
-        </dl>
 
-        {% if page.social %}
-        {% include social-links.html social=page.social %}
+        <div class="sidebar-card">
+          <h2>Project Information</h2>
+          <dl>
+            <dt>Status</dt>
+            <dd>{% include namespaced-categories.html categories=page.categories namespaces="status" %}</dd>
+          </dl>
+          <dl>
+            <dt>Contributors</dt>
+            <dd>{% include namespaced-categories.html categories=page.categories namespaces="contributors" %}</dd>
+          </dl>
+          <dl>
+            <dt>This project touches</dt>
+            <dd>{% include tags.html tags=page.tags %}</dd>
+          </dl>
+          {% if page.dateActiveFirst %}
+          <dl>
+            <dt>Since</dt>
+            <dd>{{ page.dateActiveFirst | date: "%B %Y" }}</dd>
+          </dl>
+          {% endif %}
+          {% if page.social %}
+            {% include social-links.html social=page.social %}
+          {% endif %}
+        </div>
+
+        {% if resolved_people.size > 0 %}
+        <div class="sidebar-card">
+          <h2>Who's building this</h2>
+          <ul class="contributor-list">
+            {% for person in resolved_people %}
+              <li><a href="{{ person.url }}">{{ person.title }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
         {% endif %}
+
+        <div class="project-cta-box">
+          <p>Want to contribute?</p>
+          <p>Show up to the next meetup and introduce yourself.</p>
+          <a role="button" href="{{ '/events' | relative_url }}">See upcoming events →</a>
+        </div>
       </aside>
     </div>
     <footer>
@@ -76,43 +104,16 @@ layout: base
     </footer>
   </article>
 
-  {% if resolved_people.size > 0 or resolved_meetups.size > 0 %}
+  {% if resolved_meetups.size > 0 %}
   <section class="related-articles">
-    {% if resolved_people.size > 0 %}
-    <section>
-      <h3>Related People</h3>
-      
-      <article>
-        <ul>
-          {% for person in resolved_people %}
-            <li>
-              <a  href="{{ person.url }}">{{ person.title }}</a>
-            </li>
-          {% endfor %}
-        </ul>
-      </article>
-
-    </section>
-    {% endif %}
-
-    {% if resolved_meetups.size > 0 %}
-    <section>
-      <h3>Related Meetups</h3>
-      {% for meetup in resolved_meetups %}
-      <article>
-        <hgroup>
-          <small>
-            {{ meetup.date | date: "%B %d, %Y" }} - Meetup #{{ meetup.number }}
-          </small>
-          <h4>
-            <a href="{{ meetup.url }}">
-              {{ meetup.topic }}
-            </a>
-          </h4>
-        </hgroup>
-      </article>
-      {% endfor %}
-    </section>
-    {% endif %}
+    <h3>Related Meetups</h3>
+    {% for meetup in resolved_meetups %}
+    <article>
+      <hgroup>
+        <small>{{ meetup.date | date: "%B %d, %Y" }} · Meetup #{{ meetup.number }}</small>
+        <h4><a href="{{ meetup.url }}">{{ meetup.topic }}</a></h4>
+      </hgroup>
+    </article>
+    {% endfor %}
   </section>
   {% endif %}

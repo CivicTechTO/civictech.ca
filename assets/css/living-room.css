@@ -820,3 +820,96 @@ aside .ogimage { margin-bottom: 1rem; }
   transition: color 0.2s;
 }
 .site-footer__bottom nav a:hover { color: rgba(255,255,255,0.9); }
+
+/* === 10. Project Page === */
+
+.project-banner {
+  background-color: var(--color-plum);
+  color: #fff;
+  padding: 3rem 2rem;
+  border-radius: var(--radius-card);
+  margin-bottom: 2.5rem;
+}
+
+.project-banner__category {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-sage);
+  margin-bottom: 0.75rem;
+}
+.project-banner__category span + span::before { content: " · "; }
+
+.project-banner__title {
+  color: #fff;
+  font-variation-settings: 'opsz' 72, 'wght' 600;
+  margin-bottom: 1rem;
+}
+
+.project-banner__impact {
+  color: rgba(255,255,255,0.8);
+  font-style: italic;
+  font-size: 1.15rem;
+  margin: 0;
+}
+
+.sidebar-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.sidebar-card h2 {
+  font-size: 1rem;
+  color: var(--color-ink);
+  margin-bottom: 1rem;
+  font-variation-settings: 'opsz' 36, 'wght' 600;
+}
+
+.contributor-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.contributor-list li { margin-bottom: 0.4rem; }
+
+.project-cta-box {
+  background-color: var(--color-clay);
+  color: #fff;
+  border-radius: var(--radius-card);
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+.project-cta-box p { color: rgba(255,255,255,0.9); margin-bottom: 0.4rem; }
+.project-cta-box p:first-child {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  font-variation-settings: 'opsz' 36, 'wght' 600;
+  color: #fff;
+}
+.project-cta-box [role="button"] {
+  display: inline-block;
+  margin-top: 0.75rem;
+  background-color: #fff;
+  color: var(--color-clay);
+  padding: 0.4rem 1rem;
+  border-radius: var(--radius-button);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.related-articles { margin-top: 2rem; }
+.related-articles h3 {
+  font-variation-settings: 'opsz' 36, 'wght' 600;
+  margin-bottom: 1rem;
+}
+.related-articles article {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
