@@ -1,32 +1,40 @@
 {%- comment -%}
-Usage:
-  {% include footer.html %}
-This footer include displays the site title, description, social links, and a theme switcher.
-Make sure your site has:
-  - `logo.svg` include (used in the header)
-  - `site.title` and `site.description` configured in _config.yml
-  - `social-links-footer.html` include for social icons/links
-  - Theme switching JavaScript for data-theme-switcher links to work
+Usage: {% include footer.html %}
 {%- endcomment -%}
 
-<footer class="container">
-  <header>
-    <p><a href="{{ '/' | relative_url }}">{% include logo.svg %}{{ site.title | escape }}</a></p>
-  </header>
-  <div class="grid">
-    <p>{{ site.description }}</p>
-    <div>
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <div class="site-footer__brand">
+      <a href="{{ '/' | relative_url }}" class="site-footer__logo">
+        {% include logo.svg %}<span>{{ site.title | escape }}</span>
+      </a>
+      <p class="site-footer__tagline">Building Toronto, together.</p>
+    </div>
+
+    <div class="site-footer__links">
+      <p><strong>Navigate</strong></p>
+      <ul>
+        {% for item in site.data.navigation.main %}
+          <li><a href="{{ item.url | relative_url }}">{{ item.label }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="site-footer__connect">
       <p><strong>Connect</strong></p>
       {% include social-links-footer.html %}
     </div>
   </div>
-  <hr/>
-  <nav>
-    <ul><li><strong>Change Theme</strong></li></ul>
-    <ul>
-      <li><a href="#" data-theme-switcher="auto">Auto</a></li>
-      <li><a href="#" data-theme-switcher="light">Light</a></li>
-      <li><a href="#" data-theme-switcher="dark">Dark</a></li>
-    </ul>
-  </nav>
+
+  <div class="container site-footer__bottom">
+    <nav aria-label="Theme switcher">
+      <ul>
+        <li><small>Theme:</small></li>
+        <li><a href="#" data-theme-switcher="auto">Auto</a></li>
+        <li><a href="#" data-theme-switcher="light">Light</a></li>
+        <li><a href="#" data-theme-switcher="dark">Dark</a></li>
+      </ul>
+    </nav>
+    <p><small>{{ site.description }}</small></p>
+  </div>
 </footer>
