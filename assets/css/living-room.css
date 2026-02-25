@@ -1,0 +1,134 @@
+/* ==========================================================================
+   LIVING ROOM — Design System for civictech.ca
+   ==========================================================================
+   TABLE OF CONTENTS
+   01. Design Tokens (CSS Custom Properties)
+   02. Pico Variable Overrides
+   03. Base Typography
+   04. Noise Texture
+   ========================================================================== */
+
+/* === 01. Design Tokens === */
+
+:root {
+  --color-ground:      #FAF5EE;
+  --color-ink:         #2C1810;
+  --color-surface:     #F0E8DA;
+  --color-border:      #D9CCBA;
+  --color-sage:        #6B8F71;
+  --color-sage-dark:   #4A6650;
+  --color-clay:        #B85C2C;
+  --color-clay-dark:   #8F3E18;
+  --color-plum:        #3D2B3D;
+  --color-plum-light:  #5C3F5C;
+  --color-mist:        #E8F0EA;
+
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body:    'Instrument Sans', system-ui, sans-serif;
+
+  --radius-card:   1.25rem;
+  --radius-button: 100px;
+  --radius-small:  0.5rem;
+
+  --shadow-warm: 0 4px 24px rgba(44, 24, 16, 0.08);
+  --shadow-warm-lg: 0 8px 48px rgba(44, 24, 16, 0.12);
+}
+
+/* === 02. Pico Variable Overrides (Light Mode) === */
+
+:root,
+[data-theme="light"] {
+  --pico-background-color:        var(--color-ground);
+  --pico-color:                   var(--color-ink);
+  --pico-card-background-color:   var(--color-surface);
+  --pico-card-border-color:       var(--color-border);
+  --pico-muted-background-color:  var(--color-surface);
+  --pico-muted-border-color:      var(--color-border);
+  --pico-muted-color:             #7A6255;
+
+  --pico-primary:                    var(--color-sage);
+  --pico-primary-background:         var(--color-sage);
+  --pico-primary-border:             var(--color-sage);
+  --pico-primary-hover-background:   var(--color-sage-dark);
+  --pico-primary-hover-border:       var(--color-sage-dark);
+  --pico-primary-inverse:            #ffffff;
+  --pico-primary-inverse-hover:      #ffffff;
+
+  --pico-secondary:                  var(--color-clay);
+  --pico-secondary-background:       var(--color-clay);
+  --pico-secondary-border:           var(--color-clay);
+  --pico-secondary-hover-background: var(--color-clay-dark);
+  --pico-secondary-hover-border:     var(--color-clay-dark);
+  --pico-secondary-inverse:          #ffffff;
+
+  --pico-contrast:            var(--color-plum);
+  --pico-contrast-background: var(--color-plum);
+  --pico-contrast-border:     var(--color-plum);
+  --pico-contrast-inverse:    #ffffff;
+
+  --pico-border-radius: var(--radius-small);
+  --pico-box-shadow:    var(--shadow-warm);
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-ground:  #1A1410;
+    --color-ink:     #F0E8DA;
+    --color-surface: #231C18;
+    --color-border:  #3D3028;
+
+    --pico-background-color:       var(--color-ground);
+    --pico-color:                  var(--color-ink);
+    --pico-card-background-color:  var(--color-surface);
+    --pico-card-border-color:      var(--color-border);
+    --pico-muted-background-color: var(--color-surface);
+    --pico-muted-border-color:     var(--color-border);
+    --pico-muted-color:            #A08878;
+  }
+}
+
+[data-theme="dark"] {
+  --color-ground:  #1A1410;
+  --color-ink:     #F0E8DA;
+  --color-surface: #231C18;
+  --color-border:  #3D3028;
+
+  --pico-background-color:       var(--color-ground);
+  --pico-color:                  var(--color-ink);
+  --pico-card-background-color:  var(--color-surface);
+  --pico-card-border-color:      var(--color-border);
+  --pico-muted-background-color: var(--color-surface);
+  --pico-muted-border-color:     var(--color-border);
+  --pico-muted-color:            #A08878;
+}
+
+/* === 03. Base Typography === */
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-ground);
+  color: var(--color-ink);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-variation-settings: 'opsz' 72; }
+h2 { font-size: clamp(1.5rem, 3vw, 2.25rem); font-variation-settings: 'opsz' 72; }
+h3 { font-size: 1.25rem; font-variation-settings: 'opsz' 36; }
+
+/* === 04. Noise Texture === */
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
