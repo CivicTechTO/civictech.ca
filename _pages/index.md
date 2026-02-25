@@ -13,7 +13,7 @@ permalink: "/"
       <a role="button" class="outline" href="{{ ‘/events’ | relative_url }}">See what we’re working on</a>
     </div>
   </div>
-  <div class="home-hero__mosaic" aria-hidden="true">
+  <div class="home-hero__mosaic">
     <img src="{{ ‘assets/images/CivicTechTO-InPerson.jpg’ | relative_url }}"
          alt="Community members at a Civic Tech Toronto meetup"
          class="home-hero__photo" />

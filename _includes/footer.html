@@ -35,6 +35,6 @@ Usage: {% include footer.html %}
         <li><a href="#" data-theme-switcher="dark">Dark</a></li>
       </ul>
     </nav>
-    <p><small>{{ site.description }}</small></p>
+    <p><small>{{ site.description | strip_html | escape }}</small></p>
   </div>
 </footer>
