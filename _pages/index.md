@@ -6,15 +6,15 @@ permalink: "/"
 
 <section class="home-hero">
   <div class="home-hero__content">
-    <h1 class="home-hero__headline">Toronto’s civic community, building together.</h1>
+    <h1 class="home-hero__headline">Toronto's civic community, building together.</h1>
     <p class="home-hero__sub">We bring technologists, designers, and community advocates together to work on the issues that matter.<br><strong>No tech background required.</strong></p>
     <div class="button-list">
-      <a role="button" href="{{ ‘/projects’ | relative_url }}">Find your project →</a>
-      <a role="button" class="outline" href="{{ ‘/events’ | relative_url }}">See what we’re working on</a>
+      <a role="button" href="{{ '/projects' | relative_url }}">Find your project →</a>
+      <a role="button" class="outline" href="{{ '/events' | relative_url }}">See what we're working on</a>
     </div>
   </div>
   <div class="home-hero__mosaic">
-    <img src="{{ ‘assets/images/CivicTechTO-InPerson.jpg’ | relative_url }}"
+    <img src="{{ 'assets/images/CivicTechTO-InPerson.jpg' | relative_url }}"
          alt="Community members at a Civic Tech Toronto meetup"
          class="home-hero__photo" />
   </div>
