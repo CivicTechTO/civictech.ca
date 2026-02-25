@@ -913,3 +913,50 @@ aside .ogimage { margin-bottom: 1rem; }
   padding: 0.75rem 0;
   border-bottom: 1px solid var(--color-border);
 }
+
+/* === 11. Person Page === */
+
+.person-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.person-header__name {
+  font-variation-settings: 'opsz' 72, 'wght' 600;
+  margin-bottom: 0.4rem;
+}
+
+.person-header__tagline {
+  color: var(--color-clay);
+  font-style: italic;
+  font-size: 1.05rem;
+  margin-bottom: 1rem;
+}
+
+.person-bio__lead {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-variation-settings: 'opsz' 72, 'wght' 400;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--color-ink);
+  margin-bottom: 1rem;
+}
+
+.person-section {
+  margin-top: 2rem;
+}
+.person-section h2 {
+  font-size: 1.1rem;
+  font-variation-settings: 'opsz' 36, 'wght' 600;
+  margin-bottom: 1rem;
+}
+.person-section ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+}
+.person-section li { margin-bottom: 0.4rem; }

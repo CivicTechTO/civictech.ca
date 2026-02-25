@@ -2,6 +2,28 @@
 layout: base
 ---
 
+{% comment %} Resolve Organizations {% endcomment %}
+{% assign resolved_organizations = "" | split: "" %}
+{% for org in page.organization %}
+  {% assign org_name = org | remove: '[[' | remove: ']]' %}
+  {% assign org_path = '_organizations/' | append: org_name | append: '.md' %}
+  {% assign org_resolved = site.organizations | where: "relative_path", org_path | first %}
+  {% if org_resolved %}
+    {% assign resolved_organizations = resolved_organizations | push: org_resolved %}
+  {% endif %}
+{% endfor %}
+
+{% comment %} Resolve Projects {% endcomment %}
+{% assign resolved_projects = "" | split: "" %}
+{% for proj in page.project %}
+  {% assign proj_name = proj | remove: '[[' | remove: ']]' %}
+  {% assign proj_path = '_projects/' | append: proj_name | append: '.md' %}
+  {% assign proj_resolved = site.projects | where: "relative_path", proj_path | first %}
+  {% if proj_resolved %}
+    {% assign resolved_projects = resolved_projects | push: proj_resolved %}
+  {% endif %}
+{% endfor %}
+
   <nav aria-label="breadcrumb">
     <ul>
       <li><a href="{{ site.baseurl }}/">Home</a></li>
@@ -10,39 +32,30 @@ layout: base
     </ul>
   </nav>
 
-  <article class="mobilenegativemargin">
-    <header>
-      <hgroup>
-        <h1>{{ page.title }}</h1>
+  <article class="person-article">
+    <header class="person-header">
+      <div class="person-header__meta">
+        <h1 class="person-header__name">{{ page.title }}</h1>
         {% if page.excerpt %}
-          <p>{{ page.excerpt }}</p>
+          <p class="person-header__tagline">{{ page.excerpt }}</p>
         {% endif %}
-      </hgroup>
+        {% if page.social %}
+          {% include social-links.html social=page.social %}
+        {% endif %}
+      </div>
     </header>
 
     {% if page.description or page.content %}
-    <section class="person-description">
-      <h2>Description</h2>
+    <section class="person-bio">
       {% if page.description %}
-        <p>{{ page.description }}</p>
+        <p class="person-bio__lead">{{ page.description }}</p>
       {% endif %}
-      <div>{{ page.content }}</div>
+      <div>{{ content }}</div>
     </section>
     {% endif %}
 
-    {% comment %} Resolve Organizations {% endcomment %}
-    {% assign resolved_organizations = "" | split: "" %}
-    {% for org in page.organization %}
-      {% assign org_name = org | remove: '[[' | remove: ']]' %}
-      {% assign org_path = '_organizations/' | append: org_name | append: '.md' %}
-      {% assign org_resolved = site.organizations | where: "relative_path", org_path | first %}
-      {% if org_resolved %}
-        {% assign resolved_organizations = resolved_organizations | push: org_resolved %}
-      {% endif %}
-    {% endfor %}
-
     {% if resolved_organizations.size > 0 %}
-    <section class="person-organizations">
+    <section class="person-section">
       <h2>Affiliated Organizations</h2>
       <ul>
         {% for org in resolved_organizations %}
@@ -52,41 +65,28 @@ layout: base
     </section>
     {% endif %}
 
-    {% comment %} Resolve Projects {% endcomment %}
-    {% assign resolved_projects = "" | split: "" %}
-    {% for proj in page.project %}
-      {% assign proj_name = proj | remove: '[[' | remove: ']]' %}
-      {% assign proj_path = '_projects/' | append: proj_name | append: '.md' %}
-      {% assign proj_resolved = site.projects | where: "relative_path", proj_path | first %}
-      {% if proj_resolved %}
-        {% assign resolved_projects = resolved_projects | push: proj_resolved %}
-      {% endif %}
-    {% endfor %}
-
     {% if resolved_projects.size > 0 %}
-    <section class="person-projects">
+    <section class="person-section">
       <h2>Projects</h2>
-      <ul>
+      <div class="card-grid">
         {% for proj in resolved_projects %}
-          <li><a href="{{ proj.url }}">{{ proj.title }}</a></li>
+          <article class="card">
+            <h3><a href="{{ proj.url }}">{{ proj.title }}</a></h3>
+            {% if proj.excerpt %}<p>{{ proj.excerpt }}</p>{% endif %}
+          </article>
         {% endfor %}
-      </ul>
+      </div>
     </section>
     {% endif %}
-
-    {% if page.social %}
-    {% include social-links.html social=page.social %}
-    {% endif %}
-
-    {% assign all_collections = site.meetups | concat: site.projects %}
 
     <footer>
       {% include edit-link.html %}
     </footer>
   </article>
 
-  {% include backlinks.html 
-    collections=all_collections 
+  {% assign all_collections = site.meetups | concat: site.projects %}
+  {% include backlinks.html
+    collections=all_collections
     fields="team,speakers"
     title="Mentioned In"
   %}
