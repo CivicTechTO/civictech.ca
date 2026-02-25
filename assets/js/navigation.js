@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
     menu.hidden = false;
     backdrop.hidden = false;
     document.body.classList.add("menu-open");
+    closeBtn.focus();
   }
 
   function closeMenu() {
@@ -18,6 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     menu.hidden = true;
     backdrop.hidden = true;
     document.body.classList.remove("menu-open");
+    toggle.focus();
   }
 
   toggle.addEventListener("click", function () {
@@ -27,4 +29,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   backdrop.addEventListener("click", closeMenu);
   if (closeBtn) closeBtn.addEventListener("click", closeMenu);
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !menu.hidden) closeMenu();
+  });
 });

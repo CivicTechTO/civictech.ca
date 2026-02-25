@@ -43,7 +43,7 @@ Requirements:
 <div id="mobile-menu" class="mobile-menu" hidden>
   <div class="mobile-menu__inner">
     <button class="close-menu" aria-label="Close menu">&times;</button>
-    <nav>
+    <nav aria-label="Mobile navigation">
       <ul>
         {% for item in site.data.navigation.main %}
           <li><a href="{{ item.url | relative_url }}">{{ item.label }}</a></li>

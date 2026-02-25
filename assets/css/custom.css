@@ -9,9 +9,8 @@
    02. Layouts
    03. Components
    04. Page-Specific Styles
-   05. Navigation
-   06. Icons
-   07. Responsive Adjustments
+   05. Icons
+   06. Responsive Adjustments
    ==========================================================================
 */
 
@@ -368,59 +367,7 @@ header.sticky {
   }
 }
 
-/* === 05. Navigation === */
-.skip-link {
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform: translateY(-200%);
-  background-color: #000;
-  color: #fff;
-  padding: 0.5rem 1rem;
-  z-index: 100;
-  text-decoration: none;
-  transition: transform 0.3s ease;
-}
-
-.skip-link:focus {
-  transform: translateY(0);
-}
-
-body.menu-open {
-  overflow: hidden;
-}
-
-.menu-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  z-index: 9998;
-}
-
-.mobile-menu {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 75%;
-  height: 100%;
-  padding: 1rem;
-  background: var(--pico-background-color);
-  z-index: 9999;
-  overflow-y: auto;
-  transition: transform 0.3s ease;
-}
-
-.close-menu {
-  display: block;
-  margin-left: auto;
-  font-size: 2rem;
-  background: none;
-  border: none;
-  color: var(--pico-primary);
-  padding: 0.25rem 1rem;
-}
-
-/* === 06. Icons === */
+/* === 05. Icons === */
 
 .iconstyle svg {
   color: inherit;
@@ -430,7 +377,7 @@ body.menu-open {
   vertical-align: middle;
 }
 
-/* === 07. Responsive Adjustments === */
+/* === 06. Responsive Adjustments === */
 
 /* Fix spacing between heading and subtext in hgroup for better readability on mobile */
 hgroup p {
