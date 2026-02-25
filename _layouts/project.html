@@ -34,7 +34,7 @@ layout: base
   </nav>
 
   <!-- Impact banner -->
-  <header class="project-banner">
+  <div class="project-banner">
     <div class="project-banner__category">
       {% for tag in page.tags %}{% if tag contains "topic/" %}<span>{{ tag | replace: "topic/", "" | upcase }}</span>{% endif %}{% endfor %}
     </div>
@@ -42,7 +42,7 @@ layout: base
     {% if page.excerpt %}
       <p class="project-banner__impact">{{ page.excerpt }}</p>
     {% endif %}
-  </header>
+  </div>
 
   <article>
     <div class="main-with-sidebar">
