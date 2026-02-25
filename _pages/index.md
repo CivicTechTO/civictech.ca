@@ -142,6 +142,27 @@ permalink: "/"
   </div>
 </section>
 
+<!-- === Come As You Are === -->
+<section class="home-welcome">
+  <div class="home-welcome__grid">
+    <article class="home-welcome__card">
+      <div class="home-welcome__icon" aria-hidden="true">◎</div>
+      <h3>Not a developer?</h3>
+      <p>We have designers, writers, researchers, and advocates who've never written a line of code.</p>
+    </article>
+    <article class="home-welcome__card">
+      <div class="home-welcome__icon" aria-hidden="true">◎</div>
+      <h3>New to Toronto?</h3>
+      <p>Our community spans every neighbourhood and background.</p>
+    </article>
+    <article class="home-welcome__card">
+      <div class="home-welcome__icon" aria-hidden="true">◎</div>
+      <h3>Not sure where to start?</h3>
+      <p>Show up once. You'll figure out the rest together.</p>
+    </article>
+  </div>
+</section>
+
 <!-- === Projects Feature ===  -->
 
 {% assign current_projects = site.projects | where_exp: "item", "item.categories contains 'meta/feature'" %}

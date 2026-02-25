@@ -522,3 +522,48 @@ a[role="button"].outline:hover {
   aspect-ratio: 4/3;
   box-shadow: var(--shadow-warm-lg);
 }
+
+/* Come As You Are */
+.home-welcome {
+  background-color: var(--color-mist);
+  border-radius: var(--radius-card);
+  padding: 3rem 2rem;
+  margin-bottom: 4rem;
+}
+
+.home-welcome__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .home-welcome__grid { grid-template-columns: 1fr 1fr 1fr; }
+}
+
+.home-welcome__card {
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+  border: none;
+}
+
+.home-welcome__card h3 {
+  font-size: 1.1rem;
+  color: var(--color-plum);
+  margin-bottom: 0.5rem;
+}
+
+.home-welcome__card p {
+  font-size: 0.95rem;
+  color: var(--color-ink);
+  opacity: 0.85;
+  line-height: 1.6;
+}
+
+.home-welcome__icon {
+  font-size: 1.5rem;
+  color: var(--color-sage);
+  margin-bottom: 0.75rem;
+  line-height: 1;
+}
