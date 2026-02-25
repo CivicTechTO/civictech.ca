@@ -6,6 +6,15 @@
    02. Pico Variable Overrides
    03. Base Typography
    04. Noise Texture
+   05. Navigation
+   06. Components (Cards, Badges, Buttons)
+   07. Homepage
+   08. Layout Utilities
+   09. Footer
+   10. Project Page
+   11. Person Page
+   12. Meetup Page
+   13. Tag & Category Pages
    ========================================================================== */
 
 /* === 01. Design Tokens === */
@@ -999,7 +1008,8 @@ aside .ogimage { margin-bottom: 1rem; }
 
 .meetup-header__speakers {
   font-style: italic;
-  color: var(--pico-muted-color);
+  color: var(--color-ink);
+  opacity: 0.65;
   margin: 0;
 }
 
