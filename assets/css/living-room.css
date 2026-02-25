@@ -1036,3 +1036,53 @@ aside .ogimage { margin-bottom: 1rem; }
   border-bottom: 1px solid var(--color-border);
 }
 .speaker-card h3 { font-size: 1rem; margin-bottom: 0.3rem; }
+
+/* === 13. Tag & Category Pages === */
+
+.tag-collection,
+.namespace-tags {
+  margin-bottom: 2.5rem;
+}
+
+.tag-collection h3,
+.namespace-tags h3 {
+  font-size: 1rem;
+  font-variation-settings: 'opsz' 36, 'wght' 600;
+  color: var(--color-clay);
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.tag-collection ul,
+.namespace-tags ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+}
+
+.tag-collection li,
+.namespace-tags li {
+  margin-bottom: 0.4rem;
+}
+
+/* Resource page */
+.resource-details,
+.resource-tags,
+.resource-body {
+  margin-top: 2rem;
+}
+
+/* About page figure */
+.figure-image {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.figure-image img {
+  padding: 1rem;
+  border-radius: var(--radius-card);
+  margin-bottom: 1rem;
+}
