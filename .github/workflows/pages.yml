@@ -6,6 +6,8 @@ on:
       - main # Adjust if your default branch is different
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+  schedule:
+    - cron: '0 12 * * 3'  # Every Wednesday at noon UTC (after Tuesday Hacknight events)
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
