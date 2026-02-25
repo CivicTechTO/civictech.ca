@@ -34,31 +34,29 @@ layout: base
   </nav>
 
   <article class="mobilenegativemargin">
-    <header>
-      <hgroup>
-        <p><small>Meetup #{{ page.number }}</small></p>
+    <header class="meetup-header">
+      <div class="meetup-header__text">
+        <p class="meetup-header__number">Meetup #{{ page.number }}</p>
         <h1>{{ page.topic }}</h1>
-
         {% if resolved_speakers.size > 0 %}
-        <p>with
-          {% for speaker in resolved_speakers %}
-            {% if forloop.first and forloop.length == 1 %}
-              {{ speaker.title }}
-            {% elsif forloop.length == 2 and forloop.first %}
-              {{ speaker.title }}
-            {% elsif forloop.length == 2 and forloop.last %}
-              and {{ speaker.title }}
-            {% elsif forloop.length > 2 and forloop.first %}
-              {{ speaker.title }},
-            {% elsif forloop.length > 2 and forloop.last %}
-              and {{ speaker.title }}
-            {% elsif forloop.length > 2 %}
-              {{ speaker.title }},
-            {% endif %}
-          {% endfor %}
-        </p>
+          <p class="meetup-header__speakers">with
+            {% for speaker in resolved_speakers %}
+              {% if forloop.first and forloop.length == 1 %}{{ speaker.title }}
+              {% elsif forloop.length == 2 and forloop.first %}{{ speaker.title }}
+              {% elsif forloop.length == 2 and forloop.last %} and {{ speaker.title }}
+              {% elsif forloop.length > 2 and forloop.first %}{{ speaker.title }},
+              {% elsif forloop.length > 2 and forloop.last %} and {{ speaker.title }}
+              {% elsif forloop.length > 2 %}{{ speaker.title }},
+              {% endif %}
+            {% endfor %}
+          </p>
         {% endif %}
-      </hgroup>
+      </div>
+      <div class="meetup-date-stamp" aria-label="{{ page.date | date: '%B %d, %Y' }}">
+        <span class="meetup-date-stamp__month">{{ page.date | date: "%b" | upcase }}</span>
+        <span class="meetup-date-stamp__day">{{ page.date | date: "%-d" }}</span>
+        <span class="meetup-date-stamp__year">{{ page.date | date: "%Y" }}</span>
+      </div>
     </header>
 
     <div class="main-with-sidebar">
@@ -78,8 +76,10 @@ layout: base
           <section>
             <h2>Speakers</h2>
             {% for speaker in resolved_speakers %}
-              <a href="{{ speaker.url }}">{{ speaker.title }}</a>
-              <p>{{ speaker.description }}</p>
+              <div class="speaker-card">
+                <h3><a href="{{ speaker.url }}">{{ speaker.title }}</a></h3>
+                {% if speaker.description %}<p>{{ speaker.description }}</p>{% endif %}
+              </div>
             {% endfor %}
           </section>
         {% endif %}
@@ -89,35 +89,34 @@ layout: base
 
       <aside>
         {% if page.image %}
-          {% picture events /events/{{ page.image }} alt="{{ event.topic }}" class="meetup-image" %}
+          {% picture events /events/{{ page.image }} alt="{{ page.topic }}" class="meetup-image" %}
         {% endif %}
-        <h2>Details</h2>
-        {% if page.eventUrl %}
-          {% assign now = site.time %}
-          {% if page.date < now %}
-            <p><a href="{{ page.eventUrl }}" target="_blank" rel="noopener">Event Page</a></p>
-          {% else %}
-            <p><a role="button" class="outline" href="{{ page.eventUrl }}" target="_blank" rel="noopener">Registration<span aria-hidden="true">&nbsp;↗</span></a></p>
+
+        <div class="sidebar-card">
+          <h2>Details</h2>
+          {% if page.eventUrl %}
+            {% assign now = site.time %}
+            {% if page.date < now %}
+              <p><a href="{{ page.eventUrl }}" target="_blank" rel="noopener">Event Page</a></p>
+            {% else %}
+              <p><a role="button" class="outline" href="{{ page.eventUrl }}" target="_blank" rel="noopener">Registration ↗</a></p>
+            {% endif %}
           {% endif %}
-        {% endif %}
-
-        <p>Date: {{ page.date | date: "%B %d, %Y" }}</p>
-
-        {% if resolved_venue.size > 0 %}
-          {% for venue in resolved_venue %}
-            <p>Location: <a href="{{ venue.url }}">{{ venue.title }}</a></p>
-          {% endfor %}
-        {% endif %}
-
-        {% include topic-tags.html tags=page.tags %}
+          <p><strong>Date:</strong> {{ page.date | date: "%B %d, %Y" }}</p>
+          {% if resolved_venue.size > 0 %}
+            {% for venue in resolved_venue %}
+              <p><strong>Location:</strong> <a href="{{ venue.url }}">{{ venue.title }}</a></p>
+            {% endfor %}
+          {% endif %}
+          {% include topic-tags.html tags=page.tags %}
+        </div>
       </aside>
     </div>
-    <footer>
-      {% include edit-link.html %}
-    </footer>
+
+    <footer>{% include edit-link.html %}</footer>
   </article>
 
-  {% include backlinks.html 
+  {% include backlinks.html
     collections=site.projects
     fields="team"
     title="Mentioned In"
