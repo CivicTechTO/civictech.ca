@@ -2,7 +2,7 @@
 title: "Share Your Feedback"
 layout: page
 permalink: "/feedback/"
-excerpt: "Help us make Civic Tech Toronto better. Responses are anonymous — we never collect names or email addresses — but are stored in a public repository."
+excerpt: "🔓 Help us make Civic Tech Toronto better. Responses are anonymous — we never collect names or emails — and are stored openly in a public GitHub repository."
 ---
 
 <style>
@@ -14,6 +14,7 @@ excerpt: "Help us make Civic Tech Toronto better. Responses are anonymous — we
 /* ---- Wrapper ---- */
 .feedback-wrapper {
   max-width: 600px;
+  margin: 0 auto;
 }
 
 /* ---- Card base ---- */
@@ -128,14 +129,13 @@ excerpt: "Help us make Civic Tech Toronto better. Responses are anonymous — we
   outline-offset: 2px;
 }
 
-/* ---- Rating scale ---- */
+/* ---- Rating scale (3-point) ---- */
 .rating-scale {
   display: flex;
-  gap: 0.4rem;
-  flex-wrap: wrap;
-  margin-bottom: 0.25rem;
+  gap: 0.5rem;
 }
 .rating-scale label {
+  flex: 1;
   position: relative;
   cursor: pointer;
   display: inline-flex;
@@ -151,35 +151,35 @@ excerpt: "Help us make Civic Tech Toronto better. Responses are anonymous — we
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
+  width: 100%;
+  padding: 0.5rem 0.5rem;
   border: 1.5px solid var(--pico-muted-border-color);
-  border-radius: var(--pico-border-radius);
-  font-size: 1.1rem;
+  border-radius: 100px;
+  font-size: 0.875rem;
+  font-weight: 500;
   color: var(--pico-muted-color);
   background: var(--pico-muted-background-color);
   transition: all 0.15s ease;
   user-select: none;
+  text-align: center;
+  white-space: nowrap;
 }
 .rating-scale input[type="radio"]:checked + .rating-btn {
   background: var(--pico-primary);
   border-color: var(--pico-primary);
   color: var(--pico-primary-inverse);
-  transform: scale(1.1);
 }
 .rating-scale label:hover .rating-btn {
   border-color: var(--pico-primary);
   color: var(--pico-primary);
-  background: var(--pico-primary-background);
+}
+.rating-scale input[type="radio"]:checked + .rating-btn:hover {
+  background: var(--pico-primary);
+  color: var(--pico-primary-inverse);
 }
 .rating-scale input[type="radio"]:focus-visible + .rating-btn {
   outline: 2px solid var(--pico-primary);
   outline-offset: 2px;
-}
-.rating-hint {
-  font-size: 0.75rem;
-  color: var(--pico-muted-color);
-  margin: 0;
 }
 
 /* ---- Inline follow-up fields (within a conditional section) ---- */
@@ -434,8 +434,6 @@ excerpt: "Help us make Civic Tech Toronto better. Responses are anonymous — we
 
 <div class="feedback-wrapper">
 
-<p class="fb-public-notice"><strong>Public notice:</strong> Responses are anonymous but stored openly in a <a href="https://github.com/CivicTechTO/feedback" target="_blank" rel="noopener">public GitHub repository</a>. Do not include any personal information.</p>
-
 <form id="feedback-form" novalidate>
 
   <div class="fb-card">
@@ -465,13 +463,10 @@ excerpt: "Help us make Civic Tech Toronto better. Responses are anonymous — we
     <fieldset>
       <legend>How was tonight overall?</legend>
       <div class="rating-scale">
-        <label><input type="radio" name="overall_rating" value="1"><span class="rating-btn">1</span></label>
-        <label><input type="radio" name="overall_rating" value="2"><span class="rating-btn">2</span></label>
-        <label><input type="radio" name="overall_rating" value="3"><span class="rating-btn">3</span></label>
-        <label><input type="radio" name="overall_rating" value="4"><span class="rating-btn">4</span></label>
-        <label><input type="radio" name="overall_rating" value="5"><span class="rating-btn">5</span></label>
+        <label><input type="radio" name="overall_rating" value="not-great"><span class="rating-btn">Not great</span></label>
+        <label><input type="radio" name="overall_rating" value="good"><span class="rating-btn">Good</span></label>
+        <label><input type="radio" name="overall_rating" value="great"><span class="rating-btn">Great</span></label>
       </div>
-      <p class="rating-hint">1 = poor &nbsp;&nbsp; 5 = excellent</p>
     </fieldset>
   </div>
 
@@ -483,25 +478,19 @@ excerpt: "Help us make Civic Tech Toronto better. Responses are anonymous — we
       <fieldset>
         <legend>Did you feel welcome tonight?</legend>
         <div class="rating-scale">
-          <label><input type="radio" name="felt_welcome" value="1"><span class="rating-btn">1</span></label>
-          <label><input type="radio" name="felt_welcome" value="2"><span class="rating-btn">2</span></label>
-          <label><input type="radio" name="felt_welcome" value="3"><span class="rating-btn">3</span></label>
-          <label><input type="radio" name="felt_welcome" value="4"><span class="rating-btn">4</span></label>
-          <label><input type="radio" name="felt_welcome" value="5"><span class="rating-btn">5</span></label>
+          <label><input type="radio" name="felt_welcome" value="not-really"><span class="rating-btn">Not really</span></label>
+          <label><input type="radio" name="felt_welcome" value="somewhat"><span class="rating-btn">Somewhat</span></label>
+          <label><input type="radio" name="felt_welcome" value="very"><span class="rating-btn">Very</span></label>
         </div>
-        <p class="rating-hint">1 = not at all &nbsp;&nbsp; 5 = very welcome</p>
       </fieldset>
 
       <fieldset>
         <legend>Did you understand what was going on?</legend>
         <div class="rating-scale">
-          <label><input type="radio" name="understood" value="1"><span class="rating-btn">1</span></label>
-          <label><input type="radio" name="understood" value="2"><span class="rating-btn">2</span></label>
-          <label><input type="radio" name="understood" value="3"><span class="rating-btn">3</span></label>
-          <label><input type="radio" name="understood" value="4"><span class="rating-btn">4</span></label>
-          <label><input type="radio" name="understood" value="5"><span class="rating-btn">5</span></label>
+          <label><input type="radio" name="understood" value="confused"><span class="rating-btn">Confused</span></label>
+          <label><input type="radio" name="understood" value="mostly"><span class="rating-btn">Mostly</span></label>
+          <label><input type="radio" name="understood" value="totally-clear"><span class="rating-btn">Totally clear</span></label>
         </div>
-        <p class="rating-hint">1 = confused &nbsp;&nbsp; 5 = totally clear</p>
       </fieldset>
 
       <fieldset>
@@ -531,32 +520,26 @@ excerpt: "Help us make Civic Tech Toronto better. Responses are anonymous — we
       <fieldset>
         <legend>Could you hear and see what was happening clearly?</legend>
         <div class="rating-scale">
-          <label><input type="radio" name="av_quality" value="1"><span class="rating-btn">1</span></label>
-          <label><input type="radio" name="av_quality" value="2"><span class="rating-btn">2</span></label>
-          <label><input type="radio" name="av_quality" value="3"><span class="rating-btn">3</span></label>
-          <label><input type="radio" name="av_quality" value="4"><span class="rating-btn">4</span></label>
-          <label><input type="radio" name="av_quality" value="5"><span class="rating-btn">5</span></label>
+          <label><input type="radio" name="av_quality" value="not-really"><span class="rating-btn">Not really</span></label>
+          <label><input type="radio" name="av_quality" value="mostly"><span class="rating-btn">Mostly</span></label>
+          <label><input type="radio" name="av_quality" value="clearly"><span class="rating-btn">Clearly</span></label>
         </div>
-        <p class="rating-hint">1 = poor &nbsp;&nbsp; 5 = excellent</p>
       </fieldset>
 
       <fieldset>
         <legend>Did you feel like an equal participant, not just a viewer?</legend>
         <div class="rating-scale">
-          <label><input type="radio" name="felt_included" value="1"><span class="rating-btn">1</span></label>
-          <label><input type="radio" name="felt_included" value="2"><span class="rating-btn">2</span></label>
-          <label><input type="radio" name="felt_included" value="3"><span class="rating-btn">3</span></label>
-          <label><input type="radio" name="felt_included" value="4"><span class="rating-btn">4</span></label>
-          <label><input type="radio" name="felt_included" value="5"><span class="rating-btn">5</span></label>
+          <label><input type="radio" name="felt_included" value="not-really"><span class="rating-btn">Not really</span></label>
+          <label><input type="radio" name="felt_included" value="somewhat"><span class="rating-btn">Somewhat</span></label>
+          <label><input type="radio" name="felt_included" value="fully"><span class="rating-btn">Fully</span></label>
         </div>
-        <p class="rating-hint">1 = not at all &nbsp;&nbsp; 5 = fully included</p>
       </fieldset>
     </div>
   </section>
 
   <!-- Optional expander: general feedback -->
   <details class="fb-expander">
-    <summary>Tell us more <span style="font-size:0.8em;color:var(--pico-muted-color);font-weight:400;">(optional)</span></summary>
+    <summary>Tell us more</summary>
     <div class="fb-expander-body">
       <label for="liked">What worked well tonight?</label>
       <textarea id="liked" name="liked" rows="3"></textarea>
@@ -567,9 +550,9 @@ excerpt: "Help us make Civic Tech Toronto better. Responses are anonymous — we
 
   <!-- Optional expander: equity questions -->
   <details class="fb-expander">
-    <summary>About you <span style="font-size:0.8em;color:var(--pico-muted-color);font-weight:400;">(optional)</span></summary>
+    <summary>About you</summary>
     <div class="fb-expander-body">
-      <p class="privacy-note">All fields in this section are completely optional and anonymous. This information helps us understand who is showing up and whether everyone feels included.</p>
+      <p class="privacy-note">All fields in this section are anonymous. This information helps us understand who is showing up and whether everyone feels included.</p>
 
       <label for="gender_identity">How do you describe your gender identity?</label>
       <input type="text" id="gender_identity" name="gender_identity" placeholder="Your own words">
@@ -606,25 +589,19 @@ excerpt: "Help us make Civic Tech Toronto better. Responses are anonymous — we
       <fieldset>
         <legend>Do you feel like someone like you belongs in this space?</legend>
         <div class="rating-scale">
-          <label><input type="radio" name="belongs_here" value="1"><span class="rating-btn">1</span></label>
-          <label><input type="radio" name="belongs_here" value="2"><span class="rating-btn">2</span></label>
-          <label><input type="radio" name="belongs_here" value="3"><span class="rating-btn">3</span></label>
-          <label><input type="radio" name="belongs_here" value="4"><span class="rating-btn">4</span></label>
-          <label><input type="radio" name="belongs_here" value="5"><span class="rating-btn">5</span></label>
+          <label><input type="radio" name="belongs_here" value="not-at-all"><span class="rating-btn">Not at all</span></label>
+          <label><input type="radio" name="belongs_here" value="somewhat"><span class="rating-btn">Somewhat</span></label>
+          <label><input type="radio" name="belongs_here" value="absolutely"><span class="rating-btn">Absolutely</span></label>
         </div>
-        <p class="rating-hint">1 = not at all &nbsp;&nbsp; 5 = absolutely</p>
       </fieldset>
 
       <fieldset>
         <legend>Were tonight's topics or speakers relevant to your community or experience?</legend>
         <div class="rating-scale">
-          <label><input type="radio" name="topics_relevant" value="1"><span class="rating-btn">1</span></label>
-          <label><input type="radio" name="topics_relevant" value="2"><span class="rating-btn">2</span></label>
-          <label><input type="radio" name="topics_relevant" value="3"><span class="rating-btn">3</span></label>
-          <label><input type="radio" name="topics_relevant" value="4"><span class="rating-btn">4</span></label>
-          <label><input type="radio" name="topics_relevant" value="5"><span class="rating-btn">5</span></label>
+          <label><input type="radio" name="topics_relevant" value="not-relevant"><span class="rating-btn">Not relevant</span></label>
+          <label><input type="radio" name="topics_relevant" value="somewhat"><span class="rating-btn">Somewhat</span></label>
+          <label><input type="radio" name="topics_relevant" value="very-relevant"><span class="rating-btn">Very relevant</span></label>
         </div>
-        <p class="rating-hint">1 = not relevant &nbsp;&nbsp; 5 = very relevant</p>
       </fieldset>
     </div>
   </details>
@@ -778,15 +755,15 @@ excerpt: "Help us make Civic Tech Toronto better. Responses are anonymous — we
 
     if (attendanceMode) data.attendance_mode = attendanceMode;
     if (firstTime !== undefined) data.first_time = firstTime === 'yes';
-    if (overallRating) data.overall_rating = parseInt(overallRating, 10);
+    if (overallRating) data.overall_rating = overallRating;
 
     if (firstTime === 'yes') {
       var newAttendee = {};
       var fw = getRadio('felt_welcome');
       var un = getRadio('understood');
       var wr = getRadio('would_return');
-      if (fw) newAttendee.felt_welcome = parseInt(fw, 10);
-      if (un) newAttendee.understood_what_was_happening = parseInt(un, 10);
+      if (fw) newAttendee.felt_welcome = fw;
+      if (un) newAttendee.understood_what_was_happening = un;
       if (wr) newAttendee.would_return = wr;
       if (wr === 'maybe') {
         var maybeReason = getText('return_maybe_reason');
@@ -802,8 +779,8 @@ excerpt: "Help us make Civic Tech Toronto better. Responses are anonymous — we
       var online = {};
       var av = getRadio('av_quality');
       var fi = getRadio('felt_included');
-      if (av) online.av_quality = parseInt(av, 10);
-      if (fi) online.felt_included = parseInt(fi, 10);
+      if (av) online.av_quality = av;
+      if (fi) online.felt_included = fi;
       if (Object.keys(online).length) data.online = online;
     }
 
@@ -825,8 +802,8 @@ excerpt: "Help us make Civic Tech Toronto better. Responses are anonymous — we
     if (ar) equity.age_range = ar;
     if (ra) equity.racialized = ra;
     if (di) equity.disability = di;
-    if (bh) equity.belongs_here = parseInt(bh, 10);
-    if (tr) equity.topics_relevant = parseInt(tr, 10);
+    if (bh) equity.belongs_here = bh;
+    if (tr) equity.topics_relevant = tr;
     if (Object.keys(equity).length) data.equity = equity;
 
     return data;
