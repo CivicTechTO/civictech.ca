@@ -1,0 +1,88 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build Jekyll site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository (with submodules)
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+          cache-version: 0
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libvips libvips-dev imagemagick
+
+      - name: Generate tag and category data
+        run: make generate
+
+      - name: Build Jekyll site
+        run: bundle exec jekyll build
+
+      - name: Upload built site artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: _site/
+          retention-days: 1
+
+  accessibility:
+    name: Accessibility (Pa11y)
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download built site artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: _site/
+
+      - name: Install Pa11y
+        run: npm install -g pa11y
+
+      - name: Run Pa11y on representative pages
+        run: |
+          FAILED=0
+
+          run_pa11y() {
+            local label="$1"
+            local glob="$2"
+            local file
+            file=$(find _site/$glob -name "index.html" 2>/dev/null | sort | head -1)
+            if [ -z "$file" ]; then
+              echo "SKIP [$label]: no file found at _site/$glob"
+              return
+            fi
+            echo ""
+            echo "=== $label: $file ==="
+            pa11y --standard WCAG2AA "$file" || FAILED=1
+          }
+
+          run_pa11y "Homepage"     ""
+          run_pa11y "Event"        "events"
+          run_pa11y "Project"      "projects"
+          run_pa11y "Person"       "people"
+          run_pa11y "Organization" "organizations"
+          run_pa11y "Venue"        "venues"
+          run_pa11y "Resource"     "resources"
+          run_pa11y "Tag"          "tags"
+          run_pa11y "Category"     "categories"
+
+          exit $FAILED
