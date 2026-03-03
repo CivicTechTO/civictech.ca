@@ -72,6 +72,12 @@ jobs:
       #     chmod +x _scripts/thumbnail_sizes.sh
       #     ./_scripts/thumbnail_sizes.sh
 
+      - name: Inject feedback token
+        run: |
+          echo "feedback_token: \"$FEEDBACK_TOKEN\"" >> _config.yml
+        env:
+          FEEDBACK_TOKEN: ${{ secrets.FEEDBACK_TOKEN }}
+
       # Outputs to the './_site' directory by default
       - name: Build Jekyll site
         run: |

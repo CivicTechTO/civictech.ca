@@ -11,13 +11,21 @@ all: serve
 install:
 	bundle install
 
-# Start Jekyll server
+# Start Jekyll server (uses _config.local.yml if present)
 serve:
-	$(JEKYLL) serve
+	@if [ -f _config.local.yml ]; then \
+		$(JEKYLL) serve --config _config.yml,_config.local.yml; \
+	else \
+		$(JEKYLL) serve; \
+	fi
 
 # Start Jekyll server with incremental regeneration
 serve-incremental:
-	$(JEKYLL) serve --incremental
+	@if [ -f _config.local.yml ]; then \
+		$(JEKYLL) serve --incremental --config _config.yml,_config.local.yml; \
+	else \
+		$(JEKYLL) serve --incremental; \
+	fi
 
 # Generate category and tag data
 generate-data:

@@ -1,6 +1,6 @@
 /* ==========================================================================
    CUSTOM.CSS
-   Last Updated: 2025-06-13
+   Last Updated: 2026-02-24
    Purpose: Extend Pico.css with custom responsive layouts and components
    --------------------------------------------------------------------------
    TABLE OF CONTENTS
@@ -528,4 +528,17 @@ aside .ogimage {
   flex-wrap: wrap;
   gap: 0.5rem;
   padding-bottom: 1rem;
+}
+
+/* Feedback form: inline rating scale */
+.rating-row {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.25rem;
+}
+.rating-row label {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
