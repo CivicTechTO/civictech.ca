@@ -172,7 +172,7 @@ permalink: "/"
       <article class="card card-row">
       <div>
           {% if project.image %}
-          <img class="ogimage" src="{{ project.image }}">
+          <img class="ogimage" src="{{ project.image }}" alt="">
           {% endif %}
           </div>
         <div class="row-content">
