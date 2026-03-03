@@ -77,7 +77,7 @@ jobs:
             fi
             echo ""
             echo "=== $label: $file ==="
-            pa11y --standard WCAG2AA "$file" || FAILED=1
+            pa11y --standard WCAG2AA --chromium-flags="--no-sandbox" "$file" || FAILED=1
           }
 
           run_pa11y "Homepage"     ""
