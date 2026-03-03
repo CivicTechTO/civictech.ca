@@ -42,6 +42,7 @@ jobs:
           name: site
           path: _site/
           retention-days: 1
+          if-no-files-found: error
 
   accessibility:
     name: Accessibility (Pa11y)
@@ -55,7 +56,7 @@ jobs:
           path: _site/
 
       - name: Install Pa11y
-        run: npm install -g pa11y
+        run: npm install -g pa11y@9
 
       - name: Run Pa11y on representative pages
         run: |
@@ -63,11 +64,15 @@ jobs:
 
           run_pa11y() {
             local label="$1"
-            local glob="$2"
+            local subdir="$2"
             local file
-            file=$(find _site/$glob -name "index.html" 2>/dev/null | sort | head -1)
+            if [ -z "$subdir" ]; then
+              file=$(find _site/ -maxdepth 1 -name "index.html" 2>/dev/null | head -1)
+            else
+              file=$(find "_site/$subdir" -name "index.html" 2>/dev/null | sort | head -1)
+            fi
             if [ -z "$file" ]; then
-              echo "SKIP [$label]: no file found at _site/$glob"
+              echo "SKIP [$label]: no file found at _site/$subdir"
               return
             fi
             echo ""
