@@ -142,7 +142,7 @@ permalink: "/feedback/"
     {% assign recent_meetups = site.meetups | sort: "date" | reverse %}
     {% for meetup in recent_meetups limit:10 %}
     <option value="{{ meetup.number }}">
-      Hacknight #{{ meetup.number }} – {{ meetup.date | date: "%B %d, %Y" }}{% if meetup.topic %} – {{ meetup.topic }}{% endif %}
+      Meetup #{{ meetup.number }} – {{ meetup.date | date: "%B %d, %Y" }}{% if meetup.topic %} – {{ meetup.topic }}{% endif %}
     </option>
     {% endfor %}
   </select>
@@ -484,7 +484,7 @@ git commit -m "Add conditional question visibility and submit-enable JS"
     var now = new Date();
     var dateStr = now.toISOString().slice(0, 10);
     var randomSuffix = Math.random().toString(36).slice(2, 8);
-    var filename = 'submissions/' + dateStr + '-hacknight-' + meetupNumber + '-' + randomSuffix + '.json';
+    var filename = 'submissions/' + dateStr + '-meetup-' + meetupNumber + '-' + randomSuffix + '.json';
     var jsonStr = JSON.stringify(data, null, 2);
     // btoa with unicode support
     var encoded = btoa(unescape(encodeURIComponent(jsonStr)));
@@ -496,7 +496,7 @@ git commit -m "Add conditional question visibility and submit-enable JS"
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        message: 'Add feedback for hacknight #' + meetupNumber,
+        message: 'Add feedback for meetup #' + meetupNumber,
         content: encoded
       })
     })
@@ -627,13 +627,13 @@ This is done directly on GitHub, not in this repo.
 Anonymous post-meetup feedback submitted via [civictech.ca/feedback](https://civictech.ca/feedback).
 
 Each submission is a JSON file in `submissions/` named:
-`YYYY-MM-DD-hacknight-NNN-RANDOM.json`
+`YYYY-MM-DD-meetup-NNN-RANDOM.json`
 
 ## Schema
 
 | Field | Type | Description |
 |---|---|---|
-| `meetup_number` | string | Hacknight number |
+| `meetup_number` | string | Meetup number |
 | `submitted_at` | ISO 8601 string | Submission timestamp (UTC) |
 | `attendance_mode` | `"in-person"` \| `"online"` | How they attended |
 | `first_time` | boolean | First visit to CivicTechTO |

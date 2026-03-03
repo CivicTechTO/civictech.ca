@@ -27,7 +27,7 @@ A post-meetup feedback survey at `civictech.ca/feedback`. Fully anonymous, no lo
 
 ### File Naming
 
-`submissions/YYYY-MM-DD-hacknight-NNN-<6-char-random>.json`
+`submissions/YYYY-MM-DD-meetup-NNN-<6-char-random>.json`
 
 Sortable by date, identifiable by meetup number, random suffix prevents collision.
 

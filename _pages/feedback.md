@@ -54,7 +54,7 @@ excerpt: "ðŸ”“ Help us make Civic Tech Toronto better. Responses are anonymous â
   width: 100%;
 }
 
-/* ---- Hacknight date picker ---- */
+/* ---- Meetup date picker ---- */
 .fb-select-label {
   display: block;
   font-size: 0.875rem;
@@ -698,9 +698,9 @@ excerpt: "ðŸ”“ Help us make Civic Tech Toronto better. Responses are anonymous â
 
     var now = new Date();
     var data = buildFormData(now);
-    var hacknightDate = meetupInput.value;
+    var meetupDate = meetupInput.value;
     var randomSuffix = Math.random().toString(36).slice(2, 8);
-    var filename = 'submissions/' + hacknightDate + '-feedback-' + randomSuffix + '.json';
+    var filename = 'submissions/' + meetupDate + '-feedback-' + randomSuffix + '.json';
     var jsonStr = JSON.stringify(data, null, 2);
     // btoa with unicode support
     var encoded = btoa(unescape(encodeURIComponent(jsonStr)));
@@ -712,7 +712,7 @@ excerpt: "ðŸ”“ Help us make Civic Tech Toronto better. Responses are anonymous â
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        message: 'Add feedback for hacknight on ' + hacknightDate,
+        message: 'Add feedback for meetup on ' + meetupDate,
         content: encoded
       })
     })
@@ -749,7 +749,7 @@ excerpt: "ðŸ”“ Help us make Civic Tech Toronto better. Responses are anonymous â
     var overallRating = getRadio('overall_rating');
 
     var data = {
-      hacknight_date: meetupInput.value,
+      meetup_date: meetupInput.value,
       submitted_at: now.toISOString(),
     };
 
