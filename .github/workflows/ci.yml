@@ -128,15 +128,15 @@ jobs:
               continue;
             }
 
-            const issues = data.issues || [];
+            const issues = Array.isArray(data) ? data : (data.issues || []);
             const errors = issues.filter(i => i.type === 'error');
             const warnings = issues.filter(i => i.type === 'warning');
             const notices = issues.filter(i => i.type === 'notice');
             totalErrors += errors.length;
             totalWarnings += warnings.length;
 
-            const pageUrl = data.pageUrl || label;
-            const title = data.documentTitle ? ` — ${data.documentTitle}` : '';
+            const pageUrl = (!Array.isArray(data) && data.pageUrl) ? data.pageUrl : label;
+            const title = (!Array.isArray(data) && data.documentTitle) ? ` — ${data.documentTitle}` : '';
 
             if (issues.length === 0) {
               sections.push(`### ${label}\n\n✅ No issues found.\n`);
