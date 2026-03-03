@@ -48,6 +48,9 @@ jobs:
     name: Accessibility (Pa11y)
     runs-on: ubuntu-latest
     needs: build
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - name: Download built site artifact
         uses: actions/download-artifact@v4
@@ -62,6 +65,7 @@ jobs:
         run: echo 0 | sudo tee /proc/sys/kernel/apparmor_restrict_unprivileged_userns
 
       - name: Run Pa11y on representative pages
+        id: pa11y
         run: |
           FAILED=0
 
@@ -72,15 +76,16 @@ jobs:
             if [ -z "$subdir" ]; then
               file=$(find _site/ -maxdepth 1 -name "index.html" 2>/dev/null | head -1)
             else
-              file=$(find "_site/$subdir" -name "index.html" 2>/dev/null | sort | head -1)
+              file=$(find "_site/$subdir" -name "index.html" 2>/dev/null | sort 2>/dev/null | head -1)
             fi
             if [ -z "$file" ]; then
               echo "SKIP [$label]: no file found at _site/$subdir"
+              echo "{\"pageUrl\":\"$file\",\"documentTitle\":\"$label\",\"issues\":[]}" > "/tmp/pa11y_${label}.json"
               return
             fi
             echo ""
             echo "=== $label: $file ==="
-            pa11y --standard WCAG2AA "$file" || FAILED=1
+            pa11y --reporter json --standard WCAG2AA "$file" > "/tmp/pa11y_${label}.json" 2>/dev/null || FAILED=1
           }
 
           run_pa11y "Homepage"     ""
@@ -93,4 +98,142 @@ jobs:
           run_pa11y "Tag"          "tags"
           run_pa11y "Category"     "categories"
 
-          exit $FAILED
+          echo "failed=$FAILED" >> "$GITHUB_OUTPUT"
+
+      - name: Build accessibility report
+        id: report
+        run: |
+          node - <<'EOF'
+          const fs = require('fs');
+          const path = require('path');
+
+          const labels = [
+            'Homepage', 'Event', 'Project', 'Person', 'Organization',
+            'Venue', 'Resource', 'Tag', 'Category'
+          ];
+
+          let totalErrors = 0;
+          let totalWarnings = 0;
+          let sections = [];
+
+          for (const label of labels) {
+            const jsonPath = `/tmp/pa11y_${label}.json`;
+            if (!fs.existsSync(jsonPath)) continue;
+
+            let data;
+            try {
+              data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+            } catch (e) {
+              sections.push(`### ${label}\n\n> Could not parse Pa11y output.\n`);
+              continue;
+            }
+
+            const issues = data.issues || [];
+            const errors = issues.filter(i => i.type === 'error');
+            const warnings = issues.filter(i => i.type === 'warning');
+            const notices = issues.filter(i => i.type === 'notice');
+            totalErrors += errors.length;
+            totalWarnings += warnings.length;
+
+            const pageUrl = data.pageUrl || label;
+            const title = data.documentTitle ? ` — ${data.documentTitle}` : '';
+
+            if (issues.length === 0) {
+              sections.push(`### ${label}\n\n✅ No issues found.\n`);
+            } else {
+              let rows = [`### ${label}${title}`, '', `\`${pageUrl}\``, ''];
+              if (errors.length > 0) {
+                rows.push(`**${errors.length} error(s)**`, '');
+                for (const issue of errors) {
+                  rows.push(`- **[${issue.code}]** ${issue.message}`);
+                  rows.push(`  - Context: \`${issue.context.replace(/`/g, "'").substring(0, 200)}\``);
+                  rows.push(`  - Selector: \`${issue.selector}\``);
+                  rows.push('');
+                }
+              }
+              if (warnings.length > 0) {
+                rows.push(`<details><summary><strong>${warnings.length} warning(s)</strong></summary>`, '');
+                for (const issue of warnings) {
+                  rows.push(`- **[${issue.code}]** ${issue.message}`);
+                  rows.push(`  - Context: \`${issue.context.replace(/`/g, "'").substring(0, 200)}\``);
+                  rows.push(`  - Selector: \`${issue.selector}\``);
+                  rows.push('');
+                }
+                rows.push('</details>', '');
+              }
+              if (notices.length > 0) {
+                rows.push(`<details><summary>${notices.length} notice(s)</summary>`, '');
+                for (const issue of notices) {
+                  rows.push(`- **[${issue.code}]** ${issue.message}`);
+                  rows.push('');
+                }
+                rows.push('</details>', '');
+              }
+              sections.push(rows.join('\n'));
+            }
+          }
+
+          const statusEmoji = totalErrors > 0 ? '❌' : '✅';
+          const statusLine = totalErrors > 0
+            ? `${totalErrors} error(s), ${totalWarnings} warning(s) found`
+            : `All pages passed — ${totalWarnings} warning(s)`;
+
+          const header = [
+            '<!-- pa11y-report -->',
+            '## Pa11y Accessibility Report',
+            '',
+            `${statusEmoji} **${statusLine}** (WCAG2AA)`,
+            '',
+            '---',
+            '',
+          ].join('\n');
+
+          const report = header + sections.join('\n---\n\n');
+
+          fs.writeFileSync('/tmp/pa11y_report.md', report);
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, report);
+          console.log('Report written.');
+          EOF
+
+      - name: Post or update PR comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v8
+        env:
+          REPORT_BODY_FILE: /tmp/pa11y_report.md
+        with:
+          script: |
+            const fs = require('fs');
+            const body = fs.readFileSync(process.env.REPORT_BODY_FILE, 'utf8');
+            const marker = '<!-- pa11y-report -->';
+
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const existing = comments.data.find(c => c.body && c.body.includes(marker));
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+              console.log(`Updated existing comment ${existing.id}`);
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+              console.log('Created new comment');
+            }
+
+      - name: Fail if accessibility errors were found
+        if: steps.pa11y.outputs.failed == '1'
+        run: |
+          echo "Pa11y found accessibility errors. See report above."
+          exit 1
