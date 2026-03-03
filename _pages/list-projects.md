@@ -37,7 +37,7 @@ permalink: "/projects/"
     {% for project in open_projects %}
       <article class="card">
         {% if project.image %}
-            <img class="ogimage listed" src="{{ project.image }}">
+            <img class="ogimage listed" src="{{ project.image }}" alt="">
           {% endif%}
         <div class="card-body">
           <h3><a href="{{ project.url }}">{{ project.title }}</a></h3>
@@ -84,7 +84,7 @@ permalink: "/projects/"
       <article class="card card-row">
         <div class="row-content">
           {% if project.image %}
-            <img class="ogimage listed" src="{{ project.image }}">
+            <img class="ogimage listed" src="{{ project.image }}" alt="">
           {% endif%}
           <div>
             <h3><a href="{{ project.url }}">{{ project.title }}</a></h3>
@@ -132,7 +132,7 @@ permalink: "/projects/"
       <article class="card card-row">
         <div class="row-content">
           {% if project.image %}
-            <img class="ogimage listed" src="{{ project.image }}">
+            <img class="ogimage listed" src="{{ project.image }}" alt="">
           {% endif %}
 
           <div>
