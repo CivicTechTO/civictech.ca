@@ -38,7 +38,7 @@ Reach out in person or on Slack to one of the Code of Conduct Committee members 
 
 Current members of the Code of Conduct Committee are:
 
-- soon to be provided
+- Jamie Pantling - please ping [@Jamie Pantling](https://civictechto.slack.com/team/U049S7ZRHEU) on Slack
 
 ## Outcome Guidelines
 
