@@ -34,3 +34,6 @@ guild:
 mastodon:
   label: Mastodon
   icon: mastodon.svg
+tiktok:
+  label: TikTok
+  icon: tiktok.svg
