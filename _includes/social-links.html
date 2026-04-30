@@ -39,7 +39,7 @@ Notes:
       {% assign social_data = site.data.social_links[platform] %}
       {% assign label = social_data.label | default: platform %}
 
-      {% if social_data %}
+      {% if social_data and url %}
         <a href="{{ url }}" target="_blank" rel="noopener" class="social-button">
           {% if social_data.icon %}
             <span class="iconstyle">{% include icons/{{ social_data.icon }} %}</span>
