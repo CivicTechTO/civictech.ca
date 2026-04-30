@@ -38,12 +38,12 @@ Reach out in person or on Slack to one of the Code of Conduct Committee members 
 
 Current members of the Code of Conduct Committee are:
 
-- Alex Olson
-- Gabe Sawhney
-- Gurpreet Kaur
-- Jamie Pantling ([Integrity Officer](https://docs.google.com/document/d/1Rjg-l7AaKwNb2enlgjNivnla12s_ZrbugybKVDuRYBc/edit?tab=t.dd5tus1v9j8a#bookmark=id.13h07gh3hk4e))
-- Sam McGarva
-- Tom Fleming
+- [Alex Olson](https://civictechto.slack.com/team/U04D65RHUVA)
+- [Gabe Sawhney](https://civictechto.slack.com/team/U04TQG6G6)
+- [Gurpreet Kaur](https://civictechto.slack.com/team/U08QXHZDAU8)
+- [Jamie Pantling](https://civictechto.slack.com/team/U049S7ZRHEU) ([Integrity Officer](https://docs.google.com/document/d/1Rjg-l7AaKwNb2enlgjNivnla12s_ZrbugybKVDuRYBc/edit?tab=t.dd5tus1v9j8a#bookmark=id.13h07gh3hk4e))
+- [Sam McGarva](https://civictechto.slack.com/team/UKBSMH55H)
+- [Tom Fleming](https://civictechto.slack.com/team/U07KE4059R8)
 
 You can also email [conduct@civictech.ca](mailto:conduct@civictech.ca) with your concern. This is received by the Integrity Officer. Please note we can't take forward concerns submitted anonymously. 
 
