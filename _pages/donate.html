@@ -272,9 +272,13 @@ excerpt: "Help us feed 50 Tuesday nights in 2027."
 
   // Always fetch and show current total (including on thank-you state)
   fetch(WORKER_URL + '/total')
-    .then(function (r) { return r.json(); })
+    .then(function (r) {
+      if (!r.ok) throw new Error('non-2xx');
+      return r.json();
+    })
     .then(function (data) {
-      var dollars = Math.floor(data.raised_cents / 100);
+      var cents = Number.isFinite(data.raised_cents) ? data.raised_cents : 0;
+      var dollars = Math.min(Math.floor(cents / 100), 3500);
       raisedLabel.textContent = '$' + dollars.toLocaleString('en-CA') + ' raised';
       donateBar.value = dollars;
     })
