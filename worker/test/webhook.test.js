@@ -31,43 +31,76 @@ async function makeSignature(body, timestamp, secret) {
 describe('verifyStripeSignature', () => {
   const SECRET = 'whsec_test';
   const BODY = '{"type":"checkout.session.completed"}';
-  const TS = '1700000000';
+
+  function nowTs() {
+    return String(Math.floor(Date.now() / 1000));
+  }
 
   it('accepts a valid signature', async () => {
-    const sig = await makeSignature(BODY, TS, SECRET);
-    expect(await verifyStripeSignature(BODY, `t=${TS},v1=${sig}`, SECRET)).toBe(true);
+    const ts = nowTs();
+    const sig = await makeSignature(BODY, ts, SECRET);
+    expect(await verifyStripeSignature(BODY, `t=${ts},v1=${sig}`, SECRET)).toBe(true);
   });
 
   it('rejects a wrong signature', async () => {
-    expect(await verifyStripeSignature(BODY, `t=${TS},v1=${'0'.repeat(64)}`, SECRET)).toBe(false);
+    const ts = nowTs();
+    expect(await verifyStripeSignature(BODY, `t=${ts},v1=${'0'.repeat(64)}`, SECRET)).toBe(false);
   });
 
   it('accepts when one of multiple v1 values matches (key rotation)', async () => {
-    const sig = await makeSignature(BODY, TS, SECRET);
-    expect(await verifyStripeSignature(BODY, `t=${TS},v1=${'0'.repeat(64)},v1=${sig}`, SECRET)).toBe(true);
+    const ts = nowTs();
+    const sig = await makeSignature(BODY, ts, SECRET);
+    expect(await verifyStripeSignature(BODY, `t=${ts},v1=${'0'.repeat(64)},v1=${sig}`, SECRET)).toBe(true);
   });
 
   it('rejects when all v1 values are wrong', async () => {
-    expect(await verifyStripeSignature(BODY, `t=${TS},v1=${'0'.repeat(64)},v1=${'f'.repeat(64)}`, SECRET)).toBe(false);
+    const ts = nowTs();
+    expect(await verifyStripeSignature(BODY, `t=${ts},v1=${'0'.repeat(64)},v1=${'f'.repeat(64)}`, SECRET)).toBe(false);
   });
 
   it('rejects a tampered body', async () => {
-    const sig = await makeSignature(BODY, TS, SECRET);
-    expect(await verifyStripeSignature('{"type":"evil"}', `t=${TS},v1=${sig}`, SECRET)).toBe(false);
+    const ts = nowTs();
+    const sig = await makeSignature(BODY, ts, SECRET);
+    expect(await verifyStripeSignature('{"type":"evil"}', `t=${ts},v1=${sig}`, SECRET)).toBe(false);
   });
 
   it('rejects a wrong secret', async () => {
-    const sig = await makeSignature(BODY, TS, SECRET);
-    expect(await verifyStripeSignature(BODY, `t=${TS},v1=${sig}`, 'wrong_secret')).toBe(false);
+    const ts = nowTs();
+    const sig = await makeSignature(BODY, ts, SECRET);
+    expect(await verifyStripeSignature(BODY, `t=${ts},v1=${sig}`, 'wrong_secret')).toBe(false);
   });
 
   it('rejects a header with no timestamp', async () => {
-    const sig = await makeSignature(BODY, TS, SECRET);
+    const ts = nowTs();
+    const sig = await makeSignature(BODY, ts, SECRET);
     expect(await verifyStripeSignature(BODY, `v1=${sig}`, SECRET)).toBe(false);
   });
 
   it('rejects a header with no v1 signature', async () => {
-    expect(await verifyStripeSignature(BODY, `t=${TS}`, SECRET)).toBe(false);
+    expect(await verifyStripeSignature(BODY, `t=${nowTs()}`, SECRET)).toBe(false);
+  });
+
+  it('rejects a timestamp older than 5 minutes', async () => {
+    const staleTs = String(Math.floor(Date.now() / 1000) - 301);
+    const sig = await makeSignature(BODY, staleTs, SECRET);
+    expect(await verifyStripeSignature(BODY, `t=${staleTs},v1=${sig}`, SECRET)).toBe(false);
+  });
+
+  it('rejects a timestamp more than 5 minutes in the future', async () => {
+    const futureTs = String(Math.floor(Date.now() / 1000) + 301);
+    const sig = await makeSignature(BODY, futureTs, SECRET);
+    expect(await verifyStripeSignature(BODY, `t=${futureTs},v1=${sig}`, SECRET)).toBe(false);
+  });
+
+  it('rejects a non-numeric timestamp', async () => {
+    const sig = await makeSignature(BODY, 'notanumber', SECRET);
+    expect(await verifyStripeSignature(BODY, `t=notanumber,v1=${sig}`, SECRET)).toBe(false);
+  });
+
+  it('handles whitespace around header fields', async () => {
+    const ts = nowTs();
+    const sig = await makeSignature(BODY, ts, SECRET);
+    expect(await verifyStripeSignature(BODY, ` t=${ts} , v1=${sig} `, SECRET)).toBe(true);
   });
 });
 
