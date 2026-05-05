@@ -6,6 +6,7 @@ const GOAL_CENTS = 350000;
 const ALLOWED_ORIGINS = [
   'https://civictech.ca',
   'http://localhost:4000',
+  'http://127.0.0.1:4000',
 ];
 
 function corsHeaders(request) {
@@ -49,6 +50,8 @@ export default {
         return json({ error: validation.error }, 400, request);
       }
 
+      const origin = request.headers.get('Origin') || '';
+      const returnOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : 'https://civictech.ca';
       const stripeRes = await fetch('https://api.stripe.com/v1/checkout/sessions', {
         method: 'POST',
         headers: {
@@ -59,7 +62,7 @@ export default {
           ui_mode: 'embedded',
           mode: 'payment',
           currency: 'cad',
-          return_url: 'https://civictech.ca/donate/?session_id={CHECKOUT_SESSION_ID}',
+          return_url: `${returnOrigin}/donate/?session_id={CHECKOUT_SESSION_ID}`,
           'line_items[0][price_data][currency]': 'cad',
           'line_items[0][price_data][unit_amount]': String(body.amount_cents),
           'line_items[0][price_data][product_data][name]': 'Civic Tech Toronto 2027 Donation',
