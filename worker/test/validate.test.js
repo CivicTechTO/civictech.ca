@@ -14,8 +14,8 @@ describe('validateAmount', () => {
   it('rejects 99 cents (below minimum)', () => {
     expect(validateAmount(99)).toEqual({ valid: false, error: 'Minimum donation is $1.00' });
   });
-  it('rejects 1000001 cents (above maximum)', () => {
-    expect(validateAmount(1000001)).toEqual({ valid: false, error: 'Maximum donation is $10,000.00' });
+  it('rejects 350001 cents (above maximum)', () => {
+    expect(validateAmount(350001)).toEqual({ valid: false, error: 'Maximum donation is $3,500.00' });
   });
   it('accepts 100 cents ($1.00 — minimum)', () => {
     expect(validateAmount(100)).toEqual({ valid: true });
