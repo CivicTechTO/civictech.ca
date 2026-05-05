@@ -25,12 +25,15 @@ export async function verifyStripeSignature(body, header, secret) {
     new TextEncoder().encode(secret),
     { name: 'HMAC', hash: 'SHA-256' },
     false,
-    ['sign']
+    ['verify']
   );
-  const mac = await crypto.subtle.sign('HMAC', cryptoKey, new TextEncoder().encode(signedPayload));
-  const computed = Array.from(new Uint8Array(mac))
-    .map((b) => b.toString(16).padStart(2, '0'))
-    .join('');
 
-  return signatures.includes(computed);
+  const signedPayloadBytes = new TextEncoder().encode(signedPayload);
+  for (const sig of signatures) {
+    const sigBytes = new Uint8Array(sig.match(/.{2}/g).map((h) => parseInt(h, 16)));
+    if (await crypto.subtle.verify('HMAC', cryptoKey, sigBytes, signedPayloadBytes)) {
+      return true;
+    }
+  }
+  return false;
 }
