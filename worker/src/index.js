@@ -95,7 +95,13 @@ export default {
         return new Response('Invalid signature', { status: 400 });
       }
 
-      const event = JSON.parse(body);
+      let event;
+      try {
+        event = JSON.parse(body);
+      } catch {
+        return new Response('Invalid JSON', { status: 400 });
+      }
+
       if (event.type === 'checkout.session.completed') {
         await incrementTotal(env.DONATION_KV, event.data.object.amount_total);
       }
