@@ -132,7 +132,7 @@ Preflight `OPTIONS` requests handled explicitly.
      - Selecting "Custom" reveals a number input (dollars, min 1)
    - Row 2 (outlined buttons with sublabel):
      - `Sponsor a Tuesday — $65` / sublabel: "covers food for one evening"
-     - `Sponsor a month — $270` / sublabel: "covers food for four Tuesdays"
+     - `Sponsor a month — $260` / sublabel: "covers food for four Tuesdays"
 
 5. **Donate button** — full-width primary button, disabled until an amount is selected. Label updates live: `"Donate $25"`, `"Donate $65"`, etc.
 
@@ -207,7 +207,7 @@ Used in the page as `{{ site.stripe_public_key }}` and `{{ site.worker_url }}`.
 | $50 | $50.00 | 5000 |
 | Custom | donor-entered | varies |
 | Sponsor a Tuesday | $65.00 | 6500 |
-| Sponsor a month | $270.00 | 27000 |
+| Sponsor a month | $260.00 | 26000 |
 
 ---
 
