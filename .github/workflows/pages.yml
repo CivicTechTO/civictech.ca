@@ -74,6 +74,8 @@ jobs:
 
       - name: Inject config secrets
         run: |
+          : "${STRIPE_PUBLIC_KEY:?STRIPE_PUBLIC_KEY secret is not set}"
+          : "${WORKER_URL:?WORKER_URL secret is not set}"
           echo "feedback_token: \"$FEEDBACK_TOKEN\"" >> _config.yml
           echo "stripe_public_key: \"$STRIPE_PUBLIC_KEY\"" >> _config.yml
           echo "worker_url: \"$WORKER_URL\"" >> _config.yml
