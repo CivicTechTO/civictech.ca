@@ -111,7 +111,11 @@ export default {
         if (alreadyProcessed !== null) {
           return new Response('OK', { status: 200 });
         }
-        await incrementTotal(env.DONATION_KV, event.data.object.amount_total);
+        const amountTotal = event?.data?.object?.amount_total;
+        if (!Number.isFinite(amountTotal) || !Number.isInteger(amountTotal)) {
+          return new Response('Invalid amount_total', { status: 400 });
+        }
+        await incrementTotal(env.DONATION_KV, amountTotal);
         await env.DONATION_KV.put(processedKey, '1');
       }
 
