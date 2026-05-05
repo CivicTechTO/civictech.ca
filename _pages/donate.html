@@ -251,9 +251,6 @@ excerpt: "Help us feed 50 Tuesday nights in 2027."
   var STRIPE_PUBLIC_KEY = '{{ site.stripe_public_key }}';
   var WORKER_URL = '{{ site.worker_url }}';
 
-  var stripe = Stripe(STRIPE_PUBLIC_KEY);
-  var selectedAmountCents = null;
-
   var donateBar    = document.getElementById('donate-bar');
   var raisedLabel  = document.getElementById('raised-label');
   var donateForm   = document.getElementById('donate-form');
@@ -263,6 +260,14 @@ excerpt: "Help us feed 50 Tuesday nights in 2027."
   var donateError  = document.getElementById('donate-error');
   var customWrapper = document.getElementById('custom-amount-wrapper');
   var customInput  = document.getElementById('custom-amount');
+
+  if (!STRIPE_PUBLIC_KEY || !WORKER_URL) {
+    donateBtn.textContent = 'Donations temporarily unavailable';
+    return;
+  }
+
+  var stripe = Stripe(STRIPE_PUBLIC_KEY);
+  var selectedAmountCents = null;
 
   // Show thank-you state when returning from Stripe
   if (new URLSearchParams(window.location.search).has('session_id')) {
