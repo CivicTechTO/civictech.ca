@@ -135,4 +135,11 @@ describe('incrementTotal', () => {
     expect(result).toBe(27000);
     expect(kv.store.total_cents).toBe('27000');
   });
+
+  it('recovers from a corrupted KV value by treating it as 0', async () => {
+    const kv = { store: { total_cents: 'corrupted' }, get: async (k) => kv.store[k] ?? null, put: async (k, v) => { kv.store[k] = v; } };
+    const result = await incrementTotal(kv, 5000);
+    expect(result).toBe(5000);
+    expect(kv.store.total_cents).toBe('5000');
+  });
 });

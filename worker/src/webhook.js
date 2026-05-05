@@ -1,6 +1,8 @@
 export async function incrementTotal(kv, amountCents) {
   const current = await kv.get('total_cents');
-  const newTotal = (current !== null ? parseInt(current, 10) : 0) + amountCents;
+  const parsedCurrent = current !== null ? Number.parseInt(current, 10) : 0;
+  const currentTotal = Number.isFinite(parsedCurrent) && Number.isInteger(parsedCurrent) ? parsedCurrent : 0;
+  const newTotal = currentTotal + amountCents;
   await kv.put('total_cents', String(newTotal));
   return newTotal;
 }
