@@ -198,10 +198,10 @@ excerpt: "Help us feed 50 Tuesday nights in 2027."
     <div class="donate-amount-section">
       <p class="donate-section-label">Choose an amount</p>
       <div class="donate-presets">
-        <button class="donate-preset" data-amount="1000">$10</button>
-        <button class="donate-preset" data-amount="2500">$25</button>
-        <button class="donate-preset" data-amount="5000">$50</button>
-        <button class="donate-preset" data-custom="true">Custom</button>
+        <button class="donate-preset" data-amount="1000" aria-pressed="false">$10</button>
+        <button class="donate-preset" data-amount="2500" aria-pressed="false">$25</button>
+        <button class="donate-preset" data-amount="5000" aria-pressed="false">$50</button>
+        <button class="donate-preset" data-custom="true" aria-pressed="false">Custom</button>
       </div>
       <div id="custom-amount-wrapper" hidden>
         <label for="custom-amount">Your amount (CAD $)</label>
@@ -213,14 +213,14 @@ excerpt: "Help us feed 50 Tuesday nights in 2027."
       <p class="donate-section-label">Or sponsor specific nights</p>
       <div class="donate-sponsors">
         <div class="donate-sponsor-card">
-          <button class="donate-sponsor-btn" data-amount="6500">
+          <button class="donate-sponsor-btn" data-amount="6500" aria-pressed="false">
             <span class="donate-sponsor-title">Sponsor a Tuesday</span>
             <span class="donate-sponsor-amount">$65</span>
           </button>
           <p class="donate-sponsor-label">Covers food for one evening</p>
         </div>
         <div class="donate-sponsor-card">
-          <button class="donate-sponsor-btn" data-amount="26000">
+          <button class="donate-sponsor-btn" data-amount="26000" aria-pressed="false">
             <span class="donate-sponsor-title">Sponsor a month</span>
             <span class="donate-sponsor-amount">$260</span>
           </button>
@@ -295,6 +295,7 @@ excerpt: "Help us feed 50 Tuesday nights in 2027."
   function clearSelections() {
     document.querySelectorAll('.donate-preset, .donate-sponsor-btn').forEach(function (b) {
       b.classList.remove('is-selected');
+      b.setAttribute('aria-pressed', 'false');
     });
   }
 
@@ -317,6 +318,7 @@ excerpt: "Help us feed 50 Tuesday nights in 2027."
     btn.addEventListener('click', function () {
       clearSelections();
       btn.classList.add('is-selected');
+      btn.setAttribute('aria-pressed', 'true');
       if (btn.dataset.custom) {
         customWrapper.hidden = false;
         customInput.focus();
@@ -335,6 +337,7 @@ excerpt: "Help us feed 50 Tuesday nights in 2027."
       clearSelections();
       customWrapper.hidden = true;
       btn.classList.add('is-selected');
+      btn.setAttribute('aria-pressed', 'true');
       selectedAmountCents = parseInt(btn.dataset.amount, 10);
       updateDonateBtn();
     });
