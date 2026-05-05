@@ -11,12 +11,14 @@ const ALLOWED_ORIGINS = [
 
 function corsHeaders(request) {
   const origin = request.headers.get('Origin') || '';
-  const allowed = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
-  return {
-    'Access-Control-Allow-Origin': allowed,
+  const headers = {
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
   };
+  if (ALLOWED_ORIGINS.includes(origin)) {
+    headers['Access-Control-Allow-Origin'] = origin;
+  }
+  return headers;
 }
 
 function json(data, status, request) {
