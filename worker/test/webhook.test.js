@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { incrementTotal } from '../src/webhook.js';
+import { incrementTotal, verifyStripeSignature } from '../src/webhook.js';
 
 function makeMockKV(initialCents = null) {
   const store = initialCents !== null ? { total_cents: String(initialCents) } : {};
@@ -9,6 +9,67 @@ function makeMockKV(initialCents = null) {
     put: async (key, value) => { store[key] = value; },
   };
 }
+
+async function makeSignature(body, timestamp, secret) {
+  const key = await crypto.subtle.importKey(
+    'raw',
+    new TextEncoder().encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+  const mac = await crypto.subtle.sign(
+    'HMAC',
+    key,
+    new TextEncoder().encode(`${timestamp}.${body}`)
+  );
+  return Array.from(new Uint8Array(mac))
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+describe('verifyStripeSignature', () => {
+  const SECRET = 'whsec_test';
+  const BODY = '{"type":"checkout.session.completed"}';
+  const TS = '1700000000';
+
+  it('accepts a valid signature', async () => {
+    const sig = await makeSignature(BODY, TS, SECRET);
+    expect(await verifyStripeSignature(BODY, `t=${TS},v1=${sig}`, SECRET)).toBe(true);
+  });
+
+  it('rejects a wrong signature', async () => {
+    expect(await verifyStripeSignature(BODY, `t=${TS},v1=${'0'.repeat(64)}`, SECRET)).toBe(false);
+  });
+
+  it('accepts when one of multiple v1 values matches (key rotation)', async () => {
+    const sig = await makeSignature(BODY, TS, SECRET);
+    expect(await verifyStripeSignature(BODY, `t=${TS},v1=${'0'.repeat(64)},v1=${sig}`, SECRET)).toBe(true);
+  });
+
+  it('rejects when all v1 values are wrong', async () => {
+    expect(await verifyStripeSignature(BODY, `t=${TS},v1=${'0'.repeat(64)},v1=${'f'.repeat(64)}`, SECRET)).toBe(false);
+  });
+
+  it('rejects a tampered body', async () => {
+    const sig = await makeSignature(BODY, TS, SECRET);
+    expect(await verifyStripeSignature('{"type":"evil"}', `t=${TS},v1=${sig}`, SECRET)).toBe(false);
+  });
+
+  it('rejects a wrong secret', async () => {
+    const sig = await makeSignature(BODY, TS, SECRET);
+    expect(await verifyStripeSignature(BODY, `t=${TS},v1=${sig}`, 'wrong_secret')).toBe(false);
+  });
+
+  it('rejects a header with no timestamp', async () => {
+    const sig = await makeSignature(BODY, TS, SECRET);
+    expect(await verifyStripeSignature(BODY, `v1=${sig}`, SECRET)).toBe(false);
+  });
+
+  it('rejects a header with no v1 signature', async () => {
+    expect(await verifyStripeSignature(BODY, `t=${TS}`, SECRET)).toBe(false);
+  });
+});
 
 describe('incrementTotal', () => {
   it('adds to an existing total', async () => {
