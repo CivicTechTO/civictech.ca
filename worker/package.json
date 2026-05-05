@@ -10,9 +10,5 @@
   "devDependencies": {
     "vitest": "^4.1.5",
     "wrangler": "^4.87.0"
-  },
-  "dependencies": {
-    "node-addon-api": "^8.7.0",
-    "node-gyp": "^12.3.0"
   }
 }
