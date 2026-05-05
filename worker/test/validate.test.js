@@ -23,7 +23,7 @@ describe('validateAmount', () => {
   it('accepts 2500 cents ($25.00)', () => {
     expect(validateAmount(2500)).toEqual({ valid: true });
   });
-  it('accepts 1000000 cents ($10,000.00 — maximum)', () => {
-    expect(validateAmount(1000000)).toEqual({ valid: true });
+  it('accepts 350000 cents ($3,500.00 — maximum)', () => {
+    expect(validateAmount(350000)).toEqual({ valid: true });
   });
 });
