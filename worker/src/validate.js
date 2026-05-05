@@ -5,8 +5,8 @@ export function validateAmount(amount_cents) {
   if (amount_cents < 100) {
     return { valid: false, error: 'Minimum donation is $1.00' };
   }
-  if (amount_cents > 1000000) {
-    return { valid: false, error: 'Maximum donation is $10,000.00' };
+  if (amount_cents > 350000) {
+    return { valid: false, error: 'Maximum donation is $3,500.00' };
   }
   return { valid: true };
 }
