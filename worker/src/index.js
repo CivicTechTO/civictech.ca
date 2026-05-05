@@ -113,7 +113,8 @@ export default {
         }
         const amountTotal = event?.data?.object?.amount_total;
         if (!Number.isFinite(amountTotal) || !Number.isInteger(amountTotal)) {
-          return new Response('Invalid amount_total', { status: 400 });
+          console.error('checkout.session.completed: unexpected amount_total', event.id, amountTotal);
+          return new Response('OK', { status: 200 });
         }
         await incrementTotal(env.DONATION_KV, amountTotal);
         await env.DONATION_KV.put(processedKey, '1');
