@@ -102,6 +102,16 @@ describe('verifyStripeSignature', () => {
     const sig = await makeSignature(BODY, ts, SECRET);
     expect(await verifyStripeSignature(BODY, ` t=${ts} , v1=${sig} `, SECRET)).toBe(true);
   });
+
+  it('rejects a malformed v1 value (odd-length hex)', async () => {
+    const ts = nowTs();
+    expect(await verifyStripeSignature(BODY, `t=${ts},v1=abc`, SECRET)).toBe(false);
+  });
+
+  it('rejects a malformed v1 value (non-hex characters)', async () => {
+    const ts = nowTs();
+    expect(await verifyStripeSignature(BODY, `t=${ts},v1=${'zz'.repeat(32)}`, SECRET)).toBe(false);
+  });
 });
 
 describe('incrementTotal', () => {
