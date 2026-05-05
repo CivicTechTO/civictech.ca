@@ -103,7 +103,16 @@ export default {
       }
 
       if (event.type === 'checkout.session.completed') {
+        if (!event.id) {
+          return new Response('Missing event id', { status: 400 });
+        }
+        const processedKey = `stripe_event_processed:${event.id}`;
+        const alreadyProcessed = await env.DONATION_KV.get(processedKey);
+        if (alreadyProcessed !== null) {
+          return new Response('OK', { status: 200 });
+        }
         await incrementTotal(env.DONATION_KV, event.data.object.amount_total);
+        await env.DONATION_KV.put(processedKey, '1');
       }
 
       return new Response('OK', { status: 200 });
