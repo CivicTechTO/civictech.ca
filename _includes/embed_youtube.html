@@ -1,18 +1,22 @@
 {%- comment -%}
 Usage:
-  {% include embed_youtube.html youtubeID="Yw6u6YkTgQ4" %}
-Replace "dQw4w9WgXcQ" with the ID of the YouTube video you want to embed.
+  {% include embed_youtube.html youtubeID="Yw6u6YkTgQ4" title="Descriptive title of the video" %}
+Replace "Yw6u6YkTgQ4" with the ID of the YouTube video you want to embed.
+The `title` parameter is required for accessibility (WCAG 2.4.1, 4.1.2) and
+should describe the specific video being embedded.
 This embed uses the privacy-enhanced "youtube-nocookie.com" URL.
 {%- endcomment -%}
 
+{%- assign embed_title = include.title | default: "Embedded YouTube video" -%}
+
 <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-  <iframe 
+  <iframe
     src="https://www.youtube-nocookie.com/embed/{{ include.youtubeID }}?modestbranding=1&color=white&iv_load_policy=3"
     style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
     frameborder="0"
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
     allowfullscreen
-    title="YouTube video"
+    title="{{ embed_title | escape }}"
     loading="lazy"
     referrerpolicy="strict-origin-when-cross-origin">
   </iframe>

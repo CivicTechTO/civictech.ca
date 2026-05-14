@@ -40,7 +40,7 @@ redirect_from: /get-in-touch/
 {% for speaker in featured_speakers limit:9 %}
 
 <hgroup>
-<a href="{{speaker.url}}" alt="{{speark.title}}"><h4>{{ speaker.title }}</h4></a>
+<a href="{{speaker.url}}"><h4>{{ speaker.title }}</h4></a>
 <p>
 {% if speaker.organization %}
 {% assign organization_list = "" | split: "" %}

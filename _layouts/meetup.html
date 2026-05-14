@@ -66,7 +66,7 @@ layout: base
         {% if page.youtubeID %}
           <section>
             <h2>Recording</h2>
-            {% include embed_youtube.html youtubeID=page.youtubeID %}
+            {% include embed_youtube.html youtubeID=page.youtubeID title=page.topic %}
           </section>
         {% endif %}
 
