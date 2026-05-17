@@ -15,9 +15,11 @@ jobs:
   comment:
     name: Post Pa11y report comment
     runs-on: ubuntu-latest
+    env:
+      REPORT_BODY_FILE: /tmp/pa11y-report/pa11y_report.md
     if: >-
       github.event.workflow_run.event == 'pull_request' &&
-      github.event.workflow_run.head_repository.fork == true &&
+      github.event.workflow_run.head_repository.fork &&
       github.event.workflow_run.conclusion != 'cancelled' &&
       github.event.workflow_run.pull_requests[0].number
 
@@ -34,7 +36,7 @@ jobs:
       - name: Check report file
         id: report
         run: |
-          if [ -f /tmp/pa11y-report/pa11y_report.md ]; then
+          if [ -f "$REPORT_BODY_FILE" ]; then
             echo "exists=true" >> "$GITHUB_OUTPUT"
           else
             echo "exists=false" >> "$GITHUB_OUTPUT"
@@ -45,7 +47,6 @@ jobs:
         if: steps.report.outputs.exists == 'true'
         uses: actions/github-script@v8
         env:
-          REPORT_BODY_FILE: /tmp/pa11y-report/pa11y_report.md
           PR_NUMBER: ${{ github.event.workflow_run.pull_requests[0].number }}
         with:
           script: |
