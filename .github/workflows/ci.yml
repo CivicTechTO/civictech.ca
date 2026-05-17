@@ -146,7 +146,7 @@ jobs:
                 rows.push(`**${errors.length} error(s)**`, '');
                 for (const issue of errors) {
                   rows.push(`- **[${issue.code}]** ${issue.message}`);
-                  rows.push(`  - Context: \`${issue.context.replace(/`/g, "'").substring(0, 200)}\``);
+                  rows.push(`  - Context: \`${issue.context.replace(/\`/g, "'").substring(0, 200)}\``);
                   rows.push(`  - Selector: \`${issue.selector}\``);
                   rows.push('');
                 }
@@ -155,7 +155,7 @@ jobs:
                 rows.push(`<details><summary><strong>${warnings.length} warning(s)</strong></summary>`, '');
                 for (const issue of warnings) {
                   rows.push(`- **[${issue.code}]** ${issue.message}`);
-                  rows.push(`  - Context: \`${issue.context.replace(/`/g, "'").substring(0, 200)}\``);
+                  rows.push(`  - Context: \`${issue.context.replace(/\`/g, "'").substring(0, 200)}\``);
                   rows.push(`  - Selector: \`${issue.selector}\``);
                   rows.push('');
                 }
@@ -195,8 +195,15 @@ jobs:
           console.log('Report written.');
           EOF
 
+      - name: Upload Pa11y report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pa11y-report
+          path: /tmp/pa11y_report.md
+          retention-days: 7
+
       - name: Post or update PR comment
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false
         uses: actions/github-script@v8
         env:
           REPORT_BODY_FILE: /tmp/pa11y_report.md
