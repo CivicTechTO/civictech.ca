@@ -21,7 +21,7 @@ jobs:
       github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.head_repository.fork &&
       github.event.workflow_run.conclusion != 'cancelled' &&
-      github.event.workflow_run.pull_requests[0]
+      github.event.workflow_run.pull_requests[0] != null
 
     steps:
       - name: Download Pa11y report artifact from CI run
@@ -60,6 +60,10 @@ jobs:
             const fs = require('fs');
             const marker = '<!-- pa11y-report -->';
             const issue_number = Number(process.env.PR_NUMBER);
+            if (!Number.isInteger(issue_number) || issue_number <= 0) {
+              core.setFailed(`Invalid PR number: ${process.env.PR_NUMBER}`);
+              return;
+            }
 
             let body;
             try {
