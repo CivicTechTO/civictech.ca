@@ -38,7 +38,7 @@ jobs:
             echo "exists=true" >> "$GITHUB_OUTPUT"
           else
             echo "exists=false" >> "$GITHUB_OUTPUT"
-            echo "Pa11y report artifact not found for run ${{ github.event.workflow_run.id }}. Skipping comment."
+            echo "::warning::Pa11y report artifact not found for run ${{ github.event.workflow_run.id }}. Skipping comment."
           fi
 
       - name: Post or update PR comment
@@ -50,9 +50,16 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            const body = fs.readFileSync(process.env.REPORT_BODY_FILE, 'utf8');
             const marker = '<!-- pa11y-report -->';
             const issue_number = Number(process.env.PR_NUMBER);
+
+            let body;
+            try {
+              body = fs.readFileSync(process.env.REPORT_BODY_FILE, 'utf8');
+            } catch (error) {
+              core.setFailed(`Unable to read report file: ${error.message}`);
+              return;
+            }
 
             const comments = await github.rest.issues.listComments({
               owner: context.repo.owner,
