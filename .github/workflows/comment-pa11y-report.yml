@@ -1,0 +1,81 @@
+name: Comment Pa11y report on fork PRs
+
+on:
+  workflow_run:
+    workflows: ['CI']
+    types:
+      - completed
+
+permissions:
+  actions: read
+  contents: read
+  issues: write
+
+jobs:
+  comment:
+    name: Post Pa11y report comment
+    runs-on: ubuntu-latest
+    if: >-
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.head_repository.fork == true &&
+      github.event.workflow_run.conclusion != 'cancelled' &&
+      github.event.workflow_run.pull_requests[0].number
+
+    steps:
+      - name: Download Pa11y report artifact from CI run
+        id: download
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: pa11y-report
+          run-id: ${{ github.event.workflow_run.id }}
+          path: /tmp/pa11y-report
+
+      - name: Check report file
+        id: report
+        run: |
+          if [ -f /tmp/pa11y-report/pa11y_report.md ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "Pa11y report artifact not found for run ${{ github.event.workflow_run.id }}. Skipping comment."
+          fi
+
+      - name: Post or update PR comment
+        if: steps.report.outputs.exists == 'true'
+        uses: actions/github-script@v8
+        env:
+          REPORT_BODY_FILE: /tmp/pa11y-report/pa11y_report.md
+          PR_NUMBER: ${{ github.event.workflow_run.pull_requests[0].number }}
+        with:
+          script: |
+            const fs = require('fs');
+            const body = fs.readFileSync(process.env.REPORT_BODY_FILE, 'utf8');
+            const marker = '<!-- pa11y-report -->';
+            const issue_number = Number(process.env.PR_NUMBER);
+
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number,
+            });
+
+            const existing = comments.data.find(c => c.body && c.body.includes(marker));
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+              core.info(`Updated existing comment ${existing.id}`);
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number,
+                body,
+              });
+              core.info('Created new comment');
+            }
