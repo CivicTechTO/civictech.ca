@@ -1,36 +1,39 @@
+bluesky:
+  label: Bluesky
+  icon: bluesky.svg
+facebook:
+  label: Facebook
+  icon: facebook.svg
+github:
+  label: GitHub
+  icon: github.svg
+guild:
+  label: Guild
+  icon: guild.svg
+instagram:
+  label: Instagram
+  icon: instagram.svg
+linkedin:
+  label: LinkedIn
+  icon: linkedin.svg
+mastodon:
+  label: Mastodon
+  icon: mastodon.svg
+slack:
+  label: Slack
+  icon: slack.svg
+tiktok:
+  label: TikTok
+  icon: tiktok.svg
+twitter:
+  label: Twitter
+  icon: twitter.svg
 website:
   label: Website
   icon: link.svg
 wikipedia:
   label: Wikipedia
   icon: wikipedia.svg
-linkedin:
-  label: LinkedIn
-  icon: linkedin.svg
-instagram:
-  label: Instagram
-  icon: instagram.svg
-twitter:
-  label: Twitter
-  icon: twitter.svg
-github:
-  label: GitHub
-  icon: github.svg
-facebook:
-  label: Facebook
-  icon: facebook.svg
-slack:
-  label: Slack
-  icon: slack.svg
 youtube:
   label: YouTube
   icon: youtube.svg
-bluesky:
-  label: Bluesky
-  icon: bluesky.svg
-guild:
-  label: Guild
-  icon: guild.svg
-mastodon:
-  label: Mastodon
-  icon: mastodon.svg
