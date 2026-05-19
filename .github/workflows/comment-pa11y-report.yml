@@ -1,0 +1,100 @@
+name: Comment Pa11y report on fork PRs
+
+on:
+  workflow_run:
+    workflows: ['CI']
+    types:
+      - completed
+
+permissions:
+  actions: read
+  contents: read
+  issues: write
+
+jobs:
+  comment:
+    name: Post Pa11y report comment
+    runs-on: ubuntu-latest
+    env:
+      REPORT_DIR: /tmp/pa11y-report
+    if: >-
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.head_repository.fork &&
+      github.event.workflow_run.conclusion != 'cancelled' &&
+      github.event.workflow_run.pull_requests[0] != null
+
+    steps:
+      - name: Download Pa11y report artifact from CI run
+        id: download
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: pa11y-report
+          run-id: ${{ github.event.workflow_run.id }}
+          path: ${{ env.REPORT_DIR }}
+
+      - name: Check report file
+        id: report
+        run: |
+          report_file="$REPORT_DIR/pa11y_report.md"
+          if [ -f "$report_file" ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "report_file=$report_file" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            if [ "${{ steps.download.outcome }}" = "failure" ]; then
+              echo "::warning::Failed to download Pa11y report artifact from CI run ${{ github.event.workflow_run.id }}. Skipping comment."
+            else
+              echo "::warning::Pa11y report artifact was not uploaded by CI run ${{ github.event.workflow_run.id }}. Skipping comment."
+            fi
+          fi
+
+      - name: Post or update PR comment
+        if: steps.report.outputs.exists == 'true'
+        uses: actions/github-script@v8
+        env:
+          REPORT_BODY_FILE: ${{ steps.report.outputs.report_file }}
+          PR_NUMBER: ${{ github.event.workflow_run.pull_requests[0].number }}
+        with:
+          script: |
+            const fs = require('fs');
+            const marker = '<!-- pa11y-report -->';
+            const issue_number = Number(process.env.PR_NUMBER);
+            if (!Number.isInteger(issue_number) || issue_number <= 0) {
+              core.setFailed(`Invalid PR number: ${process.env.PR_NUMBER}`);
+              return;
+            }
+
+            let body;
+            try {
+              body = fs.readFileSync(process.env.REPORT_BODY_FILE, 'utf8');
+            } catch (error) {
+              core.setFailed(`Unable to read report file: ${error.message}`);
+              return;
+            }
+
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number,
+            });
+
+            const existing = comments.data.find(c => c.body && c.body.includes(marker));
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+              core.info(`Updated existing comment ${existing.id}`);
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number,
+                body,
+              });
+              core.info('Created new comment');
+            }
