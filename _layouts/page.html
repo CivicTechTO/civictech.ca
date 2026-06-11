@@ -13,8 +13,8 @@ layout: base
     <header>
       <hgroup>
         <h1>{{ page.display_title | default: page.title }}</h1>
-        {% if page.excerpt %}
-          <p>{{ page.excerpt }}</p>
+        {% if page.summary %}
+          <p>{{ page.summary }}</p>
         {% endif %}
       </hgroup>
     </header>

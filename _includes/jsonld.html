@@ -12,7 +12,7 @@ It determines the appropriate @type based on page.tags:
 
 Requirements:
   - Pages should have appropriate tags in front matter
-  - Optional fields supported: excerpt, description, dateActiveFirst, organization, venue, videoUrl, social.website, parent_organization, speakers, etc.
+  - Optional fields supported: summary, description, dateActiveFirst, organization, venue, videoUrl, social.website, parent_organization, speakers, etc.
   - Uses Liquid's `jsonify` filter to safely escape string values
 
 Note:
@@ -29,8 +29,8 @@ Note:
   {% if page_tags contains "type/project" %}
     "@type": "CreativeWork",
     "name": {{ page.title | jsonify }},
-    {% if page.excerpt %}
-      "description": {{ page.excerpt | strip_html | strip_newlines | jsonify }},
+    {% if page.summary %}
+      "description": {{ page.summary | strip_html | strip_newlines | jsonify }},
     {% endif %}
     {% if page.dateActiveFirst %}
       "dateCreated": "{{ page.dateActiveFirst }}",
