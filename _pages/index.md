@@ -178,8 +178,8 @@ permalink: "/"
         <div class="row-content">
           <div>
             <h3><a href="{{ project.url }}">{{ project.title }}</a></h3>
-            {% if project.excerpt %}
-              <p>{{ project.excerpt }}</p>
+            {% if project.summary %}
+              <p>{{ project.summary }}</p>
             {% endif %}
             {% if project.tags %}
               {% include topic-tags.html tags=project.tags %}

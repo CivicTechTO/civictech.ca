@@ -27,8 +27,8 @@ permalink: "/announcements/"
               {% endif %}
               </small>
             </p>
-            {% if post.excerpt %}
-              <p>{{ post.excerpt }}</p>
+            {% if post.summary %}
+              <p>{{ post.summary }}</p>
             {% else %}
               <p>{{ post.content | strip_html | truncatewords: 30 }}</p>
             {% endif %}

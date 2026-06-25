@@ -2,7 +2,7 @@
 title: "Share Your Feedback"
 layout: page
 permalink: "/feedback/"
-excerpt: "🔓 Help us make Civic Tech Toronto better. Responses are anonymous — we never collect names or emails — and are stored openly in a public GitHub repository."
+summary: "🔓 Help us make Civic Tech Toronto better. Responses are anonymous — we never collect names or emails — and are stored openly in a public GitHub repository."
 ---
 
 <style>
