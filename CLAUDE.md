@@ -71,6 +71,8 @@ Site-wide data is in `_data/`:
 
 The `jekyll_picture_tag` plugin processes images from `archives/images/` and caches generated thumbnails in `assets/thumbs/`. This requires `libvips` and `imagemagick` to be installed locally. The `assets/thumbs/` directory is gitignored and regenerated at build time.
 
+`jekyll_picture_tag` only generates a derivative when its output file is absent in the Jekyll destination (`_site/assets/thumbs`), which Jekyll preserves across builds via `keep_files`. CI caches that directory (`actions/cache`, keyed on `archives/images/**`) so unchanged builds regenerate nothing. Generated filenames embed an MD5 of the source image, so a changed source regenerates correctly; `make clean` forces a full local rebuild.
+
 ## CI/CD
 
 - **`pages.yml`**: Triggers on push to `main`. Runs `make generate`, then `jekyll build`, then deploys to GitHub Pages.
