@@ -39,6 +39,16 @@ else
   echo "❌ case 3 (external url) should exit 0"; fails=$((fails + 1))
 fi
 
-rm -rf "$t1" "$t2" "$t3"
+# Case 4: CRLF line endings on the image value -> still resolves -> exit 0
+t4=$(mktemp -d); setup_fixture "$t4"
+printf 'image: present.jpg\r\n' > "$t4/_meetups/crlf.md"
+: > "$t4/images/events/present.jpg"
+if ARCHIVES_DIR="$t4" "$VALIDATOR" >/dev/null 2>&1; then
+  echo "✅ case 4 (CRLF) exits 0"
+else
+  echo "❌ case 4 (CRLF) should exit 0"; fails=$((fails + 1))
+fi
+
+rm -rf "$t1" "$t2" "$t3" "$t4"
 if [ "$fails" -gt 0 ]; then echo "❌ $fails test(s) failed"; exit 1; fi
 echo "✅ all validate_images tests passed"

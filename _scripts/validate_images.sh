@@ -7,6 +7,11 @@ EVENTS_DIR="$ARCHIVES_DIR/images/events"
 
 echo "🔍 Validating meetup image references in $MEETUPS_DIR..."
 
+if [ ! -d "$MEETUPS_DIR" ]; then
+  echo "❌ Meetups directory not found: $MEETUPS_DIR"
+  exit 1
+fi
+
 missing=0
 checked=0
 
