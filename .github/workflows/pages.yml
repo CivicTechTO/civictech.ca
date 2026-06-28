@@ -78,6 +78,14 @@ jobs:
         env:
           FEEDBACK_TOKEN: ${{ secrets.FEEDBACK_TOKEN }}
 
+      - name: Cache generated image derivatives
+        uses: actions/cache@v4
+        with:
+          path: _site/assets/thumbs
+          key: jpt-thumbs-${{ hashFiles('archives/images/**') }}
+          restore-keys: |
+            jpt-thumbs-
+
       # Outputs to the './_site' directory by default
       - name: Build Jekyll site
         run: |
