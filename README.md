@@ -88,6 +88,9 @@ Ensure your Ruby environment matches the `Gemfile` requirements. Older gem versi
 **Jekyll-GitHub Pages Compatibility**
 GitHub Pages restricts Jekyll plugins for security. See [supported versions](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/about-github-pages-and-jekyll#plugins) for details.
 
+**Validating Meetup Images**
+Run `make validate` to check that every meetup's `image:` front matter points at a real file in `archives/images/events/`. CI runs this on pull requests to `main` (including the daily submodule-update PR) and fails if a referenced image is missing, so broken references are caught before they reach the site.
+
 **Image Derivative Caching**
 CI caches generated image thumbnails (`_site/assets/thumbs`) keyed on the contents of `archives/images/`, so unchanged images are not regenerated. Locally, `_site` persists between builds, so repeat builds are already incremental — running `make clean` wipes `_site` and forces a full regeneration on the next build.
 

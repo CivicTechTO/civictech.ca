@@ -60,6 +60,10 @@ Tags and categories are not manually maintained — they're generated from colle
 
 The CI build (`.github/workflows/pages.yml`) always runs `make generate` before `jekyll build`. Do not manually edit files in `tags/`, `categories/`, or `_data/tags.yml`/`_data/categories.yml` — they will be overwritten.
 
+### Image Validation
+
+`_scripts/validate_images.sh` (exposed as `make validate`) checks that every meetup's `image:` front matter resolves to a file in `archives/images/events/`, skipping external `http(s)` URLs. It exits non-zero on a missing source and runs on pull requests via `ci.yml`. It is intentionally **not** part of `make generate` or `pages.yml`, so a missing image never blocks the production deploy. Run `bash _scripts/test_validate_images.sh` to exercise the validator against fixtures.
+
 ### Navigation and Site Data
 
 Site-wide data is in `_data/`:

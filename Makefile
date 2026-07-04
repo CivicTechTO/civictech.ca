@@ -40,6 +40,10 @@ generate-pages:
 # Generate all content
 generate: generate-data generate-pages
 
+# Validate that meetup image references resolve to source files
+validate:
+	$(SCRIPTS_DIR)/validate_images.sh
+
 # Update Git submodules
 update:
 	git submodule update --remote --merge
@@ -48,4 +52,4 @@ update:
 clean:
 	rm -rf _site .jekyll-metadata
 
-.PHONY: all bundle serve serve-incremental generate-data generate-pages generate update-submodules clean
+.PHONY: all bundle serve serve-incremental generate-data generate-pages generate validate update-submodules clean
