@@ -9,6 +9,8 @@ permalink: "/"
     <img
       src="{{ 'assets/images/CivicTechTO-InPerson.jpg' | relative_url }}"
       alt="Picture of a group of people sitting listening to a presentation at a Civic Tech Toronto Meetup"
+      width="1037"
+      height="758"
       style="border-radius: 4px;"
     />
   </figure>
