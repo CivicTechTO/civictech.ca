@@ -24,7 +24,8 @@
   <!-- Inclusion of JSON Linked Data -->
   {% include jsonld.html %} 
   <link rel="icon" href="{{ site.baseurl }}/assets/images/favicon.ico" type="image/x-icon">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.pumpkin.min.css" />
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.pumpkin.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.pumpkin.min.css" /></noscript>
   <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/custom.css" />
   <script defer src="https://umami.dgt.ca/script.js" data-website-id="99c82c37-f3b0-4219-8eda-7b150c5160f4"></script>
 </head>
