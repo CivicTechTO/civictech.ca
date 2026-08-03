@@ -437,11 +437,17 @@ hgroup p {
   margin-top: var(--pico-typography-spacing-vertical);
 }
 
-.mobile-only {
-  display: block;
+/* Fix for (#169). Addresses custom CSS to Pico component class css conflicts. */
+@media (max-width: 767.98px) {
+  .desktop-only {
+    display: none;
+  }
 }
-.desktop-only {
-  display: none;
+
+@media (min-width: 768px) {
+  .mobile-only {
+    display: none;
+  }
 }
 
 @media (max-width: 1023px) {
@@ -472,15 +478,6 @@ hgroup p {
 @media (min-width: 576px) {
   .card-grid {
     grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media (min-width: 768px) {
-  .mobile-only {
-    display: none;
-  }
-  .desktop-only {
-    display: inline-block;
   }
 }
 
