@@ -1,0 +1,83 @@
+---
+layout: null
+sitemap: false
+---
+{%- assign meetups = site.meetups | sort: "date" | reverse -%}
+{%- if site.feed.limit -%}{%- assign meetups = meetups | slice: 0, site.feed.limit -%}{%- endif -%}
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
+  <title type="text">{{ site.title | xml_escape }} | Meetups</title>
+  <subtitle>{{ site.description | strip_html | strip_newlines | strip | xml_escape }}</subtitle>
+  <id>{{ '/feed.xml' | absolute_url }}</id>
+  <link rel="self" type="application/atom+xml" href="{{ '/feed.xml' | absolute_url }}" />
+  <link rel="alternate" type="text/html" href="{{ '/events/' | absolute_url }}" />
+  <updated>{{ site.time | date_to_xmlschema }}</updated>
+  <author><name>{{ site.author.name | xml_escape }}</name><email>{{ site.author.email | xml_escape }}</email></author>
+  <icon>{{ '/assets/images/favicon.ico' | absolute_url }}</icon>
+  <rights>© {{ site.time | date: "%Y" }} {{ site.title | xml_escape }}</rights>
+  <generator uri="https://jekyllrb.com/" version="{{ jekyll.version }}">Jekyll</generator>
+{%- for meetup in meetups %}
+  {%- comment -%}
+    Resolve [[Wikilink]] references the same way _layouts/meetup.html does, so
+    feed readers get real names and URLs instead of raw Obsidian syntax.
+  {%- endcomment -%}
+  {%- assign speakers = "" | split: "" -%}
+  {%- for ref in meetup.speakers -%}
+    {%- assign name = ref | remove: '[[' | remove: ']]' -%}
+    {%- assign path = '_people/' | append: name | append: '.md' -%}
+    {%- assign person = site.people | where: "relative_path", path | first -%}
+    {%- if person -%}{%- assign speakers = speakers | push: person -%}{%- endif -%}
+  {%- endfor -%}
+  {%- assign venues = "" | split: "" -%}
+  {%- for ref in meetup.venue -%}
+    {%- assign name = ref | remove: '[[' | remove: ']]' -%}
+    {%- assign path = '_venues/' | append: name | append: '.md' -%}
+    {%- assign loc = site.venues | where: "relative_path", path | first -%}
+    {%- if loc -%}{%- assign venues = venues | push: loc -%}{%- endif -%}
+  {%- endfor -%}
+  {%- assign description = meetup.description | remove: '[[' | remove: ']]' -%}
+  {%- if meetup.image contains '://' -%}
+    {%- assign image_url = meetup.image -%}
+  {%- elsif meetup.image -%}
+    {%- assign image_url = '/archives/images/events/' | append: meetup.image | absolute_url -%}
+  {%- endif -%}
+  <entry>
+    <title type="text">{{ meetup.title | default: meetup.topic | xml_escape }}</title>
+    <link rel="alternate" type="text/html" href="{{ meetup.url | absolute_url }}" />
+    <id>{{ meetup.url | absolute_url }}</id>
+    <published>{{ meetup.date | date_to_xmlschema }}</published>
+    <updated>{{ meetup.last_modified_at | default: meetup.date | date_to_xmlschema }}</updated>
+    {%- for speaker in speakers %}
+    <author><name>{{ speaker.title | xml_escape }}</name><uri>{{ speaker.url | absolute_url }}</uri></author>
+    {%- endfor %}
+    {%- if speakers.size == 0 %}
+    <author><name>{{ site.author.name | xml_escape }}</name></author>
+    {%- endif %}
+    {%- for tag in meetup.tags %}
+    <category term="{{ tag | xml_escape }}" label="{{ tag | split: '/' | last | replace: '-', ' ' | capitalize | xml_escape }}" />
+    {%- endfor %}
+    {%- if description %}
+    <summary type="html">{{ description | markdownify | strip_html | strip_newlines | strip | xml_escape }}</summary>
+    {%- endif %}
+    {%- if image_url %}
+    <media:thumbnail url="{{ image_url }}" />
+    <media:content medium="image" url="{{ image_url }}" />
+    {%- endif %}
+    <content type="html" xml:base="{{ meetup.url | absolute_url }}">{% capture body %}
+      {%- if image_url %}<p><img src="{{ image_url }}" alt="{{ meetup.topic | escape }}" /></p>{% endif -%}
+      {%- if description %}{{ description | markdownify }}{% endif -%}
+      {%- if speakers.size > 0 %}<h2>Speakers</h2>
+        {%- for speaker in speakers %}
+        <p><a href="{{ speaker.url | absolute_url }}">{{ speaker.title }}</a>{% if speaker.description %} — {{ speaker.description | remove: '[[' | remove: ']]' | markdownify | strip_html | strip_newlines | strip }}{% endif %}</p>
+        {%- endfor %}
+      {%- endif -%}
+      <h2>Details</h2>
+      <p>Date: {{ meetup.date | date: "%B %-d, %Y" }}</p>
+      {%- for venue in venues %}<p>Location: <a href="{{ venue.url | absolute_url }}">{{ venue.title }}</a></p>{% endfor -%}
+      {%- if meetup.eventUrl %}<p><a href="{{ meetup.eventUrl }}">{% if meetup.date > site.time %}Register for this meetup{% else %}Event page{% endif %}</a></p>{% endif -%}
+      {%- if meetup.youtubeID %}<p><a href="https://www.youtube.com/watch?v={{ meetup.youtubeID }}">Watch the recording</a></p>{% endif -%}
+      {{- meetup.content -}}
+    {% endcapture %}{{ body | strip | xml_escape }}</content>
+  </entry>
+{%- endfor %}
+</feed>

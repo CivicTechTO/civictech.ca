@@ -10,6 +10,7 @@ description: >-
 
 feedback_token: ""
 
+url: "https://civictech.ca"
 baseurl: ""
 github_username: civictechto
 
@@ -112,6 +113,13 @@ plugins:
   - jekyll-sitemap
   - jekyll_picture_tag
   - jekyll-loading-lazy
+
+# Atom feed of meetups, hand-rolled in feed.xml.
+# Meetups keep their substance in front matter rather than the document body,
+# so jekyll-feed produced entries with an empty <content>; feed.xml assembles
+# the entry body the same way _layouts/meetup.html does.
+feed:
+  limit: 25
 
 # jekyll_picture_tag settings
 picture:
