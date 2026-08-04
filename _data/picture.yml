@@ -18,6 +18,7 @@ presets:
       default: 690px
     attributes:
       loading: lazy
+    dimension_attributes: true
 
 media_queries:
   mobile: "(max-width: 600px)"
