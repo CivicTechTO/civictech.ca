@@ -71,7 +71,7 @@ layout: base
         {% endif %}
 
         {% if page.description %}
-          <p>{{ page.description }}</p>
+          {{ page.description | markdownify }}
         {% endif %}
 
         {% if resolved_speakers.size > 0 %}
@@ -79,7 +79,7 @@ layout: base
             <h2>Speakers</h2>
             {% for speaker in resolved_speakers %}
               <a href="{{ speaker.url }}">{{ speaker.title }}</a>
-              <p>{{ speaker.description }}</p>
+              {{ speaker.description | markdownify }}
             {% endfor %}
           </section>
         {% endif %}

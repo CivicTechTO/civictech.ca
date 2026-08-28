@@ -15,7 +15,7 @@ layout: base
       <hgroup>
         <h1>{{ page.title }}</h1>
         {% if page.description %}
-          <p>{{ page.description }}</p>
+          {{ page.description | markdownify }}
         {% endif %}
       </hgroup>
     </header>

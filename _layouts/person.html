@@ -24,7 +24,7 @@ layout: base
     <section class="person-description">
       <h2>Description</h2>
       {% if page.description %}
-        <p>{{ page.description }}</p>
+        {{ page.description | markdownify }}
       {% endif %}
       <div>{{ page.content }}</div>
     </section>
