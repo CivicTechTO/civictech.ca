@@ -2,7 +2,7 @@
 
 Thank you for your interest in contributing to CivicTech Toronto's website! We welcome contributions from the community.
 
-All contributors are expected to follow our [Code of Conduct](https://civictech.ca/code-of-conduct).
+All contributors are expected to follow our [Code of Conduct](https://civictech.ca/code-of-conduct/).
 
 ## Ways to Contribute
 

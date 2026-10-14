@@ -16,7 +16,7 @@ redirect_from: /get-in-touch/
   <h2>Who’s Invited?</h2>
   <p>Everyone. Our community includes people with no technical experience whatsoever alongside developers, designers, policy enthusiasts, activists, and curious newcomers. We strongly believe that diverse perspectives make for stronger solutions. Whatever your background or skill level, you're welcome to contribute and learn.</p>
   <p>We are committed to providing a safe, inclusive, and respectful environment for everyone.</p>
-  <a href="/code-of-conduct" class="secondary">Read our Code of Conduct →</a>
+  <a href="/code-of-conduct/" class="secondary">Read our Code of Conduct →</a>
 </section>
 
 <section>
