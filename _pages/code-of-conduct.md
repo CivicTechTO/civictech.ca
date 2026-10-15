@@ -1,7 +1,7 @@
 ---
 title: "Code of Conduct"
 layout: page
-permalink: "/code-of-conduct"
+permalink: "/code-of-conduct/"
 ---
 
 As organizers and community members, we pledge to act and interact in ways that contribute to an open, welcoming, diverse, inclusive, and healthy community.

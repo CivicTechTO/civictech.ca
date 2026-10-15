@@ -4,7 +4,7 @@ main:
   - label: "Get Involved"
     url: "/get-involved"
   - label: "Code of Conduct"
-    url: "/code-of-conduct"
+    url: "/code-of-conduct/"
   - label: "Announcements"
     url: "/announcements"
     collection: true
