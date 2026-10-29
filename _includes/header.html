@@ -63,10 +63,10 @@ Requirements:
   </nav>
 </header>
 
-<!-- Mobile Menu -->
-<div id="mobile-menu" class="mobile-menu mobile-only" hidden>
-  <button class="close-menu" aria-label="Close menu">&times;</button>
+<!-- Mobile Menu: native modal dialog, opened by navigation.js -->
+<dialog id="mobile-menu" class="mobile-menu mobile-only" aria-label="Site menu">
 <aside>
+  <button class="close-menu" aria-label="Close menu">&times;</button>
   <nav>
     <ul>
       {% for item in site.data.navigation.main %}
@@ -88,7 +88,5 @@ Requirements:
     </ul>
   </nav>
 </aside>
-</div>
-
-<div id="menu-backdrop" class="menu-backdrop mobile-only" hidden></div>
+</dialog>
 
