@@ -26,6 +26,8 @@ jobs:
         with:
           submodules: recursive
 
+      # ARCHIVE-COMPAT(redirect-from): remove once the archives drop
+      # redirect_from and _data/redirects.csv is the only source.
       - name: Check redirects.csv covers the archives
         run: make check-redirects
 

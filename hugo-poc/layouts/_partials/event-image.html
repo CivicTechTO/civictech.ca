@@ -1,7 +1,11 @@
-{{- /* Returns the processable resource for a meetup image, or nil. A few
-  archive images carry a .png name over WebP or AVIF bytes; libvips sniffs
-  them, but Hugo goes by extension, so those are re-typed by magic bytes.
-  Only .png files are read, so the other images are never loaded here. */ -}}
+{{- /* Returns the processable resource for a meetup image, or nil.
+
+  ARCHIVE-COMPAT(mislabeled-images): hacknight_528–530.png are WebP and
+  hacknight_549, 551, 552.png are AVIF. libvips sniffs content, but Hugo goes
+  by extension, so .png files are re-typed by magic bytes. Only .png files
+  are read, so other images are never loaded here. A mislabelled file with
+  another extension fails the build at Resize. Remove once the archive
+  stores these with correct extensions. */ -}}
 {{- $img := resources.Get (printf "images/events/%s" .) }}
 {{- if and $img (eq (path.Ext $img.Name) ".png") }}
   {{- $head := substr $img.Content 0 12 }}

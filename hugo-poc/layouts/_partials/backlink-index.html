@@ -11,6 +11,9 @@
     {{- range $.fields }}
       {{- with index $page.Params . }}
         {{- range (cond (reflect.IsSlice .) . (slice .)) }}
+          {{- /* ARCHIVE-COMPAT(nested-wikilinks): printf rather than string,
+            because a nested list can't be cast. As in Jekyll, it never
+            matches. */}}
           {{- $targets = $targets | append (findRE `\[\[[^\]]+\]\]` (printf "%v" .)) }}
         {{- end }}
       {{- end }}

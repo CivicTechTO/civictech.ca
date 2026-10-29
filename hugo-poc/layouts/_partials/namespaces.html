@@ -1,7 +1,9 @@
 {{- /* Groups a taxonomy's terms by namespace. Takes the taxonomy name
   ("tags" or "categories") and returns an ordered list of
-  dict "namespace" "terms" (sorted term keys). Terms without a namespace
-  are skipped, as Jekyll's generate scripts skip them. A namespace missing
+  dict "namespace" "terms" (sorted term keys).
+  ARCHIVE-COMPAT(unnamespaced-categories): terms without a namespace
+  (`supporter` and others) are skipped, as Jekyll's generate scripts skip
+  them. Remove the check once every category is namespaced. A namespace missing
   from params.namespaces stops the build, so it can't silently lose its
   index page. */ -}}
 {{- $taxonomy := . }}

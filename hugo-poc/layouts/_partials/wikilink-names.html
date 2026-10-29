@@ -1,6 +1,9 @@
 {{- /* Normalizes a wikilink field to a flat list of names. Accepts a single
-  "[[Name]]" string, a list of them, or the nested list YAML produces from an
-  unquoted [[Name]]. */ -}}
+  "[[Name]]" string or a list of them.
+
+  ARCHIVE-COMPAT(nested-wikilinks): an unquoted `organization: [[AccessNow]]`
+  (_people/Maayan Ziv.md) is a nested list in YAML, so one level of nesting
+  is flattened. Remove the inner range once wikilinks are quoted. */ -}}
 {{- $names := slice }}
 {{- range (cond (reflect.IsSlice .) . (slice .)) }}
   {{- range (cond (reflect.IsSlice .) . (slice .)) }}

@@ -1,7 +1,10 @@
-{{- /* A page's rendered content. A few bodies use Jekyll-only syntax
-  (Liquid includes, kramdown link attributes, one Liquid variable) that
-  Goldmark would print as text; those are translated. Anything else of that
-  shape is reported so it doesn't slip through. */ -}}
+{{- /* A page's rendered content.
+
+  ARCHIVE-COMPAT(jekyll-content-syntax): two announcements use Liquid
+  (`{% include embed_youtube.html youtubeID="…" %}`) and one a kramdown link
+  attribute (`{:target="_blank"}`), which Goldmark would print as text. Those
+  constructs are translated; any other `{%` or `{:` is reported with warnf.
+  Remove once the archive bodies use plain Markdown/HTML. */ -}}
 {{- if findRE `\{%|\{:` .RawContent 1 }}
   {{- $raw := .RawContent }}
   {{- range findRESubmatch `\{%\s*include embed_youtube\.html youtubeID="([^"]+)"\s*%\}` $raw }}
@@ -13,7 +16,9 @@
   {{- end }}
   {{- .RenderString (dict "display" "block") $raw }}
 {{- else if in .RawContent "{{ site.feedback_token }}" }}
-  {{- /* feedback.md's only Liquid: the token CI writes into the config. */}}
+  {{- /* JEKYLL-TRANSITION(site-pages): feedback.md's only Liquid is the
+    token Jekyll's CI writes into _config.yml. At cutover, give the page a
+    shortcode or layout for it and drop this branch. */}}
   {{- replace .Content "{{ site.feedback_token }}" site.Params.feedbackToken | safeHTML }}
 {{- else }}
   {{- .Content }}

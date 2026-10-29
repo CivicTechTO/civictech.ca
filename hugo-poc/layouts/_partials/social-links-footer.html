@@ -1,5 +1,7 @@
-{{- /* Hugo data maps iterate in key order, so the YAML key order of
-  footer_social.yml is recovered from the raw file to keep Jekyll's ordering. */ -}}
+{{- /* JEKYLL-TRANSITION(footer-order): Hugo iterates data maps in key
+  order, so the YAML key order of _data/footer_social.yml is recovered from
+  the raw file. The file is a map because Jekyll's footer include iterates
+  one. At cutover, make it a list. */ -}}
 {{- $footer := hugo.Data.footer_social }}
 {{- $keys := slice }}
 {{- with resources.Get "data-raw/footer_social.yml" }}

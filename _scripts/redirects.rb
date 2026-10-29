@@ -21,9 +21,14 @@
 # added by hand use site paths: the redirect_from entries of the site's own
 # _pages (/hacknights/, /get-in-touch/, /volunteer-with-us/).
 #
-# When two meetups claim the same old URL, the export picks the meetup whose
-# number appears in the URL's `hacknight-N` slug. Four 2021–2022 URLs were
-# listed on both meetup N and N+1, and N+1 used to win.
+# ARCHIVE-COMPAT(redirect-from): `export` and `check` exist only while the
+# archives still carry `redirect_from`. Once the archive refactor drops that
+# key, remove them; the CSV is then the only source of redirects.
+#
+# ARCHIVE-COMPAT(duplicate-redirects): when two meetups claim the same old
+# URL, the export picks the meetup whose number appears in the URL's
+# `hacknight-N` slug. Four 2021–2022 URLs were listed on both meetup N and
+# N+1 (299/300, 358/359, 364/365, 366/367), and Jekyll sends them to N+1.
 
 require "csv"
 require "date"

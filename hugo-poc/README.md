@@ -276,31 +276,46 @@ Apart from the deliberate fixes described above, this is what remains.
 - **Redirects without a trailing slash** (2 entries) are written as
   `…/index.html` rather than as an extensionless file.
 
-## Archive data the POC has to work around
+## Interim workarounds
 
-These are fine in Jekyll but need handling in Hugo. Fixing them in `archives`
-would remove the workarounds.
+Workarounds are labelled in the code so they can be found and removed:
 
-- `_meetups/390.md` uses `published: false`. Hugo reads `published` as a date
-  and fails, so the file is excluded from the mount; Jekyll doesn't output it
-  either. The usual Hugo key is `draft: true`.
-- `_projects/Weather Report Card.md` has `date: 2027-02-29`, which doesn't
-  exist. It's excluded from the mount.
-- 6 images named `.png` are WebP (528–530) or AVIF (549, 551, 552) data.
-  libvips sniffs them; Hugo goes by extension, so `_partials/event-image.html`
-  re-types them by magic bytes. Only `.png` files are read for this; reading
-  every image added about 1.2s of CPU to each cached build.
-- `_people/Maayan Ziv.md` has an unquoted `organization: [[AccessNow]]`, which
-  YAML reads as a nested list. Jekyll never resolves it; the POC flattens it.
-- `_projects/Tabs Toronto.md` sets `image:` to a jekyll_picture_tag
-  derivative (`/assets/thumbs/events/hacknight_341-690-96ae99ad0.webp`), a
-  hashed filename that only Jekyll produces. It's a broken image in Hugo; it
-  should name the source image instead.
-- `_projects/TPL Digital Innovation Hub booking app.md` has a Markdown link
-  as a `social` value. Jekyll emits it verbatim as an `href` (a broken link);
-  Hugo's URL escaping turns it into `#ZgotmplZ`.
-- `aliases:` in person files holds alternate names (Obsidian). In Hugo that
-  key means redirect URLs, so `disableAliases = true`.
-- YAML maps lose their key order in Hugo, so the footer's and each person's,
-  project's and organization's social links are re-ordered from the raw
-  files. Lists would avoid that.
+```bash
+grep -rn 'ARCHIVE-COMPAT\|JEKYLL-TRANSITION' hugo-poc _scripts Makefile .github
+```
+
+### `ARCHIVE-COMPAT`: pending the archive refactor
+
+Each of these works around data in the archives submodule. The archive
+change listed would be a breaking change for the Jekyll site, so it's a
+change for the migration. Once it's made, delete the workaround. "New cases"
+says whether a fresh instance of the problem would be caught.
+
+| ID | Problem in the archives | Workaround | Archive change that removes it | New cases |
+| --- | --- | --- | --- | --- |
+| `unpublished-flag` | `_meetups/390.md` has `published: false`, which Hugo parses as a date | excluded by name (`hugo.toml`) | use `draft: true` | build fails |
+| `invalid-date` | `_projects/Weather Report Card.md` has `date: 2027-02-29` | excluded by name (`hugo.toml`, two mounts) | fix the date | build fails |
+| `mislabeled-images` | `hacknight_528–530.png` are WebP, `549/551/552.png` are AVIF | re-typed by magic bytes (`_partials/event-image.html`) | correct the extensions and `image:` values | `.png`: handled; other extensions: build fails |
+| `jekyll-thumb-path` | `_projects/Tabs Toronto.md` `image:` is a Jekyll picture-tag derivative path | source image found by name (`_partials/project-image.html`) | name the source image | handled |
+| `org-logo-extension` | ThoughtWorks and School of Public Policy and Governance name `.jpg` logos that are `.png` | matched by base name (`_partials/og-image.html`) | correct the filenames | handled |
+| `social-markdown-link` | `_projects/TPL Digital Innovation Hub booking app.md` has a Markdown link as a `social` value | URL extracted (`_partials/social-links.html`) | plain URL | handled |
+| `nested-wikilinks` | `_people/Maayan Ziv.md` has unquoted `organization: [[AccessNow]]`, a nested list in YAML | flattened (`_partials/wikilink-names.html`, `backlink-index.html`) | quote wikilinks | handled |
+| `empty-titles` | ASL19, Ethelo, Ghazaleh Mohseni, Ryan Markwart have an empty `title:` | file name fallback (`_partials/title.html`) | add titles | handled |
+| `obsidian-aliases` | person files use Obsidian's `aliases` key for alternate names; in Hugo it means redirect URLs | `disableAliases = true` (`hugo.toml`) | rename the key, e.g. `alternate_names` | handled |
+| `map-key-order` | `social` is a map, and Hugo doesn't keep map key order | order read from raw sources (`_partials/social-links.html`, `assets/sources/` mounts) | make `social` a list | handled |
+| `category-shape` | `categories` is a scalar in venues and a list elsewhere, mixes case, and some lists have empty entries | normalized (`_partials/category-values.html`) | lowercase lists, no empty entries | handled |
+| `unnamespaced-categories` | `supporter` (34 organizations), `civictech`, `closed`, `feature`, `school` have no namespace | kept off index pages; no namespace breadcrumb (`_partials/namespaces.html`, `term.html`) | namespace them | handled |
+| `jekyll-content-syntax` | two announcements use Liquid `embed_youtube` includes and a kramdown `{:target}` attribute | translated (`_partials/content.html`) | plain Markdown/HTML | `warnf` at build |
+| `redirect-from` | meetups and announcements carry `redirect_from`, now owned by `_data/redirects.csv` | `redirects.rb export`/`check`, `make check-redirects`, CI step | drop `redirect_from` from the archives | CI fails |
+| `duplicate-redirects` | four old URLs are listed on meetup N and N+1 (299/300, 358/359, 364/365, 366/367) | export picks the meetup the slug names (`_scripts/redirects.rb`) | delete the line from N+1 | export fails |
+
+### `JEKYLL-TRANSITION`: until cutover
+
+These exist only because Jekyll still publishes the site and shares files
+with Hugo.
+
+| ID | Why | At cutover |
+| --- | --- | --- |
+| `site-pages` | site pages live in `_pages/` for Jekyll: they're mounted, `feedback.md` is mounted as HTML (with `security.allowContent`), and its feedback token is substituted in `_partials/content.html` | move the pages into `content/`, rename `feedback.md` to `.html`, give the token a shortcode |
+| `about-us-copy` | `about-us.md` has Liquid loops, so `sync-about-us.rb` writes a shortcode copy to `content/about-us.md` | keep the copy, delete the script |
+| `footer-order` | `_data/footer_social.yml` is a map for Jekyll's footer include, so its order is read from the raw file | make it a list |

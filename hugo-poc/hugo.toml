@@ -1,5 +1,12 @@
-# Hugo proof of concept for civictech.ca: meetup and person pages only.
-# Content is mounted read-only from the archives submodule; nothing there is modified.
+# Hugo proof of concept for civictech.ca. Content is mounted read-only from
+# the archives submodule; nothing there is modified.
+#
+# Workarounds are labelled where they live, and listed in README.md:
+#   ARCHIVE-COMPAT(<id>)     works around archive data; remove once the
+#                            archive refactor fixes that data
+#   JEKYLL-TRANSITION(<id>)  only needed while Jekyll still publishes the site
+#                            or shares files with Hugo; remove at cutover
+# `grep -rn 'ARCHIVE-COMPAT\|JEKYLL-TRANSITION'` finds them all.
 baseURL = "https://civictech.ca/"
 title = "Civic Tech Toronto"
 locale = "en"
@@ -7,8 +14,9 @@ timeZone = "America/Toronto"
 # Jekyll builds with `future: true`; some organizations carry future dates.
 buildFuture = true
 
-# Some person files carry Obsidian `aliases` (alternate names, not URLs),
-# which Jekyll ignores.
+# ARCHIVE-COMPAT(obsidian-aliases): some person files use Obsidian's
+# `aliases` key for alternate names. In Hugo that key means redirect URLs.
+# Remove once the archive renames the key (e.g. `alternate_names`).
 disableAliases = true
 # Rendered: every page of the Jekyll site, the redirects, the sitemap and
 # robots.txt. The home page also writes feed.xml, generate-csv.csv and the
@@ -60,11 +68,6 @@ baseName = "_redirects"
 isPlainText = true
 notAlternative = true
 
-# Jekyll uses `published: false` to unpublish a page; Hugo would read it as a
-# publish date, so only publishDate is accepted here.
-[frontmatter]
-publishDate = ["publishDate"]
-
 [params]
 description = "Civic Tech Toronto is a vibrant and diverse community of Torontonians engaged in understanding and creating solutions for civic challenges through technology, design, and other innovative means."
 editBase = "https://github.com/CivicTechTO/archives"
@@ -94,8 +97,9 @@ organizations = "/organizations/:contentbasename/"
 announcements = "/announcements/:contentbasename/"
 resources = "/resources/:contentbasename/"
 
-# Allow HTML content files (feedback.html, below). Raw HTML in Markdown is
-# already passed through (`unsafe = true`), and all content is first-party.
+# JEKYLL-TRANSITION(site-pages): allow HTML content files (feedback.html,
+# below). Raw HTML in Markdown is already passed through (`unsafe = true`),
+# and all content is first-party.
 [security]
 allowContent = ['! ^text/org$']
 
@@ -106,7 +110,9 @@ webp.quality = 75
 [[module.mounts]]
 source = "../archives/_meetups"
 target = "content/events"
-# Jekyll skips 390.md (published: false); Hugo has no equivalent key.
+# ARCHIVE-COMPAT(unpublished-flag): 390.md has `published: false`, which
+# Jekyll honours but Hugo parses as a (bad) publish date. Remove once the
+# archive uses `draft: true`. A new `published: false` file fails the build.
 files = ["! 390.md"]
 [[module.mounts]]
 source = "../archives/_people"
@@ -114,8 +120,9 @@ target = "content/people"
 [[module.mounts]]
 source = "../archives/_projects"
 target = "content/projects"
-# Its `date: 2027-02-29` does not exist and is a fatal error in Hugo. No
-# meetup or person references it, so leaving it out changes no rendered page.
+# ARCHIVE-COMPAT(invalid-date): `date: 2027-02-29` doesn't exist and is
+# fatal in Hugo, so this project isn't built. Remove once the date is fixed.
+# A new invalid date fails the build.
 files = ["! Weather Report Card.md"]
 [[module.mounts]]
 source = "../archives/_venues"
@@ -132,6 +139,8 @@ target = "content/resources"
 [[module.mounts]]
 source = "content"
 target = "content"
+# JEKYLL-TRANSITION(site-pages): the site pages still live in _pages/ for
+# Jekyll. At cutover, move them into content/ and drop these mounts.
 # Site pages without Liquid are used as they are. about-us.md (Liquid loops)
 # has a shortcode version in content/, and index.md and list-*.md are
 # templates in layouts/.
@@ -139,8 +148,9 @@ target = "content"
 source = "../_pages"
 target = "content"
 files = ["code-of-conduct.md", "get-involved.md"]
-# feedback.md is HTML in a .md file. Its indented form markup after blank
-# lines would be code blocks in CommonMark, so it's mounted as HTML content.
+# JEKYLL-TRANSITION(site-pages): feedback.md is HTML in a .md file. Its
+# indented form markup after blank lines would be code blocks in CommonMark,
+# so it's mounted as HTML content. At cutover, rename it to feedback.html.
 [[module.mounts]]
 source = "../_pages/feedback.md"
 target = "content/feedback.html"
@@ -180,16 +190,22 @@ target = "static/llms.txt"
 [[module.mounts]]
 source = "layouts"
 target = "layouts"
+# JEKYLL-TRANSITION(footer-order): the raw file, read for its key order.
+# _data/footer_social.yml is a map because Jekyll's footer include iterates
+# one. At cutover, make it a list and drop this mount.
 [[module.mounts]]
 source = "../_data/footer_social.yml"
 target = "assets/data-raw/footer_social.yml"
-# Raw sources, read for the front matter order of `social` maps.
+# ARCHIVE-COMPAT(map-key-order): raw sources, read for the front matter
+# order of `social` maps, which Hugo doesn't keep. Remove once `social` is a
+# list in the archives.
 [[module.mounts]]
 source = "../archives/_people"
 target = "assets/sources/people"
 [[module.mounts]]
 source = "../archives/_projects"
 target = "assets/sources/projects"
+# ARCHIVE-COMPAT(invalid-date): see the content mount above.
 files = ["! Weather Report Card.md"]
 [[module.mounts]]
 source = "../archives/_organizations"

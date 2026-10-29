@@ -1,7 +1,11 @@
-{{- /* A page's categories as a lowercased list, accepting a string or a
-  list and dropping empty values. Jekyll's list pages matched these with
-  Liquid `contains`, which is case-sensitive and does substring matching on
-  strings, so several venues and organizations never appeared. */ -}}
+{{- /* A page's categories as a lowercased list.
+
+  ARCHIVE-COMPAT(category-shape): `categories` is a scalar in most venues
+  and a list elsewhere, mixes case (venue-category/Academic), and some
+  organizations have an empty entry. This accepts both forms, lowercases,
+  and drops empty values. Jekyll's list pages matched with Liquid
+  `contains`, which is case-sensitive, so many venues and organizations
+  never appeared. Simplify once categories are lowercase lists. */ -}}
 {{- $values := slice }}
 {{- with .Params.categories }}
   {{- range (cond (reflect.IsSlice .) . (slice .)) }}

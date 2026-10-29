@@ -1,8 +1,9 @@
 {{ define "main" }}
   {{- $taxonomy := .Data.Plural }}
   {{- $term := .Data.Term }}
-  {{- /* A few categories (e.g. "supporter") have no namespace; Jekyll's
-    generate scripts dropped them, so they get no namespace level here. */}}
+  {{- /* ARCHIVE-COMPAT(unnamespaced-categories): a few categories (e.g.
+    "supporter") have no namespace; Jekyll's generate scripts dropped them,
+    so they get no namespace level here. */}}
   {{- $namespace := cond (in $term "/") (index (split $term "/") 0) "" }}
   {{- $label := partial "term-label.html" $term }}
   <nav aria-label="breadcrumb">

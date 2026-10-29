@@ -40,7 +40,8 @@ generate-pages:
 # Generate all content
 generate: generate-data generate-pages
 
-# Check that every archive redirect_from is in _data/redirects.csv
+# Check that every archive redirect_from is in _data/redirects.csv.
+# ARCHIVE-COMPAT(redirect-from): remove once the archives drop redirect_from.
 check-redirects:
 	ruby $(SCRIPTS_DIR)/redirects.rb check
 

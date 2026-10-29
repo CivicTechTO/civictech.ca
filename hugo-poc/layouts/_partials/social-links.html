@@ -1,5 +1,7 @@
-{{- /* Hugo maps iterate in key order, so the front matter order of `social`
-  is recovered from the raw source file to keep Jekyll's ordering. */ -}}
+{{- /* ARCHIVE-COMPAT(map-key-order): `social` is a map, and Hugo iterates
+  maps in key order, so the front matter order is recovered from the raw
+  source file (mounted under assets/sources/) to keep Jekyll's ordering.
+  Remove once `social` is a list in the archives. */ -}}
 {{- $social := .Params.social }}
 {{- $keys := slice }}
 {{- with resources.Get (printf "sources/%s/%s" .Section .File.LogicalName) }}
