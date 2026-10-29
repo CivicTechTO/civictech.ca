@@ -20,7 +20,11 @@
   <meta name="twitter:player" content="https://www.youtube.com/embed/{{ . }}" />
   {{- else }}
   {{- $og := "/assets/images/default-og.png" | absURL }}
-  {{- with .Params.image }}{{ with partialCached "event-image.html" . . }}{{ $og = (.Resize (cond (eq .MediaType.SubType "png") "800x png" "800x jpg")).Permalink }}{{ end }}{{ end }}
+  {{- with .Params.image }}
+    {{- if hasPrefix . "http" }}{{ $og = . }}
+    {{- else if eq $.Section "events" }}{{ with partialCached "event-image.html" . . }}{{ $og = (.Resize (cond (eq .MediaType.SubType "png") "800x png" "800x jpg")).Permalink }}{{ end }}
+    {{- end }}
+  {{- end }}
   <meta property="og:image" content="{{ $og }}" />
   <meta name="twitter:image" content="{{ $og }}" />
   {{- end }}

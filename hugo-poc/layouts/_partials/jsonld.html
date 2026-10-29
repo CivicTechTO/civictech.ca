@@ -3,7 +3,12 @@
 {{- $tags := .Params.tags | default slice }}
 {{- $strip := `^\[\[|\]\]$` }}
 {{- $ld := dict "@context" "https://schema.org" "url" .Permalink }}
-{{- if in $tags "type/person" }}
+{{- if in $tags "type/project" }}
+  {{- $ld = merge $ld (dict "@type" "CreativeWork" "name" (partial "title.html" .)) }}
+  {{- with .Params.summary }}{{ $ld = merge $ld (dict "description" (. | plainify | replaceRE `\n` "")) }}{{ end }}
+  {{- with .Params.dateActiveFirst }}{{ $ld = merge $ld (dict "dateCreated" ((time.AsTime .).Format "2006-01-02")) }}{{ end }}
+  {{- with .Params.social }}{{ with .website }}{{ $ld = merge $ld (dict "mainEntityOfPage" .) }}{{ end }}{{ end }}
+{{- else if in $tags "type/person" }}
   {{- $ld = merge $ld (dict "@type" "Person" "name" (partial "title.html" .)) }}
   {{- with .Description }}{{ $ld = merge $ld (dict "description" (. | plainify | replaceRE `\n` "")) }}{{ end }}
   {{- with .Params.organization }}
@@ -25,6 +30,13 @@
   {{- end }}
   {{- with .Params.videoUrl }}{{ $ld = merge $ld (dict "video" (dict "@type" "VideoObject" "url" . "name" $.Title)) }}{{ end }}
   {{- $ld = merge $ld (dict "organizer" (dict "@type" "Organization" "name" "Civic Tech Toronto" "url" .Permalink)) }}
+{{- else if in $tags "type/organization" }}
+  {{- $ld = merge $ld (dict "@type" "Organization" "name" (partial "title.html" .)) }}
+  {{- with .Params.social }}{{ with .website }}{{ $ld = merge $ld (dict "sameAs" (slice .)) }}{{ end }}{{ end }}
+  {{- with .Params.parent_organization }}{{ $ld = merge $ld (dict "parentOrganization" (dict "@type" "Organization" "name" (replaceRE $strip "" (string .)))) }}{{ end }}
+{{- else if in $tags "type/venue" }}
+  {{- $ld = merge $ld (dict "@type" "Place" "name" (partial "title.html" .)) }}
+  {{- with .Params.address }}{{ $ld = merge $ld (dict "address" .) }}{{ end }}
 {{- else }}
   {{- $ld = merge $ld (dict "@type" "WebPage" "name" (.Title | default site.Title)) }}
 {{- end }}

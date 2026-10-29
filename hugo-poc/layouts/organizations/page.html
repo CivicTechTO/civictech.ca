@@ -1,0 +1,62 @@
+{{ define "main" }}
+  <nav aria-label="breadcrumb">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/organizations/">Organizations</a></li>
+      <li>{{ partial "title.html" . }}</li>
+    </ul>
+  </nav>
+
+  <article class="mobilenegativemargin">
+    <header>
+      <hgroup>
+        <h1>{{ partial "title.html" . }}</h1>
+        {{- with .Params.parent_organization }}
+        {{- /* Jekyll matches the parent by title, not by file name. */}}
+        {{- $name := replaceRE `^\[\[|\]\]$` "" (string .) }}
+        {{- $parent := false }}
+        {{- range where site.RegularPages "Section" "organizations" }}
+          {{- if eq (partial "title.html" .) $name }}{{ $parent = . }}{{ end }}
+        {{- end }}
+        <p class="parent-organization">
+          {{- with $parent }}
+            <a href="{{ .RelPermalink }}">{{ partial "title.html" . }}</a>
+          {{- else }}
+            {{ $name }}
+          {{- end }}
+        </p>
+        {{- end }}
+      </hgroup>
+    </header>
+
+    <section class="organization-details">
+      {{- /* Always shown: an empty content string is truthy in Liquid. */}}
+      <div class="organization-description">
+        {{ partial "content.html" . }}
+      </div>
+
+      {{- with .Params.social }}{{ with .website }}
+      <p>
+        <a href="{{ . }}" target="_blank" role="button">
+          Visit Website
+        </a>
+      </p>
+      {{- end }}{{ end }}
+
+      {{- with .Params.tags }}
+      <section class="organization-tags">
+        <h2>Tags</h2>
+        {{ partial "tag-badges.html" . }}
+      </section>
+      {{- end }}
+    </section>
+
+    {{ partial "social-links.html" . }}
+
+    <footer>
+      {{ partial "edit-link.html" . }}
+    </footer>
+  </article>
+
+  {{ partial "backlinks.html" (dict "page" . "sections" (slice "events" "projects" "people" "venues") "fields" (slice "organization" "team" "speakers" "venue" "parent_organization")) }}
+{{ end }}

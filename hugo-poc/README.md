@@ -1,9 +1,9 @@
 # Hugo proof of concept
 
-An exploration of moving civictech.ca from Jekyll to Hugo. It renders meetup
-pages, person pages, the meetup redirect stubs, and the tag and category pages
-that `make generate` produces for Jekyll. That keeps its build time
-comparable with Jekyll's for the same page set.
+An exploration of moving civictech.ca from Jekyll to Hugo. It renders a page
+for every record in all seven archive collections (meetups, people, projects,
+venues, organizations, announcements, resources), the redirect stubs, and the
+tag and category pages that `make generate` produces for Jekyll.
 
 Nothing in `archives/` is modified. Everything is mounted read-only from the
 submodule via `module.mounts` in `hugo.toml`.
@@ -56,13 +56,12 @@ Where the time goes:
 
 | Source | Mounted as | Rendered? |
 | --- | --- | --- |
-| `archives/_meetups` | `content/events` | yes, `/events/:file/` |
-| `archives/_people` | `content/people` | yes, `/people/:file/` |
-| `archives/_projects`, `_venues`, `_organizations`, `_announcements`, `_resources` | `content/…` | no (`build.render = "link"`). Read only so wikilinks, backlinks and tag pages resolve. |
+| `archives/_meetups` | `content/events` | `/events/:file/` |
+| `archives/_people`, `_projects`, `_venues`, `_organizations`, `_announcements`, `_resources` | `content/<collection>` | `/<collection>/:file/` |
 | `archives/images/events` | `assets/images/events` | processed by Hugo's image pipeline |
 | `_data/redirects.csv` | `assets/redirects.csv` | one redirect page per row |
-| `archives/_people` (again) | `assets/people-sources` | raw sources, read for `social` key order |
-| `_data`, `_includes/icons`, `_includes/logo.svg`, `assets/css`, `assets/js` | data / assets / static | shared with the Jekyll site |
+| `archives/_people`, `_projects`, `_organizations` (again) | `assets/sources/…` | raw sources, read for `social` key order |
+| `_data`, `_includes/icons`, `_includes/logo.svg`, `assets/css`, `assets/js`, `assets/images` | data / assets / static | shared with the Jekyll site |
 
 ## How the Jekyll behaviour maps
 
@@ -101,6 +100,13 @@ Where the time goes:
     off the index pages, as before.
   - category namespace pages show counts. Jekyll's template compared the bare
     value against namespaced categories and never found a match.
+- **Jekyll-only syntax in content.** Two announcements use Liquid
+  (`{% include embed_youtube.html … %}`, three times) and one uses a kramdown
+  link attribute (`{:target="_blank"}`). Goldmark would print these as text.
+  `_partials/content.html` translates exactly these constructs and re-renders
+  those pages only; any other `{%`/`{:` in a body is reported with `warnf`.
+  Raw HTML passes through (`unsafe = true`), as with kramdown. Content images
+  get `loading="lazy"` from a render hook, as jekyll-loading-lazy did.
 - **Images.** `_partials/picture.html` mirrors the jekyll_picture_tag
   `events` preset: a 690px WebP in `srcset` plus an 800px JPEG/PNG fallback.
   Derivatives are cached in `resources/_gen`. That is the counterpart of
@@ -133,9 +139,11 @@ all 567 meetups and 613 people). What remains is listed here.
   category URLs as Jekyll had them. Hugo can't lowercase terms but not
   content. Meetup URLs are unchanged. Old URLs are forwarded; see "Legacy
   URLs" above.
-- **Markdown renderer.** Goldmark and kramdown differ in a handful of meetup
-  bodies. kramdown accepts pipe tables without a separator row, and its smart
-  quotes differ in about 6 places.
+- **Markdown renderer.** Goldmark and kramdown differ in a handful of bodies.
+  kramdown accepts pipe tables without a separator row. That turned two 2016
+  announcements' bold "date | time | place" lines into broken tables with
+  literal `**`; Goldmark renders them as intended. Smart quotes differ in
+  about 10 places, and footnote back-links use `↩︎` rather than `↩`.
 - **Undated documents** (most projects, resources, venues) show no date in
   backlinks and tag/category lists, and sort last. Jekyll gives them the build
   date (a quirk of `Document#date`), which also sorts them first.
@@ -168,6 +176,13 @@ would remove the workarounds.
   every image added about 1.2s of CPU to each cached build.
 - `_people/Maayan Ziv.md` has an unquoted `organization: [[AccessNow]]`, which
   YAML reads as a nested list. Jekyll never resolves it; the POC flattens it.
+- `_projects/Tabs Toronto.md` sets `image:` to a jekyll_picture_tag
+  derivative (`/assets/thumbs/events/hacknight_341-690-96ae99ad0.webp`), a
+  hashed filename that only Jekyll produces. It's a broken image in Hugo; it
+  should name the source image instead.
+- `_projects/TPL Digital Innovation Hub booking app.md` has a Markdown link
+  as a `social` value. Jekyll emits it verbatim as an `href` (a broken link);
+  Hugo's URL escaping turns it into `#ZgotmplZ`.
 - `aliases:` in person files holds alternate names (Obsidian). In Hugo that
   key means redirect URLs, so `disableAliases = true`.
 - YAML maps lose their key order in Hugo, so footer and person social links are

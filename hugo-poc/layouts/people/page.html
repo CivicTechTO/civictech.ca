@@ -24,7 +24,7 @@
       {{- with .Description }}
         {{ $.RenderString (dict "display" "block") . }}
       {{- end }}
-      <div>{{ .Content }}</div>
+      <div>{{ partial "content.html" . }}</div>
     </section>
 
     {{- with partial "wikilinks.html" (dict "links" .Params.organization "section" "organizations") }}

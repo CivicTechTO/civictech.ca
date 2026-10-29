@@ -1,0 +1,15 @@
+{{- /* Badges for the categories in the given namespaces, like Jekyll's
+  _includes/namespaced-categories.html. Takes dict "categories" (string or
+  list) and "namespaces" (list). */ -}}
+{{- with .categories }}
+  {{- range (cond (reflect.IsSlice .) . (slice .)) }}
+    {{- $parts := split . "/" }}
+    {{- if and (gt (len $parts) 1) (in $.namespaces (index $parts 0)) }}
+      {{- $ns := index $parts 0 }}
+      {{- $cat := index $parts 1 }}
+        <a class="badge badge-{{ $ns }}" href="/categories/{{ $ns }}/{{ $cat | lower | replaceRE `[ _/]` "-" }}/">
+          {{ $ns }}:{{ $cat }}
+        </a>
+    {{- end }}
+  {{- end }}
+{{- end }}

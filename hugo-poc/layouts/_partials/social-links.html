@@ -2,7 +2,7 @@
   is recovered from the raw source file to keep Jekyll's ordering. */ -}}
 {{- $social := .Params.social }}
 {{- $keys := slice }}
-{{- with resources.Get (printf "people-sources/%s" .File.LogicalName) }}
+{{- with resources.Get (printf "sources/%s/%s" .Section .File.LogicalName) }}
   {{- with findRESubmatch `(?m)^social:\n((?:[ \t]+.*\n?)+)` .Content 1 }}
     {{- range findRESubmatch `(?m)^[ \t]+([A-Za-z0-9_-]+):` (index . 0 1) }}{{ $keys = $keys | append (index . 1) }}{{ end }}
   {{- end }}

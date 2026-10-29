@@ -11,7 +11,7 @@
     {{- range $.fields }}
       {{- with index $page.Params . }}
         {{- range (cond (reflect.IsSlice .) . (slice .)) }}
-          {{- $targets = $targets | append (findRE `\[\[[^\]]+\]\]` (string .)) }}
+          {{- $targets = $targets | append (findRE `\[\[[^\]]+\]\]` (printf "%v" .)) }}
         {{- end }}
       {{- end }}
     {{- end }}

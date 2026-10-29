@@ -1,0 +1,28 @@
+{{ define "main" }}
+  <nav aria-label="breadcrumb">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/announcements">Announcements</a></li>
+      <li>{{ partial "title.html" . }}</li>
+    </ul>
+  </nav>
+  <article class="mobilenegativemargin">
+    <header>
+      <h1>{{ partial "title.html" . }}</h1>
+      {{- if not .Date.IsZero }}
+      <p>Date: {{ .Date.Format "January 02, 2006" }}
+        {{- with .Params.author }}
+         | Author:
+        {{ replaceRE `^\[\[|\]\]$` "" (string .) }}
+        {{- end }}
+      </p>
+      {{- end }}
+    </header>
+    <section class="announcement-body">
+      {{ partial "content.html" . }}
+    </section>
+    <footer>
+      {{ partial "edit-link.html" . }}
+    </footer>
+  </article>
+{{ end }}

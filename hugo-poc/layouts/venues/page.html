@@ -1,0 +1,56 @@
+{{ define "main" }}
+  <nav aria-label="breadcrumb">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/venues/">Venues</a></li>
+      <li>{{ partial "title.html" . }}</li>
+    </ul>
+  </nav>
+
+  <article class="mobilenegativemargin">
+    <header>
+      <hgroup>
+        <h1>{{ partial "title.html" . }}</h1>
+      </hgroup>
+    </header>
+
+    <div class="venue-details">
+      {{- with .Params.address }}
+        <p><strong>Address:</strong> {{ . }}</p>
+      {{- end }}
+
+      {{- with .Params.status }}
+        <p><strong>Status:</strong> {{ . }}</p>
+      {{- end }}
+
+      {{- with partial "wikilinks.html" (dict "links" .Params.organization "section" "organizations") }}
+      <section class="venue-organizations">
+        <h2>Affiliated Organizations</h2>
+        <ul>
+          {{- range . }}
+          <li><a href="{{ .RelPermalink }}">{{ partial "title.html" . }}</a></li>
+          {{- end }}
+        </ul>
+      </section>
+      {{- end }}
+
+      {{- with .Params.tags }}
+      <section class="venue-tags">
+        <h2>Tags</h2>
+        {{ partial "tag-badges.html" . }}
+      </section>
+      {{- end }}
+    </div>
+
+    {{- /* Always shown: an empty content string is truthy in Liquid. */}}
+    <section class="venue-description">
+      <h2>Description</h2>
+      <div>{{ partial "content.html" . }}</div>
+    </section>
+    <footer>
+      {{ partial "edit-link.html" . }}
+    </footer>
+  </article>
+
+  {{ partial "backlinks.html" (dict "page" . "sections" (slice "events") "fields" (slice "venue") "title" "Meetups Held Here") }}
+{{ end }}

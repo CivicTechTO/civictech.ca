@@ -1,4 +1,4 @@
-{{- $dirs := dict "events" "_meetups" "people" "_people" }}
+{{- $dirs := dict "events" "_meetups" "people" "_people" "projects" "_projects" "venues" "_venues" "organizations" "_organizations" "announcements" "_announcements" "resources" "_resources" }}
 {{- with .File }}
 {{- $path := printf "%s/%s" (index $dirs $.Section) .LogicalName }}
 {{- $base := site.Params.editBase }}

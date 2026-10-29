@@ -1,0 +1,13 @@
+{{- /* All namespaced tags as badges linking to /tags/<namespace>/<slug>/,
+  like Jekyll's _includes/tags.html. */ -}}
+{{- with . }}
+<div class="tag-badges">
+  {{- range (cond (reflect.IsSlice .) . (slice .)) }}
+    {{- $parts := split . "/" }}
+    {{- $tag := index $parts (sub (len $parts) 1) }}
+    <a class="badge badge-{{ index $parts 0 }}" href="/tags/{{ index $parts 0 }}/{{ $tag | lower | replaceRE `[ _/]` "-" }}/">
+      {{ $tag | replaceRE "-" " " | lower | strings.FirstUpper }}
+    </a>
+  {{- end }}
+</div>
+{{- end }}

@@ -10,9 +10,9 @@ buildFuture = true
 # Some person files carry Obsidian `aliases` (alternate names, not URLs),
 # which Jekyll ignores.
 disableAliases = true
-# Rendered: meetup and person pages, their redirects, and the tag and
-# category pages that `make generate` produces for Jekyll. The home page is
-# kept only for the _redirects output below.
+# Rendered: every collection's pages, the redirects, and the tag and category
+# pages that `make generate` produces for Jekyll. The home page is kept only
+# for the _redirects output below.
 disableKinds = ["section", "rss", "sitemap", "robotstxt"]
 
 [taxonomies]
@@ -57,14 +57,6 @@ venues = "/venues/:contentbasename/"
 organizations = "/organizations/:contentbasename/"
 announcements = "/announcements/:contentbasename/"
 resources = "/resources/:contentbasename/"
-
-# These collections are only read, so wikilinks, backlinks and tag pages
-# resolve the way they do in Jekyll. They are not rendered.
-[[cascade]]
-  [cascade.build]
-    render = "link"
-  [cascade.target]
-    path = "{/projects/**,/venues/**,/organizations/**,/announcements/**,/resources/**}"
 
 [imaging]
 jpeg.quality = 75
@@ -123,15 +115,28 @@ target = "static/assets/css"
 source = "../assets/js"
 target = "static/assets/js"
 [[module.mounts]]
+source = "../assets/images"
+target = "static/assets/images"
+[[module.mounts]]
 source = "layouts"
 target = "layouts"
 [[module.mounts]]
 source = "../_data/footer_social.yml"
 target = "assets/data-raw/footer_social.yml"
+# Raw sources, read for the front matter order of `social` maps.
 [[module.mounts]]
 source = "../archives/_people"
-target = "assets/people-sources"
+target = "assets/sources/people"
+[[module.mounts]]
+source = "../archives/_projects"
+target = "assets/sources/projects"
+files = ["! Weather Report Card.md"]
+[[module.mounts]]
+source = "../archives/_organizations"
+target = "assets/sources/organizations"
 
-# kramdown (Jekyll) leaves bare URLs as text.
+# kramdown (Jekyll) leaves bare URLs as text and passes raw HTML through.
 [markup.goldmark.extensions]
 linkify = false
+[markup.goldmark.renderer]
+unsafe = true

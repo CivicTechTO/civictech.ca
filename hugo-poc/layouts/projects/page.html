@@ -1,0 +1,93 @@
+{{ define "main" }}
+{{- $meetups := (partial "wikilinks.html" (dict "links" .Params.meetups "section" "events")) }}
+{{- $meetups = sort $meetups "Date" "desc" }}
+{{- $people := partial "wikilinks.html" (dict "links" .Params.team "section" "people") }}
+
+  <nav aria-label="breadcrumb">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/projects">Projects</a></li>
+      <li>{{ partial "title.html" . }}</li>
+    </ul>
+  </nav>
+
+  <article class="mobilenegativemargin">
+    <header>
+      <hgroup>
+        <h1>{{ partial "title.html" . }}</h1>
+        {{- with .Params.summary }}
+          <p>{{ . }}</p>
+        {{- end }}
+      </hgroup>
+    </header>
+    <div class="main-with-sidebar">
+      <div class="main-content">
+        <section class="project-description">
+          {{ partial "content.html" . }}
+        </section>
+      </div>
+      <aside>
+        {{- with .Params.image }}
+        <img class="ogimage" src="{{ . }}" alt="">
+        {{- end }}
+        <h2>Project Information</h2>
+        <dl>
+          <dt>Categories</dt>
+          <dd>{{ partial "namespaced-categories.html" (dict "categories" .Params.categories "namespaces" (slice "contributors" "status")) }}</dd>
+        </dl>
+        <dl>
+          <dt>Tags</dt>
+          <dd>{{ partial "tag-badges.html" .Params.tags }}</dd>
+        </dl>
+        <dl>
+          <dt>Since</dt>
+          <dd>{{ with .Params.dateActiveFirst }}{{ (time.AsTime .).Format "January 02, 2006" }}{{ end }}</dd>
+        </dl>
+
+        {{ partial "social-links.html" . }}
+      </aside>
+    </div>
+    <footer>
+      {{ partial "edit-link.html" . }}
+    </footer>
+  </article>
+
+  {{- if or $people $meetups }}
+  <section class="related-articles">
+    {{- with $people }}
+    <section>
+      <h3>Related People</h3>
+      <article>
+        <ul>
+          {{- range . }}
+            <li>
+              <a href="{{ .RelPermalink }}">{{ partial "title.html" . }}</a>
+            </li>
+          {{- end }}
+        </ul>
+      </article>
+    </section>
+    {{- end }}
+
+    {{- with $meetups }}
+    <section>
+      <h3>Related Meetups</h3>
+      {{- range . }}
+      <article>
+        <hgroup>
+          <small>
+            {{ .Date.Format "January 02, 2006" }} - Meetup #{{ .Params.number }}
+          </small>
+          <h4>
+            <a href="{{ .RelPermalink }}">
+              {{ .Params.topic }}
+            </a>
+          </h4>
+        </hgroup>
+      </article>
+      {{- end }}
+    </section>
+    {{- end }}
+  </section>
+  {{- end }}
+{{ end }}

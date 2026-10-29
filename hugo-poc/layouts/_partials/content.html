@@ -1,0 +1,17 @@
+{{- /* A page's rendered content. A few archive bodies use Jekyll-only syntax
+  (Liquid includes, kramdown link attributes) that Goldmark would print as
+  text; those pages are translated and re-rendered. Anything else of that
+  shape is reported so it doesn't slip through. */ -}}
+{{- if findRE `\{%|\{:` .RawContent 1 }}
+  {{- $raw := .RawContent }}
+  {{- range findRESubmatch `\{%\s*include embed_youtube\.html youtubeID="([^"]+)"\s*%\}` $raw }}
+    {{- $raw = replace $raw (index . 0) (partial "embed-youtube.html" (dict "id" (index . 1)) | string) }}
+  {{- end }}
+  {{- $raw = replaceRE `\[([^\]]+)\]\(([^)\s]+)\)\{:target="_blank"\}` `<a href="$2" target="_blank">$1</a>` $raw }}
+  {{- with findRE `\{%[^%]*%\}|\{:[^}]*\}` $raw }}
+    {{- warnf "%s: untranslated Jekyll syntax %v" $.File.Path . }}
+  {{- end }}
+  {{- .RenderString (dict "display" "block") $raw }}
+{{- else }}
+  {{- .Content }}
+{{- end }}

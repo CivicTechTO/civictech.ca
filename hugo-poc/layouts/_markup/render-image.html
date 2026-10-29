@@ -1,0 +1,3 @@
+{{- /* jekyll-loading-lazy adds loading="lazy" to every content image. */ -}}
+<img src="{{ .Destination | safeURL }}" alt="{{ .PlainText }}"{{ with .Title }} title="{{ . }}"{{ end }} loading="lazy">
+{{- /**/ -}}
