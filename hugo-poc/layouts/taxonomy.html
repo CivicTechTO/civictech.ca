@@ -1,0 +1,47 @@
+{{ define "main" }}
+  {{- $singular := cond (eq .Data.Plural "tags") "Tags" "Categories" }}
+  <nav aria-label="breadcrumb">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li>{{ $singular }}</li>
+    </ul>
+  </nav>
+
+  <article class="mobilenegativemargin">
+    <header>
+      <hgroup>
+        <h1>{{ $singular }}</h1>
+      </hgroup>
+    </header>
+
+    <section class="page-content">
+      <header>
+        {{- if eq .Data.Plural "tags" }}
+        <h1>All Tags</h1>
+        <p>Browse all tags by namespace.</p>
+        {{- else }}
+        <h2>All Categories</h2>
+        <p>Browse all categories by namespace.</p>
+        {{- end }}
+      </header>
+
+      {{- $taxonomy := .Data.Plural }}
+      <section class="all-{{ $taxonomy }}">
+        {{- range partialCached "namespaces.html" $taxonomy $taxonomy }}
+        <section class="namespace-{{ $taxonomy }}">
+          <h2>{{ strings.FirstUpper .namespace }}</h2>
+          {{- with .terms }}
+          <ul>
+            {{- range . }}
+              <li><a href="{{ (site.GetPage (printf "/%s/%s" $taxonomy .)).RelPermalink }}">{{ partial "term-label.html" . }}</a></li>
+            {{- end }}
+          </ul>
+          {{- else }}
+          <p><small>No {{ $taxonomy }} found.</small></p>
+          {{- end }}
+        </section>
+        {{- end }}
+      </section>
+    </section>
+  </article>
+{{ end }}

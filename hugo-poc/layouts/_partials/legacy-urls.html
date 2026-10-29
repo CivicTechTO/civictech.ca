@@ -3,7 +3,7 @@
   Hugo sanitizes it to "/people/Lilly-Tong/". Meetup URLs don't change.
   Paths are returned decoded. */ -}}
 {{- $redirects := slice }}
-{{- range slice "people" "venues" "projects" "organizations" }}
+{{- range slice "people" "venues" "projects" "organizations" "announcements" "resources" }}
   {{- range where site.RegularPages "Section" . }}
     {{- $old := printf "/%s/%s/" .Section (replaceRE `\.+$` "" .File.ContentBaseName) }}
     {{- if ne $old .RelPermalink }}

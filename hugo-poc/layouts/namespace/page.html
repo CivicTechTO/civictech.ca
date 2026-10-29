@@ -1,0 +1,43 @@
+{{ define "main" }}
+  {{- $taxonomy := .Params.taxonomy }}
+  {{- $namespace := .Params.namespace }}
+  {{- $kind := cond (eq $taxonomy "tags") "Tags" "Categories" }}
+  <nav aria-label="breadcrumb">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/{{ $taxonomy }}/">{{ $kind }}</a></li>
+      <li>{{ strings.FirstUpper $namespace }}</li>
+    </ul>
+  </nav>
+
+  <article class="mobilenegativemargin">
+    <header>
+      <hgroup>
+        <h1>{{ strings.FirstUpper $namespace }} {{ $kind }}</h1>
+        <p>Browse all {{ lower $kind }} under the "{{ $namespace }}" {{ cond (eq $taxonomy "tags") "category" "namespace" }}.</p>
+      </hgroup>
+    </header>
+
+    <section class="namespace-{{ $taxonomy }}">
+      {{- $terms := slice }}
+      {{- range partialCached "namespaces.html" $taxonomy $taxonomy }}
+        {{- if eq .namespace $namespace }}{{ $terms = .terms }}{{ end }}
+      {{- end }}
+      {{- with $terms }}
+      <ul>
+        {{- range . }}
+          {{- $pages := index (index site.Taxonomies $taxonomy) . }}
+          <li>
+            <a href="{{ (site.GetPage (printf "/%s/%s" $taxonomy .)).RelPermalink }}">{{ partial "term-label.html" . }}</a>
+            {{- with len $pages }}
+              <small>({{ . }})</small>
+            {{- end }}
+          </li>
+        {{- end }}
+      </ul>
+      {{- else }}
+        <p>No {{ lower $kind }} found under this namespace.</p>
+      {{- end }}
+    </section>
+  </article>
+{{ end }}

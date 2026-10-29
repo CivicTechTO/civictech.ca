@@ -11,3 +11,18 @@
     "sitemap" (dict "disable" true)
   ) }}
 {{- end }}
+
+{{- /* One index page per tag and category namespace (/tags/topic/), which
+  `make generate` wrote as files for Jekyll. */ -}}
+{{- range $taxonomy, $namespaces := site.Params.namespaces }}
+  {{- range $namespaces }}
+    {{- $kind := cond (eq $taxonomy "tags") "Tags" "Categories" }}
+    {{- $.AddPage (dict
+      "path" (printf "%s/%s" $taxonomy .)
+      "kind" "page"
+      "type" "namespace"
+      "title" (printf "%s %s" . $kind)
+      "params" (dict "taxonomy" $taxonomy "namespace" .)
+    ) }}
+  {{- end }}
+{{- end }}

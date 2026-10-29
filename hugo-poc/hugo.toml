@@ -7,14 +7,17 @@ timeZone = "America/Toronto"
 # Jekyll builds with `future: true`; some organizations carry future dates.
 buildFuture = true
 
-disablePathToLower = true
 # Some person files carry Obsidian `aliases` (alternate names, not URLs),
 # which Jekyll ignores.
 disableAliases = true
-# Only meetup pages, person pages and their redirects are rendered, so the
-# page set matches the Jekyll subset build used for timing comparison. The
-# home page is kept only for the _redirects output below.
-disableKinds = ["section", "taxonomy", "term", "rss", "sitemap", "robotstxt"]
+# Rendered: meetup and person pages, their redirects, and the tag and
+# category pages that `make generate` produces for Jekyll. The home page is
+# kept only for the _redirects output below.
+disableKinds = ["section", "rss", "sitemap", "robotstxt"]
+
+[taxonomies]
+tag = "tags"
+category = "categories"
 
 [outputs]
 home = ["redirects"]
@@ -38,20 +41,30 @@ description = "Civic Tech Toronto is a vibrant and diverse community of Toronton
 editBase = "https://github.com/CivicTechTO/archives"
 editBranch = "main"
 
+# Tags and categories are namespaced ("topic/open-data"), and each namespace
+# gets an index page at /tags/<namespace>/. Jekyll derived these lists with
+# shell scripts; here they are explicit, and the build fails on a namespace
+# that isn't listed (see _partials/namespaces.html).
+[params.namespaces]
+tags = ["topic", "type"]
+categories = ["contributors", "format", "meta", "role", "status", "venue-category"]
+
 [permalinks.page]
 events = "/events/:contentbasename/"
 people = "/people/:contentbasename/"
 projects = "/projects/:contentbasename/"
 venues = "/venues/:contentbasename/"
 organizations = "/organizations/:contentbasename/"
+announcements = "/announcements/:contentbasename/"
+resources = "/resources/:contentbasename/"
 
-# Projects, venues and organizations are only read so wikilinks and backlinks
-# resolve the way they do in Jekyll; they are not rendered.
+# These collections are only read, so wikilinks, backlinks and tag pages
+# resolve the way they do in Jekyll. They are not rendered.
 [[cascade]]
   [cascade.build]
     render = "link"
   [cascade.target]
-    path = "{/projects/**,/venues/**,/organizations/**}"
+    path = "{/projects/**,/venues/**,/organizations/**,/announcements/**,/resources/**}"
 
 [imaging]
 jpeg.quality = 75
@@ -77,6 +90,12 @@ target = "content/venues"
 [[module.mounts]]
 source = "../archives/_organizations"
 target = "content/organizations"
+[[module.mounts]]
+source = "../archives/_announcements"
+target = "content/announcements"
+[[module.mounts]]
+source = "../archives/_resources"
+target = "content/resources"
 [[module.mounts]]
 source = "content"
 target = "content"

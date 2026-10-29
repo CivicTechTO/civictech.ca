@@ -1,0 +1,60 @@
+{{ define "main" }}
+  {{- $taxonomy := .Data.Plural }}
+  {{- $term := .Data.Term }}
+  {{- /* A few categories (e.g. "supporter") have no namespace; Jekyll's
+    generate scripts dropped them, so they get no namespace level here. */}}
+  {{- $namespace := cond (in $term "/") (index (split $term "/") 0) "" }}
+  {{- $label := partial "term-label.html" $term }}
+  <nav aria-label="breadcrumb">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/{{ $taxonomy }}/">{{ cond (eq $taxonomy "tags") "Tags" "Categories" }}</a></li>
+      {{- with $namespace }}
+      <li><a href="/{{ $taxonomy }}/{{ . }}/">{{ strings.FirstUpper . }}</a></li>
+      {{- end }}
+      <li>{{ $label }}</li>
+    </ul>
+  </nav>
+
+  <article class="mobilenegativemargin">
+    <header>
+      <hgroup>
+        <h1>{{ $label }}</h1>
+        {{- with $namespace }}
+        <p>{{ strings.FirstUpper . }}</p>
+        {{- end }}
+      </hgroup>
+    </header>
+
+    <section>
+      <h2>{{ cond (eq $taxonomy "tags") "Content tagged" "Content in" }} "{{ $term }}"</h2>
+
+      {{- /* Collections in Jekyll's _config.yml order, labelled as Jekyll does. */}}
+      {{- $collections := slice
+        (slice "announcements" "Announcements")
+        (slice "events" "Meetups")
+        (slice "organizations" "Organizations")
+        (slice "people" "People")
+        (slice "projects" "Projects")
+        (slice "resources" "Resources")
+        (slice "venues" "Venues") }}
+      {{- range $collection := $collections }}
+        {{- with where $.Pages "Section" (index $collection 0) }}
+        <section class="{{ cond (eq $taxonomy "tags") "tag" "category" }}-collection">
+          <h3>{{ index $collection 1 }}</h3>
+          <ul>
+            {{- range .ByDate.Reverse }}
+              <li>
+                <a href="{{ .RelPermalink }}">{{ partial "title.html" . }}</a>
+                {{- if not .Date.IsZero }}
+                  <small>({{ .Date.Format "2006-01-02" }})</small>
+                {{- end }}
+              </li>
+            {{- end }}
+          </ul>
+        </section>
+        {{- end }}
+      {{- end }}
+    </section>
+  </article>
+{{ end }}

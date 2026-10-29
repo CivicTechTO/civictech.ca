@@ -1,0 +1,4 @@
+{{- /* "topic/open-data" → "Open-data", like Liquid's `capitalize` on the
+  part after the namespace. */ -}}
+{{- $value := index (split . "/") (sub (len (split . "/")) 1) }}
+{{- return (lower $value | strings.FirstUpper) }}

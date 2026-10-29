@@ -1,0 +1,24 @@
+{{- /* Groups a taxonomy's terms by namespace. Takes the taxonomy name
+  ("tags" or "categories") and returns an ordered list of
+  dict "namespace" "terms" (sorted term keys). Terms without a namespace
+  are skipped, as Jekyll's generate scripts skip them. A namespace missing
+  from params.namespaces stops the build, so it can't silently lose its
+  index page. */ -}}
+{{- $taxonomy := . }}
+{{- $configured := index site.Params.namespaces $taxonomy }}
+{{- $byNamespace := newScratch }}
+{{- range $term, $_ := index site.Taxonomies $taxonomy }}
+  {{- $parts := split $term "/" }}
+  {{- if gt (len $parts) 1 }}
+    {{- $ns := index $parts 0 }}
+    {{- if not (in $configured $ns) }}
+      {{- errorf "%s namespace %q (from %q) is not in params.namespaces.%s in hugo.toml" $taxonomy $ns $term $taxonomy }}
+    {{- end }}
+    {{- $byNamespace.Add $ns (slice $term) }}
+  {{- end }}
+{{- end }}
+{{- $groups := slice }}
+{{- range $configured }}
+  {{- $groups = $groups | append (dict "namespace" . "terms" (sort ($byNamespace.Get . | default slice))) }}
+{{- end }}
+{{- return $groups }}

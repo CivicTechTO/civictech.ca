@@ -1,8 +1,9 @@
 # Hugo proof of concept
 
-An exploration of moving civictech.ca from Jekyll to Hugo. It renders only
-meetup pages, person pages and the meetup `redirect_from` stubs, so its build
-time can be compared against Jekyll for the same page set.
+An exploration of moving civictech.ca from Jekyll to Hugo. It renders meetup
+pages, person pages, the meetup redirect stubs, and the tag and category pages
+that `make generate` produces for Jekyll. That keeps its build time
+comparable with Jekyll's for the same page set.
 
 Nothing in `archives/` is modified. Everything is mounted read-only from the
 submodule via `module.mounts` in `hugo.toml`.
@@ -17,32 +18,39 @@ Requires Hugo extended ≥ 0.153 (tested with 0.169.0).
 
 ## Build time (measured 2026-10-29, Apple Silicon, Ruby 3.2.2, Hugo 0.169.0)
 
-The same page set was built both ways: 567 meetups, 613 people and 1,017
-redirects, with 856 image derivatives. The Jekyll run used `_config.yml` plus
-an override that excludes `_pages`, `tags`, `categories` and the feed. Its
-projects, venues and organizations are read but not output. Wall-clock
-seconds:
+Both builds produce the same page set: 567 meetups, 613 people, 1,017
+redirects, and the tag and category index, namespace and term pages (Jekyll
+2,350 pages; Hugo 2,357, the extra being the 404 page and term pages the
+generate scripts missed). Each makes 856 image derivatives. The Jekyll run is
+`make generate` followed by `jekyll build` with `_config.yml` plus an override
+that excludes `_pages` and the feed. Its projects, venues, organizations,
+announcements and resources are read but not output. Wall-clock seconds:
 
-| | Jekyll (subset) | Hugo |
+| | Jekyll: `make generate` + build | Hugo |
 | --- | --- | --- |
-| clean (no image cache) | 72.7 / 71.4 | 15.1 / 14.3 / 16.3 |
-| cached (thumbs / `resources/_gen` kept) | 17.3 / 16.9 / 18.5 | 2.2 / 0.9 / 1.0 |
+| clean (no image cache) | 10.5 + 77.6 | 12.3 / 13.4 / 12.3 |
+| cached (thumbs / `resources/_gen` kept) | 7.6 + 21.3, 10.9 + 22.2, 7.5 + 20.3 | 0.9 / 0.7 / 0.7 |
 
-The full Jekyll site (all 2,742 pages) takes 95.6s clean and 30.8s cached,
-plus about 8–9s for `make generate`.
+Before tag pages were added, the meetup/person/redirect set alone took
+Jekyll 72.7 / 71.4s clean and 17.3 / 16.9 / 18.5s cached, and Hugo 15.1 /
+14.3 / 16.3s and 2.2 / 0.9 / 1.0s. Hugo got faster since then because it now
+reads only `.png` bytes when checking image formats. The full Jekyll site
+(all 2,742 pages) takes 95.6s clean and 30.8s cached, plus `make generate`.
 
 Where the time goes:
 
 - **Jekyll, clean.** About 55s goes to jekyll_picture_tag inside
-  `meetup.html`: 57.1s inclusive, against 1.9s once the images are cached.
+  `meetup.html`: 57.1s inclusive, against 1.9–2.4s once the images are cached.
   libvips runs serially.
-- **Jekyll, cached.** `backlinks.html` takes 10.9s of 13.9s render. It is an
+- **Jekyll, cached.** `backlinks.html` takes 11.3s of 16.3s render. It is an
   O(pages × collection) Liquid scan. On the full site, `organization.html`
-  and `person.html` push it to about 20s.
-- **Hugo, clean.** Image processing takes about 96s of CPU, spread across
-  cores in about 14s wall.
-- **Hugo, cached.** About 1s in total. The backlink index is built once, in
-  0.12s (`hugo --templateMetrics`).
+  and `person.html` push it to about 20s. The tag and category layouts add
+  about 1.2s. `make generate` adds 7.5–11s of shell and awk on every build.
+- **Hugo, clean.** Almost all of it is image processing, about 96s of CPU
+  spread across cores.
+- **Hugo, cached.** 0.65–0.9s in total (`hugo --templateMetrics`). The
+  backlink index is built once, and all 150 term pages take 0.27s of
+  template time.
 
 ## What's mounted
 
@@ -50,7 +58,7 @@ Where the time goes:
 | --- | --- | --- |
 | `archives/_meetups` | `content/events` | yes, `/events/:file/` |
 | `archives/_people` | `content/people` | yes, `/people/:file/` |
-| `archives/_projects`, `_venues`, `_organizations` | `content/…` | no (`build.render = "link"`). Read only so wikilinks and backlinks resolve. |
+| `archives/_projects`, `_venues`, `_organizations`, `_announcements`, `_resources` | `content/…` | no (`build.render = "link"`). Read only so wikilinks, backlinks and tag pages resolve. |
 | `archives/images/events` | `assets/images/events` | processed by Hugo's image pipeline |
 | `_data/redirects.csv` | `assets/redirects.csv` | one redirect page per row |
 | `archives/_people` (again) | `assets/people-sources` | raw sources, read for `social` key order |
@@ -75,6 +83,24 @@ Where the time goes:
   `redirect` page per row, with the same markup as jekyll-redirect-from. The
   export also fixed four 2021–2022 URLs listed on both meetup N and N+1:
   Jekyll sent them to N+1, and they now go to N, the meetup the slug names.
+- **Tags and categories.** These are Hugo taxonomies, so `make generate`
+  and its committed output (`_data/tags.yml`, `_data/categories.yml`,
+  `tags/`, `categories/`) aren't needed. Terms keep their namespace in the
+  URL (`/tags/topic/open-data/`). The namespace index pages (`/tags/topic/`)
+  are added by `content/_content.gotmpl` from `params.namespaces` in
+  `hugo.toml`. A term in an unlisted namespace stops the build
+  (`_partials/namespaces.html`) rather than silently losing its index page.
+  Compared with the shell scripts, Hugo reads the parsed front matter, so:
+  - scalar values such as `categories: venue-category/Academic` are counted.
+    The awk parser only read block lists, so Academic, Hospitality and Park
+    had no pages.
+  - `archives/utilities/examples/` is ignored. The scripts scanned it and
+    published an empty `topic/example` page.
+  - categories without a namespace (`supporter` on 34 organizations,
+    `civictech`, `closed`, `feature`, `school`) get term pages. They are left
+    off the index pages, as before.
+  - category namespace pages show counts. Jekyll's template compared the bare
+    value against namespaced categories and never found a match.
 - **Images.** `_partials/picture.html` mirrors the jekyll_picture_tag
   `events` preset: a 690px WebP in `srcset` plus an 800px JPEG/PNG fallback.
   Derivatives are cached in `resources/_gen`. That is the counterpart of
@@ -84,14 +110,14 @@ Where the time goes:
 
 Hugo can't write a file at a path containing a space, so it can't put
 redirect stubs at the old Jekyll URLs. Instead, `_partials/legacy-urls.html`
-derives an old→new map from the file names (830 entries; Jekyll used the
+derives an old→new map from the file names (889 entries; Jekyll used the
 name minus trailing dots). It's published two ways:
 
 - **`404.html`** carries the map and forwards with `location.replace`. That
   works on GitHub Pages, but only for browsers: crawlers see a 404. The page
-  is 72 KB, 23 KB gzipped. The current Jekyll site has no `404.html` at all.
+  is 75 KB, 25 KB gzipped. The current Jekyll site has no `404.html` at all.
 - **`_redirects`** is Netlify / Cloudflare Pages format: the CSV rows plus
-  the legacy map as real 301s, 1,847 rules in all. GitHub Pages ignores it.
+  the legacy map as real 301s, 1,906 rules in all. GitHub Pages ignores it.
   Cloudflare Pages caps static redirects at 2,000, so it is close to that
   limit.
 
@@ -100,15 +126,19 @@ name minus trailing dots). It's published two ways:
 Checked page by page against `_site/` (main-content text and link targets for
 all 567 meetups and 613 people). What remains is listed here.
 
-- **Person/venue/project/organization URLs change.** Hugo sanitizes paths:
-  spaces become `-`, and `()`, `,`, `'`, `+`, `&` are dropped, so
-  `/people/Lilly Tong/` becomes `/people/Lilly-Tong/`. Meetup URLs are
-  unchanged. Old URLs are forwarded; see "Legacy URLs" below.
+- **Person/venue/project/organization/announcement/resource URLs change.**
+  Hugo lowercases paths and sanitizes them: spaces become `-`, and `()`,
+  `,`, `'`, `+`, `&` are dropped. So `/people/Lilly Tong/` becomes
+  `/people/lilly-tong/`. Lowercasing (no `disablePathToLower`) keeps tag and
+  category URLs as Jekyll had them. Hugo can't lowercase terms but not
+  content. Meetup URLs are unchanged. Old URLs are forwarded; see "Legacy
+  URLs" above.
 - **Markdown renderer.** Goldmark and kramdown differ in a handful of meetup
   bodies. kramdown accepts pipe tables without a separator row, and its smart
   quotes differ in about 6 places.
-- **Dateless projects** in backlinks show no date. Jekyll shows the build date
-  there, a quirk of `Document#date`.
+- **Undated documents** (most projects, resources, venues) show no date in
+  backlinks and tag/category lists, and sort last. Jekyll gives them the build
+  date (a quirk of `Document#date`), which also sorts them first.
 - **Empty `title:`.** Hugo falls back to the file name ("Ghazaleh Mohseni",
   "ASL19"). Jekyll titleizes the slug ("Ghazaleh mohseni", "Asl19").
 - **Image `alt` and `sizes`.** Jekyll's meetup layout passes `event.topic`,
