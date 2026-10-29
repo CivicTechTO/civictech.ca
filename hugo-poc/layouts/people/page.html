@@ -1,0 +1,60 @@
+{{ define "main" }}
+  <nav aria-label="breadcrumb">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/people">People</a></li>
+      <li>{{ partial "title.html" . }}</li>
+    </ul>
+  </nav>
+
+  <article class="mobilenegativemargin">
+    <header>
+      <hgroup>
+        <h1>{{ partial "title.html" . }}</h1>
+        {{- with .Params.summary }}
+          <p>{{ . }}</p>
+        {{- end }}
+      </hgroup>
+    </header>
+
+    {{- /* Always shown: Jekyll tests `page.description or page.content`, and an
+      empty content string is truthy in Liquid. */}}
+    <section class="person-description">
+      <h2>Description</h2>
+      {{- with .Description }}
+        {{ $.RenderString (dict "display" "block") . }}
+      {{- end }}
+      <div>{{ .Content }}</div>
+    </section>
+
+    {{- with partial "wikilinks.html" (dict "links" .Params.organization "section" "organizations") }}
+    <section class="person-organizations">
+      <h2>Affiliated Organizations</h2>
+      <ul>
+        {{- range . }}
+          <li><a href="{{ .RelPermalink }}">{{ partial "title.html" . }}</a></li>
+        {{- end }}
+      </ul>
+    </section>
+    {{- end }}
+
+    {{- with partial "wikilinks.html" (dict "links" .Params.project "section" "projects") }}
+    <section class="person-projects">
+      <h2>Projects</h2>
+      <ul>
+        {{- range . }}
+          <li><a href="{{ .RelPermalink }}">{{ partial "title.html" . }}</a></li>
+        {{- end }}
+      </ul>
+    </section>
+    {{- end }}
+
+    {{ partial "social-links.html" . }}
+
+    <footer>
+      {{ partial "edit-link.html" . }}
+    </footer>
+  </article>
+
+  {{ partial "backlinks.html" (dict "page" . "sections" (slice "events" "projects") "fields" (slice "team" "speakers")) }}
+{{ end }}

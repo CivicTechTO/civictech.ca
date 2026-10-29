@@ -1,0 +1,29 @@
+{{- /* Hugo maps iterate in key order, so the front matter order of `social`
+  is recovered from the raw source file to keep Jekyll's ordering. */ -}}
+{{- $social := .Params.social }}
+{{- $keys := slice }}
+{{- with resources.Get (printf "people-sources/%s" .File.LogicalName) }}
+  {{- with findRESubmatch `(?m)^social:\n((?:[ \t]+.*\n?)+)` .Content 1 }}
+    {{- range findRESubmatch `(?m)^[ \t]+([A-Za-z0-9_-]+):` (index . 0 1) }}{{ $keys = $keys | append (index . 1) }}{{ end }}
+  {{- end }}
+{{- end }}
+{{- with $social }}
+<section class="social-links">
+  <h3>Links</h3>
+  <div class="social-button-group">
+    {{- range $platform := $keys }}
+      {{- $url := index $social $platform }}
+      {{- with index hugo.Data.social_links $platform }}
+        <a href="{{ $url }}" target="_blank" rel="noopener" class="social-button">
+          {{- if .icon }}
+            <span class="iconstyle">{{ partial "icon.html" .icon }}</span>
+          {{- else if .emoji }}
+            <span class="iconstyle">{{ .emoji }}</span>
+          {{- end }}
+          <span>{{ .label | default $platform }}</span>
+        </a>
+      {{- end }}
+    {{- end }}
+  </div>
+</section>
+{{- end }}

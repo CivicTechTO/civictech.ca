@@ -1,0 +1,81 @@
+{{ define "main" }}
+{{- $speakers := partial "wikilinks.html" (dict "links" .Params.speakers "section" "people") }}
+{{- $venues := partial "wikilinks.html" (dict "links" .Params.venue "section" "venues") }}
+
+  <nav aria-label="breadcrumb">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/events/">Meetups</a></li>
+      <li>Meetup #{{ .Params.number }}</li>
+    </ul>
+  </nav>
+
+  <article class="mobilenegativemargin">
+    <header>
+      <hgroup>
+        <p><small>Meetup #{{ .Params.number }}</small></p>
+        <h1>{{ .Params.topic }}</h1>
+        {{- with $speakers }}
+        {{- $names := slice }}{{ range . }}{{ $names = $names | append (partial "title.html" .) }}{{ end }}
+        <p>with
+          {{ delimit $names ", " (cond (gt (len $names) 2) ", and " " and ") }}
+        </p>
+        {{- end }}
+      </hgroup>
+    </header>
+
+    <div class="main-with-sidebar">
+      <div class="main-content">
+        {{- with .Params.youtubeID }}
+          <section>
+            <h2>Recording</h2>
+            {{ partial "embed-youtube.html" (dict "id" . "title" $.Params.topic) }}
+          </section>
+        {{- end }}
+
+        {{- with .Description }}
+          {{ $.RenderString (dict "display" "block") . }}
+        {{- end }}
+
+        {{- with $speakers }}
+          <section>
+            <h2>Speakers</h2>
+            {{- range . }}
+              <a href="{{ .RelPermalink }}">{{ partial "title.html" . }}</a>
+              {{ with .Description }}{{ $.RenderString (dict "display" "block") . }}{{ end }}
+            {{- end }}
+          </section>
+        {{- end }}
+
+        {{ .Content }}
+      </div>
+
+      <aside>
+        {{- with .Params.image }}
+          {{ partial "picture.html" (dict "src" . "alt" $.Params.topic "class" "meetup-image") }}
+        {{- end }}
+        <h2>Details</h2>
+        {{- with .Params.eventUrl }}
+          {{- if $.Date.Before now }}
+            <p><a href="{{ . }}" target="_blank" rel="noopener">Event Page</a></p>
+          {{- else }}
+            <p><a role="button" class="outline" href="{{ . }}" target="_blank" rel="noopener">Registration<span aria-hidden="true">&nbsp;↗</span></a></p>
+          {{- end }}
+        {{- end }}
+
+        <p>Date: {{ .Date.Format "January 02, 2006" }}</p>
+
+        {{- range $venues }}
+          <p>Location: <a href="{{ .RelPermalink }}">{{ partial "title.html" . }}</a></p>
+        {{- end }}
+
+        {{ partial "topic-tags.html" .Params.tags }}
+      </aside>
+    </div>
+    <footer>
+      {{ partial "edit-link.html" . }}
+    </footer>
+  </article>
+
+  {{ partial "backlinks.html" (dict "page" . "sections" (slice "projects") "fields" (slice "team")) }}
+{{ end }}

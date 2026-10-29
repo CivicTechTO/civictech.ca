@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  {{- $title := partial "title.html" . | default site.Title }}
+  {{- $desc := .Description | default site.Params.description | plainify | replaceRE `\n` "" }}
+  <title>{{ $title }}</title>
+  <meta name="description" content="{{ $desc }}" />
+  <meta property="og:title" content="{{ $title }}" />
+  <meta property="og:description" content="{{ $desc }}" />
+  <meta property="og:url" content="{{ .Permalink }}" />
+  <meta property="og:site_name" content="Civic Tech Toronto" />
+  <meta name="twitter:title" content="{{ $title }}" />
+  <meta name="twitter:description" content="{{ $desc }}" />
+  {{- with .Params.youtubeID }}
+  <meta property="og:video" content="https://www.youtube.com/watch?v={{ . }}" />
+  <meta property="og:image" content="https://img.youtube.com/vi/{{ . }}/maxresdefault.jpg" />
+  <meta name="twitter:player" content="https://www.youtube.com/embed/{{ . }}" />
+  {{- else }}
+  {{- $og := "/assets/images/default-og.png" | absURL }}
+  {{- with .Params.image }}{{ with partialCached "event-image.html" . . }}{{ $og = (.Resize (cond (eq .MediaType.SubType "png") "800x png" "800x jpg")).Permalink }}{{ end }}{{ end }}
+  <meta property="og:image" content="{{ $og }}" />
+  <meta name="twitter:image" content="{{ $og }}" />
+  {{- end }}
+  {{ partial "jsonld.html" . }}
+  <link rel="alternate" type="application/atom+xml" title="{{ site.Title }} | Meetups" href="{{ "/feed.xml" | absURL }}" />
+  <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/assets/css/pico.pumpkin.min.css" />
+  <link rel="stylesheet" href="/assets/css/custom.css" />
+  <script defer src="https://umami.dgt.ca/script.js" data-website-id="99c82c37-f3b0-4219-8eda-7b150c5160f4"></script>
+</head>
+
+<body>
+  {{ partialCached "header.html" . }}
+  <main role="main" id="main-content" class="container" tabindex="-1">
+    {{ block "main" . }}{{ end }}
+  </main>
+
+  {{ partialCached "footer.html" . }}
+
+  <script defer src="/assets/js/minimal-theme-switcher.js"></script>
+  <script defer src="/assets/js/modal.js"></script>
+  <script defer src="/assets/js/navigation.js"></script>
+</body>
+</html>

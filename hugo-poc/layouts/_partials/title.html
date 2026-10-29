@@ -1,0 +1,5 @@
+{{- /* A few archive files have an empty `title:`; Jekyll then derives one from
+  the file name, so fall back to the file's base name. */ -}}
+{{- $title := .Title }}
+{{- if and (not $title) .File }}{{ $title = .File.ContentBaseName }}{{ end }}
+{{- return $title }}

@@ -1,0 +1,33 @@
+{{- /* Hugo data maps iterate in key order, so the YAML key order of
+  footer_social.yml is recovered from the raw file to keep Jekyll's ordering. */ -}}
+{{- $footer := hugo.Data.footer_social }}
+{{- $keys := slice }}
+{{- with resources.Get "data-raw/footer_social.yml" }}
+  {{- range findRESubmatch `(?m)^([A-Za-z0-9_-]+):` .Content }}{{ $keys = $keys | append (index . 1) }}{{ end }}
+{{- end }}
+{{- if $footer }}
+<section class="social-links">
+  <div class="social-button-group">
+    {{- range $key := $keys }}
+      {{- $details := index $footer $key }}
+      {{- $data := index hugo.Data.social_links $key }}
+      {{- with $details.url }}
+        {{- $rel := "noopener" }}
+        {{- with $details.rel }}{{ $rel = printf "%s noopener" . }}{{ end }}
+        <a href="{{ . }}" target="_blank" rel="{{ $rel }}" class="social-button">
+          {{- if $details.icon }}
+            <span class="iconstyle">{{ partial "icon.html" $details.icon }}</span>
+          {{- else if $details.emoji }}
+            <span class="iconstyle">{{ $details.emoji }}</span>
+          {{- else if $data.icon }}
+            <span class="iconstyle">{{ partial "icon.html" $data.icon }}</span>
+          {{- else if $data.emoji }}
+            <span class="iconstyle">{{ $data.emoji }}</span>
+          {{- end }}
+          <span>{{ $data.label | default $key }}</span>
+        </a>
+      {{- end }}
+    {{- end }}
+  </div>
+</section>
+{{- end }}

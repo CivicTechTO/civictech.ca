@@ -1,0 +1,22 @@
+{{- /* Maps each meetup's redirect_from entries to a redirect page, the way
+  jekyll-redirect-from does. Hugo only honours its own `aliases` key, and the
+  archives must not be edited, so redirect_from is read from the raw sources. */ -}}
+{{- range $src := resources.Match "meetup-sources/*.md" }}
+  {{- $fm := index (findRESubmatch `(?s)\A---\n(.*?)\n---` $src.Content 1) 0 }}
+  {{- with $fm }}
+    {{- $data := index . 1 | transform.Unmarshal (dict "format" "yaml") }}
+    {{- if ne $data.published false }}{{ with $data.redirect_from }}
+      {{- $target := printf "%sevents/%s/" site.BaseURL ($src.Name | path.Base | strings.TrimSuffix ".md") }}
+      {{- range (cond (reflect.IsSlice .) . (slice .)) }}
+        {{- $.AddPage (dict
+          "path" (strings.Trim . "/")
+          "kind" "page"
+          "type" "redirect"
+          "title" "Redirecting…"
+          "params" (dict "target" $target)
+          "sitemap" (dict "disable" true)
+        ) }}
+      {{- end }}
+    {{- end }}{{ end }}
+  {{- end }}
+{{- end }}

@@ -1,0 +1,73 @@
+{{- $logo := (resources.Get "logo.svg").Content | safeHTML -}}
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<header class="container">
+  <nav role="navigation">
+    <ul>
+      <li>
+        <a href="{{ "/" | relURL }}" class="contrast">
+          {{ $logo }}{{ site.Title }}
+        </a>
+      </li>
+    </ul>
+
+    <!-- Desktop Nav -->
+    <ul class="desktop-only">
+      <li>
+        <details class="dropdown">
+          <summary>≡&nbsp;Menu</summary>
+          <ul>
+            {{- range hugo.Data.navigation.main }}
+              <li><a href="{{ .url | relURL }}">{{ .label }}</a></li>
+            {{- end }}
+          </ul>
+        </details>
+      </li>
+      {{- range hugo.Data.navigation.utility }}
+        <li>
+          <button class="{{ .type | default "secondary" }}"
+            {{- if .external }}
+              onclick="window.open('{{ .url }}', '_blank')"
+            {{- else }}
+              onclick="window.location='{{ .url | relURL }}'"
+            {{- end }}>
+            {{ .label }}{{ if .external }}<span aria-hidden="true">&nbsp;↗</span>{{ end }}
+          </button>
+        </li>
+      {{- end }}
+    </ul>
+
+    <!-- Mobile Toggle -->
+    <ul class="mobile-only">
+      <li>
+        <button class="menu-toggle primary" aria-controls="mobile-menu" aria-expanded="false" aria-label="Open navigation menu">
+          ☰ Menu
+        </button>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<!-- Mobile Menu -->
+<div id="mobile-menu" class="mobile-menu mobile-only" hidden>
+  <button class="close-menu" aria-label="Close menu">&times;</button>
+<aside>
+  <nav>
+    <ul>
+      {{- range hugo.Data.navigation.main }}
+        <li><a href="{{ .url | relURL }}">{{ .label }}</a></li>
+      {{- end }}
+      {{- range hugo.Data.navigation.utility }}
+        <li>
+          <a role="button" class="{{ .type | default "secondary" }}"
+             href="{{ .url }}"
+             {{ if .external }}target="_blank"{{ end }}>
+            {{ .label }}{{ if .external }}<span aria-hidden="true">&nbsp;↗</span>{{ end }}
+          </a>
+        </li>
+      {{- end }}
+    </ul>
+  </nav>
+</aside>
+</div>
+
+<div id="menu-backdrop" class="menu-backdrop mobile-only" hidden></div>

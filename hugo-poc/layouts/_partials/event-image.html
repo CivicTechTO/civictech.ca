@@ -1,0 +1,13 @@
+{{- /* Returns the processable resource for a meetup image, or nil. A few
+  archive images carry a .png name over WebP or AVIF bytes; libvips sniffs
+  them, but Hugo goes by extension, so those are re-typed by magic bytes. */ -}}
+{{- $img := resources.Get (printf "images/events/%s" .) }}
+{{- with $img }}
+  {{- $head := substr .Content 0 12 }}
+  {{- $ext := "" }}
+  {{- if hasPrefix $head "RIFF" }}{{ $ext = "webp" }}{{ else if eq (substr $head 4 8) "ftypavif" }}{{ $ext = "avif" }}{{ end }}
+  {{- if and $ext (ne (path.Ext .Name) (printf ".%s" $ext)) }}
+    {{- $img = resources.FromString (printf "images/events/%s.%s" (path.BaseName .Name) $ext) .Content }}
+  {{- end }}
+{{- end }}
+{{- return $img }}

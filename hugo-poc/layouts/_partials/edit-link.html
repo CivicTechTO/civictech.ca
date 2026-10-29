@@ -1,0 +1,12 @@
+{{- $dirs := dict "events" "_meetups" "people" "_people" }}
+{{- with .File }}
+{{- $path := printf "%s/%s" (index $dirs $.Section) .LogicalName }}
+{{- $base := site.Params.editBase }}
+{{- $branch := site.Params.editBranch }}
+<p>
+  Update:&thinsp;
+  <a href="{{ $base }}/blob/{{ $branch }}/{{ $path }}" target="_blank" rel="noopener">Edit this Record ↗</a>
+  &thinsp;
+  <a href="{{ $base }}/issues/new?title={{ printf "Suggestion: Update %s" $.Title | urlquery }}&body={{ printf "Please insert your comments while keeping the link to review file:\n%s/blob/%s/%s" $base $branch $path | urlquery }}" target="_blank" rel="noopener">Open an Issue ↗</a>
+</p>
+{{- end }}

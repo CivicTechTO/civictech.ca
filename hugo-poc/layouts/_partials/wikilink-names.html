@@ -1,0 +1,10 @@
+{{- /* Normalizes a wikilink field to a flat list of names. Accepts a single
+  "[[Name]]" string, a list of them, or the nested list YAML produces from an
+  unquoted [[Name]]. */ -}}
+{{- $names := slice }}
+{{- range (cond (reflect.IsSlice .) . (slice .)) }}
+  {{- range (cond (reflect.IsSlice .) . (slice .)) }}
+    {{- with . }}{{ $names = $names | append (replaceRE `^\[\[|\]\]$` "" (string .)) }}{{ end }}
+  {{- end }}
+{{- end }}
+{{- return $names }}

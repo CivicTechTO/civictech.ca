@@ -1,0 +1,21 @@
+<footer class="container">
+  <header>
+    <p><a href="{{ "/" | relURL }}">{{ (resources.Get "logo.svg").Content | safeHTML }}{{ site.Title }}</a></p>
+  </header>
+  <div class="grid">
+    <p>{{ site.Params.description }}</p>
+    <div>
+      <p><strong>Connect</strong></p>
+      {{ partial "social-links-footer.html" . }}
+    </div>
+  </div>
+  <hr/>
+  <nav aria-label="Theme switcher">
+    <ul><li><strong>Change Theme</strong></li></ul>
+    <ul>
+      <li><a href="#" data-theme-switcher="auto">Auto</a></li>
+      <li><a href="#" data-theme-switcher="light">Light</a></li>
+      <li><a href="#" data-theme-switcher="dark">Dark</a></li>
+    </ul>
+  </nav>
+</footer>

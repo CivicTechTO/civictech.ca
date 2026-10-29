@@ -1,0 +1,7 @@
+{{- /* Hugo image-pipeline counterpart of the jekyll_picture_tag "events"
+  preset: a 690px WebP in srcset and an 800px original-format fallback. */ -}}
+{{- with partialCached "event-image.html" .src .src }}
+  {{- $webp := .Resize "690x webp" }}
+  {{- $fallback := .Resize (cond (eq .MediaType.SubType "png") "800x png" "800x jpg") }}
+  <img alt="{{ $.alt }}" class="{{ $.class }}" src="{{ $fallback.RelPermalink }}" srcset="{{ $webp.RelPermalink }} 690w" sizes="(max-width: 600px) 100vw, 690px" width="{{ .Width }}" height="{{ .Height }}" loading="lazy">
+{{- end }}

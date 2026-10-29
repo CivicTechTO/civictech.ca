@@ -1,0 +1,8 @@
+{{- /* Resolves [[Name]] wikilinks to pages in a section, like the Jekyll
+  layouts' relative_path lookups. Takes dict "links" (string or list) and
+  "section"; returns the resolved pages, skipping unresolved names. */ -}}
+{{- $pages := slice }}
+{{- range partial "wikilink-names.html" .links }}
+  {{- with site.GetPage (printf "/%s/%s" $.section .) }}{{ $pages = $pages | append . }}{{ end }}
+{{- end }}
+{{- return $pages }}

@@ -1,0 +1,104 @@
+# Hugo proof of concept for civictech.ca: meetup and person pages only.
+# Content is mounted read-only from the archives submodule; nothing there is modified.
+baseURL = "https://civictech.ca/"
+title = "Civic Tech Toronto"
+locale = "en"
+timeZone = "America/Toronto"
+# Jekyll builds with `future: true`; some organizations carry future dates.
+buildFuture = true
+
+disablePathToLower = true
+# Some person files carry Obsidian `aliases` (alternate names, not URLs),
+# which Jekyll ignores.
+disableAliases = true
+# Only meetup pages, person pages and their redirects are rendered, so the
+# page set matches the Jekyll subset build used for timing comparison.
+disableKinds = ["home", "section", "taxonomy", "term", "rss", "sitemap", "robotstxt", "404"]
+
+# Jekyll uses `published: false` to unpublish a page; Hugo would read it as a
+# publish date, so only publishDate is accepted here.
+[frontmatter]
+publishDate = ["publishDate"]
+
+[params]
+description = "Civic Tech Toronto is a vibrant and diverse community of Torontonians engaged in understanding and creating solutions for civic challenges through technology, design, and other innovative means."
+editBase = "https://github.com/CivicTechTO/archives"
+editBranch = "main"
+
+[permalinks.page]
+events = "/events/:contentbasename/"
+people = "/people/:contentbasename/"
+projects = "/projects/:contentbasename/"
+venues = "/venues/:contentbasename/"
+organizations = "/organizations/:contentbasename/"
+
+# Projects, venues and organizations are only read so wikilinks and backlinks
+# resolve the way they do in Jekyll; they are not rendered.
+[[cascade]]
+  [cascade.build]
+    render = "link"
+  [cascade.target]
+    path = "{/projects/**,/venues/**,/organizations/**}"
+
+[imaging]
+jpeg.quality = 75
+webp.quality = 75
+
+[[module.mounts]]
+source = "../archives/_meetups"
+target = "content/events"
+# Jekyll skips 390.md (published: false); Hugo has no equivalent key.
+files = ["! 390.md"]
+[[module.mounts]]
+source = "../archives/_people"
+target = "content/people"
+[[module.mounts]]
+source = "../archives/_projects"
+target = "content/projects"
+# Its `date: 2027-02-29` does not exist and is a fatal error in Hugo. No
+# meetup or person references it, so leaving it out changes no rendered page.
+files = ["! Weather Report Card.md"]
+[[module.mounts]]
+source = "../archives/_venues"
+target = "content/venues"
+[[module.mounts]]
+source = "../archives/_organizations"
+target = "content/organizations"
+[[module.mounts]]
+source = "content"
+target = "content"
+# Raw meetup sources, read by the redirect content adapter to find redirect_from.
+[[module.mounts]]
+source = "../archives/_meetups"
+target = "assets/meetup-sources"
+[[module.mounts]]
+source = "../archives/images/events"
+target = "assets/images/events"
+[[module.mounts]]
+source = "../_includes/icons"
+target = "assets/icons"
+[[module.mounts]]
+source = "../_includes/logo.svg"
+target = "assets/logo.svg"
+[[module.mounts]]
+source = "../_data"
+target = "data"
+[[module.mounts]]
+source = "../assets/css"
+target = "static/assets/css"
+[[module.mounts]]
+source = "../assets/js"
+target = "static/assets/js"
+[[module.mounts]]
+source = "layouts"
+target = "layouts"
+[[module.mounts]]
+source = "../_data/footer_social.yml"
+target = "assets/data-raw/footer_social.yml"
+[[module.mounts]]
+source = "../archives/_people"
+target = "assets/people-sources"
+
+# kramdown (Jekyll) leaves bare URLs as text.
+[markup.goldmark.extensions]
+linkify = false

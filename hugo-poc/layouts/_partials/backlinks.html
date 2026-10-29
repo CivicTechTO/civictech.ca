@@ -1,0 +1,25 @@
+{{- /* Lists pages that reference the current page by [[wikilink]] in the
+  given fields. Takes dict "page", "sections", "fields" and optional "title". */ -}}
+{{- $index := partialCached "backlink-index.html" . (delimit .sections ",") (delimit .fields ",") }}
+{{- $backlinks := $index.Get (printf "[[%s]]" .page.File.ContentBaseName) }}
+{{- $collectionNames := dict "events" "meetups" }}
+{{- if $backlinks }}
+<section class="backlinks">
+  <h2>{{ .title | default "Mentioned In" }}</h2>
+  {{- range $section := .sections }}
+    {{- with where $backlinks "Section" $section }}
+    <h3>{{ index $collectionNames $section | default $section | strings.FirstUpper }}</h3>
+    <ul>
+      {{- range . }}
+        <li>
+          <a href="{{ .RelPermalink }}">{{ partial "title.html" . }}</a>
+          {{- if not .Date.IsZero }}
+            <small>({{ .Date.Format "2006-01-02" }})</small>
+          {{- end }}
+        </li>
+      {{- end }}
+    </ul>
+    {{- end }}
+  {{- end }}
+</section>
+{{- end }}

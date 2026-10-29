@@ -1,0 +1,14 @@
+{{- with . }}
+  <div>
+  {{- range . }}
+    {{- $parts := split . "/" }}
+    {{- if and (eq (index $parts 0) "topic") (gt (len $parts) 1) }}
+      {{- $tag := index $parts 1 }}
+      {{- $slug := $tag | lower | replaceRE `[ _/]` "-" }}
+      <a class="badge badge-topic" href="/tags/topic/{{ $slug }}/">
+        {{ $tag | replaceRE "-" " " | lower | strings.FirstUpper }}
+      </a>
+    {{- end }}
+  {{- end }}
+  </div>
+{{- end }}
