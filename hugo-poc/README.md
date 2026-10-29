@@ -28,39 +28,54 @@ alongside the Jekyll build, and runs `make check-redirects`. It caches
 
 ## Build time (measured 2026-10-29, Apple Silicon, Ruby 3.2.2, Hugo 0.169.0)
 
-Both builds produce the same page set: 567 meetups, 613 people, 1,017
-redirects, and the tag and category index, namespace and term pages (Jekyll
-2,350 pages; Hugo 2,357, the extra being the 404 page and term pages the
-generate scripts missed). Each makes 856 image derivatives. The Jekyll run is
-`make generate` followed by `jekyll build` with `_config.yml` plus an override
-that excludes `_pages` and the feed. Its projects, venues, organizations,
-announcements and resources are read but not output. Wall-clock seconds:
+Both sides build the whole site: Jekyll 2,742 pages, Hugo 2,748. Hugo's
+extra pages are the 404 page and the category pages Jekyll's generate
+scripts missed. Each side makes 856 image derivatives. Jekyll is
+`make generate` followed by `bundle exec jekyll build`; Hugo is `hugo`.
+Wall-clock seconds per run:
 
 | | Jekyll: `make generate` + build | Hugo |
 | --- | --- | --- |
-| clean (no image cache) | 10.5 + 77.6 | 12.3 / 13.4 / 12.3 |
-| cached (thumbs / `resources/_gen` kept) | 7.6 + 21.3, 10.9 + 22.2, 7.5 + 20.3 | 0.9 / 0.7 / 0.7 |
-
-Before tag pages were added, the meetup/person/redirect set alone took
-Jekyll 72.7 / 71.4s clean and 17.3 / 16.9 / 18.5s cached, and Hugo 15.1 /
-14.3 / 16.3s and 2.2 / 0.9 / 1.0s. Hugo got faster since then because it now
-reads only `.png` bytes when checking image formats. The full Jekyll site
-(all 2,742 pages) takes 95.6s clean and 30.8s cached, plus `make generate`.
+| clean (no image cache) | 7.7 + 91.0, 7.4 + 86.2 | 11.6 / 11.4 / 12.3 |
+| cached (thumbs / `resources/_gen` kept) | 7.4 + 29.7, 7.5 + 29.3, 7.2 + 29.9 | 1.0 / 0.9 / 0.9 |
 
 Where the time goes:
 
-- **Jekyll, clean.** About 55s goes to jekyll_picture_tag inside
-  `meetup.html`: 57.1s inclusive, against 1.9–2.4s once the images are cached.
-  libvips runs serially.
-- **Jekyll, cached.** `backlinks.html` takes 11.3s of 16.3s render. It is an
-  O(pages × collection) Liquid scan. On the full site, `organization.html`
-  and `person.html` push it to about 20s. The tag and category layouts add
-  about 1.2s. `make generate` adds 7.5–11s of shell and awk on every build.
-- **Hugo, clean.** Almost all of it is image processing, about 96s of CPU
-  spread across cores.
-- **Hugo, cached.** 0.65–0.9s in total (`hugo --templateMetrics`). The
-  backlink index is built once, and all 150 term pages take 0.27s of
-  template time.
+- **Jekyll, clean.** About 55–60s is jekyll_picture_tag inside
+  `meetup.html`, and libvips runs serially. The rest is as in the cached
+  build.
+- **Jekyll, cached.** 25.2s of 28.5s is render. `backlinks.html` takes
+  18.9s of that, an O(pages × collection) Liquid scan repeated on 1,384
+  pages. `make generate` adds another 7–8s of shell and awk on every build.
+- **Hugo, clean.** Almost all of it is image processing, spread across
+  cores.
+- **Hugo, cached.** 0.8–1.0s for the whole site (`hugo --templateMetrics`).
+  Backlinks cost 0.45s of template time in total, because the index is built
+  once per field set rather than per page.
+
+## Bugs found in the live Jekyll site
+
+These turned up while comparing outputs, and each can be fixed in Jekyll
+independently of any migration. Details are in the sections below.
+
+- The JSON-LD on every meetup page is invalid (missing closing brace in
+  `_includes/jsonld.html`).
+- `/venues/` lists 11 of 74 venues and `/organizations/` 50 of 130
+  (`_pages/list-venues.md`, `list-organizations.md`).
+- Four old meetup URLs redirect to the wrong meetup (N+1 instead of N),
+  because both meetups list them in `redirect_from` in the archives.
+- `make generate` misses scalar `categories:` values (no pages for
+  `venue-category/Academic`, `Hospitality`, `Park`) and publishes an empty
+  `topic/example` page from `archives/utilities/examples/`.
+- Category namespace pages never show item counts.
+- Meetup images have an empty `alt` and a malformed `sizes` attribute
+  (`_layouts/meetup.html`).
+- `feed.xml` summaries double-escape `&`.
+- Two 2016 announcements render broken tables with literal `**`.
+- `CLAUDE.md` and `GEMINI.md` are published to the live site (not in
+  `exclude:`).
+- `/projects/` relies on `reject`, which Jekyll doesn't have. It's harmless
+  today because no project is tagged `from/breakout`.
 
 ## What's mounted
 
@@ -71,7 +86,11 @@ Where the time goes:
 | `archives/images/events` | `assets/images/events` | processed by Hugo's image pipeline |
 | `_data/redirects.csv` | `assets/redirects.csv` | one redirect page per row |
 | `archives/_people`, `_projects`, `_organizations` (again) | `assets/sources/…` | raw sources, read for `social` key order |
-| `_data`, `_includes/icons`, `_includes/logo.svg`, `assets/css`, `assets/js`, `assets/images` | data / assets / static | shared with the Jekyll site |
+| `_pages/code-of-conduct.md`, `get-involved.md`; `_pages/feedback.md` | `content/…`; `content/feedback.html` | site pages without Liquid |
+| `_data`, `_includes/icons`, `_includes/logo.svg`, `assets/css`, `assets/js`, `assets/images`, `llms.txt` | data / assets / static | shared with the Jekyll site |
+
+Files in `hugo-poc/content/` are Hugo-only: section titles (`_index.md`),
+the home page title, and the shortcode version of `about-us.md`.
 
 ## How the Jekyll behaviour maps
 
@@ -196,8 +215,14 @@ name minus trailing dots). It's published two ways:
 
 ## Differences from the Jekyll output
 
-Checked page by page against `_site/` (main-content text and link targets for
-all 567 meetups and 613 people). What remains is listed here.
+Checked against `_site/`:
+- main-content text and link targets of every collection page
+- the items under each heading of every list, tag and category page
+- every redirect stub's target
+- the feed entry by entry
+- the sitemap's URL set
+
+Apart from the deliberate fixes described above, this is what remains.
 
 - **Person/venue/project/organization/announcement/resource URLs change.**
   Hugo lowercases paths and sanitizes them: spaces become `-`, and `()`,
@@ -222,8 +247,6 @@ all 567 meetups and 613 people). What remains is listed here.
 - **JSON-LD** is built as a map and serialized with `jsonify`. Jekyll's
   hand-assembled meetup JSON-LD is missing a closing brace and fails to parse
   on every meetup page.
-- **Project backlink order** follows Hugo's collation, not Jekyll's byte-order
-  path sort.
 - **Redirects without a trailing slash** (2 entries) are written as
   `…/index.html` rather than as an extensionless file.
 
@@ -252,5 +275,6 @@ would remove the workarounds.
   Hugo's URL escaping turns it into `#ZgotmplZ`.
 - `aliases:` in person files holds alternate names (Obsidian). In Hugo that
   key means redirect URLs, so `disableAliases = true`.
-- YAML maps lose their key order in Hugo, so footer and person social links are
-  re-ordered from the raw files. Lists would avoid that.
+- YAML maps lose their key order in Hugo, so the footer's and each person's,
+  project's and organization's social links are re-ordered from the raw
+  files. Lists would avoid that.
