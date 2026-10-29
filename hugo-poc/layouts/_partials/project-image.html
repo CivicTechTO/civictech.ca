@@ -1,0 +1,24 @@
+{{- /* Absolute URL for a project's `image:`, or "". Projects normally give
+  an external URL.
+
+  ARCHIVE-COMPAT(jekyll-thumb-path): _projects/Tabs Toronto.md points at a
+  jekyll_picture_tag derivative ("/assets/thumbs/events/hacknight_341-690-
+  96ae99ad0.webp"), which only a Jekyll build produces. Its source image is
+  found by name and processed here instead. Remove once the archive names
+  the source image. */ -}}
+{{- $url := "" }}
+{{- with . }}
+  {{- $thumb := findRESubmatch `^/assets/thumbs/events/(.+)-\d+-[0-9a-f]+\.[a-z]+$` . 1 }}
+  {{- if hasPrefix . "http" }}
+    {{- $url = . }}
+  {{- else if $thumb }}
+    {{- with resources.Match (printf "images/events/%s.*" (index (index $thumb 0) 1)) }}
+      {{- with partialCached "event-image.html" (path.Base (index . 0).Name) (index . 0).Name }}
+        {{- $url = (.Resize "690x webp").Permalink }}
+      {{- end }}
+    {{- end }}
+  {{- else }}
+    {{- $url = . | absURL }}
+  {{- end }}
+{{- end }}
+{{- return $url }}

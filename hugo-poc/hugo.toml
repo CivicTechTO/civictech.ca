@@ -170,6 +170,10 @@ target = "static/assets/js"
 [[module.mounts]]
 source = "../assets/images"
 target = "static/assets/images"
+# Organization logos, also as resources so og:image can check they exist.
+[[module.mounts]]
+source = "../assets/images/organizations"
+target = "assets/org-logos"
 [[module.mounts]]
 source = "../llms.txt"
 target = "static/llms.txt"

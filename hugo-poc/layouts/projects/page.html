@@ -27,7 +27,7 @@
         </section>
       </div>
       <aside>
-        {{- with .Params.image }}
+        {{- with partial "project-image.html" .Params.image }}
         <img class="ogimage" src="{{ . }}" alt="">
         {{- end }}
         <h2>Project Information</h2>

@@ -1,0 +1,21 @@
+{{- /* Absolute URL of a page's og:image. Jekyll used `page.image |
+  absolute_url`, which only works for external URLs: meetup images became
+  https://civictech.ca/hacknight_N.jpg and organization logos
+  https://civictech.ca/supporter_x.png, both 404. */ -}}
+{{- $url := "/assets/images/default-og.png" | absURL }}
+{{- with .Params.image }}
+  {{- if eq $.Section "events" }}
+    {{- with partialCached "event-image.html" . . }}{{ $url = (.Resize (cond (eq .MediaType.SubType "png") "800x png" "800x jpg")).Permalink }}{{ end }}
+  {{- else if eq $.Section "projects" }}
+    {{- with partial "project-image.html" . }}{{ $url = . }}{{ end }}
+  {{- else if eq $.Section "organizations" }}
+    {{- /* ARCHIVE-COMPAT(org-logo-extension): two organizations name a .jpg
+      logo that exists only as .png (ThoughtWorks, School of Public Policy and
+      Governance at the University of Toronto), so the logo is matched by
+      base name. Remove once the archive names the right files. */}}
+    {{- with resources.Match (printf "org-logos/%s.*" (path.BaseName .)) }}{{ $url = printf "/assets/images/organizations/%s" (path.Base (index . 0).Name) | absURL }}{{ end }}
+  {{- else if hasPrefix . "http" }}
+    {{- $url = . }}
+  {{- end }}
+{{- end }}
+{{- return $url }}

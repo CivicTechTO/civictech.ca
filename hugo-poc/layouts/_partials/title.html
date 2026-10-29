@@ -1,5 +1,8 @@
 {{- /* A few archive files have an empty `title:`; Jekyll then derives one from
   the file name, so fall back to the file's base name. */ -}}
 {{- $title := .Title }}
+{{- /* Term pages: Jekyll's generated tag and category pages were titled with
+  the value as written ("open-data", "Industry"), not Hugo's "Topic/Open-Data". */}}
+{{- if eq .Kind "term" }}{{ $title = index (split .Data.Term "/") (sub (len (split .Data.Term "/")) 1) }}{{ end }}
 {{- if and (not $title) .File }}{{ $title = .File.ContentBaseName }}{{ end }}
 {{- return $title }}

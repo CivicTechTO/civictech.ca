@@ -13,6 +13,10 @@
   <div class="social-button-group">
     {{- range $platform := $keys }}
       {{- $url := index $social $platform }}
+      {{- /* ARCHIVE-COMPAT(social-markdown-link): one project gives a Markdown
+        link ("[tpl-bookings](https://…)") as a social value; use its URL.
+        Remove once the archive holds plain URLs. */}}
+      {{- with findRESubmatch `^\[[^\]]*\]\((\S+)\)$` $url 1 }}{{ $url = index (index . 0) 1 }}{{ end }}
       {{- with index hugo.Data.social_links $platform }}
         <a href="{{ $url }}" target="_blank" rel="noopener" class="social-button">
           {{- if .icon }}

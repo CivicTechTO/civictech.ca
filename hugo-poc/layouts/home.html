@@ -83,7 +83,7 @@
       {{- if and (in (partial "category-values.html" .) "meta/feature") (not .Params.feature) }}
       <article class="card card-row">
       <div>
-          {{- with .Params.image }}
+          {{- with partial "project-image.html" .Params.image }}
           <img class="ogimage" src="{{ . }}" alt="">
           {{- end }}
           </div>
