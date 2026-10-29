@@ -1,0 +1,60 @@
+name: Hugo POC
+
+# Builds the Hugo proof of concept in hugo-poc/ on pull requests, alongside
+# the Jekyll build in ci.yml. Nothing here deploys. It also runs the redirect
+# drift check, so the daily archives bump flags any new redirect_from that
+# _data/redirects.csv lacks.
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+env:
+  HUGO_VERSION: 0.169.0
+
+jobs:
+  build:
+    name: Build Hugo POC
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository (with submodules)
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Check redirects.csv covers the archives
+        run: make check-redirects
+
+      - name: Install Hugo
+        run: |
+          wget -q -O "${RUNNER_TEMP}/hugo.deb" \
+            "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb"
+          sudo dpkg -i "${RUNNER_TEMP}/hugo.deb"
+          hugo version
+
+      # Hugo keeps processed images in resources/_gen and skips any it
+      # already has, so a warm cache makes the build about 1s instead of
+      # about 14s.
+      - name: Cache processed images
+        uses: actions/cache@v4
+        with:
+          path: hugo-poc/resources/_gen
+          key: hugo-gen-${{ env.HUGO_VERSION }}-${{ hashFiles('archives/images/**', 'hugo-poc/layouts/_partials/picture.html', 'hugo-poc/layouts/_partials/event-image.html') }}
+          restore-keys: |
+            hugo-gen-${{ env.HUGO_VERSION }}-
+
+      - name: Build Hugo site
+        working-directory: hugo-poc
+        run: hugo --gc --templateMetrics
+
+      - name: Upload built site artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hugo-poc-site
+          path: hugo-poc/public/
+          retention-days: 1
+          if-no-files-found: error

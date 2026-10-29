@@ -21,6 +21,11 @@ hugo server            # http://localhost:1313/events/99/
 
 Requires Hugo extended ≥ 0.153 (tested with 0.169.0).
 
+CI (`.github/workflows/hugo-poc.yml`) builds the POC on every pull request
+alongside the Jekyll build, and runs `make check-redirects`. It caches
+`resources/_gen` (processed images) the way `pages.yml` caches
+`_site/assets/thumbs`. Nothing is deployed.
+
 ## Build time (measured 2026-10-29, Apple Silicon, Ruby 3.2.2, Hugo 0.169.0)
 
 Both builds produce the same page set: 567 meetups, 613 people, 1,017
