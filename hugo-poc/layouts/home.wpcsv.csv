@@ -1,0 +1,14 @@
+{{- /* The WordPress import CSV of all meetups, ported as-is from Jekyll's
+  _pages/generate-csv.html (values are not CSV-escaped there either). Its
+  per-speaker description lookup matched people by a `name` field no record
+  has, so it never added anything and is left out. */ -}}
+csv_post_title,csv_post_post,csv_post_type,csv_post_excerpt,csv_post_categories,csv_post_tags,csv_post_date
+{{ range sort (where site.RegularPages "Section" "events") "Date" -}}
+{{- $speakers := slice }}{{ range .Params.speakers }}{{ $speakers = $speakers | append (replaceRE `[\[\]]` "" .) }}{{ end -}}
+{{- $with := "" }}
+{{- if eq (len $speakers) 1 }}{{ $with = printf " with %s" (index $speakers 0) }}
+{{- else if eq (len $speakers) 2 }}{{ $with = printf " with %s" (delimit $speakers " & ") }}
+{{- else if gt (len $speakers) 2 }}{{ $with = printf " with %s & %s" (delimit (first (sub (len $speakers) 1) $speakers) ", ") (index $speakers (sub (len $speakers) 1)) }}
+{{- end -}}
+"Meetup #{{ .Params.number }} – {{ .Params.topic }}{{ $with }}","{{ with .Params.videoUrl }}[embed]{{ . }}[/embed]{{ end }}<p><strong>Date:</strong> {{ .Date.Format "Jan 02, 2006" }}</p><p><strong>Topic:</strong> {{ .Params.topic }}</p> {{ with .Description }}<p>{{ . }}</p><br/>{{ end }}{{ with $speakers }}<p><strong>Speakers:</strong></p><ul>{{ range . }}<li>{{ . }}</li>{{ end }}</ul>{{ end }}{{ with .Params.venue }}<p><strong>Venue:</strong> {{ replaceRE `[\[\]]` "" . }}</p><br/>{{ end }} ",post,,import-2025-01-30,,{{ .Date.Format "2006-01-02 15:04:05 -0700" }}
+{{ end }}

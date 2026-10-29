@@ -10,10 +10,11 @@ buildFuture = true
 # Some person files carry Obsidian `aliases` (alternate names, not URLs),
 # which Jekyll ignores.
 disableAliases = true
-# Rendered: every collection's pages and list pages, the redirects, and the
-# tag and category pages that `make generate` produces for Jekyll. The home
-# page is kept only for the _redirects output below.
-disableKinds = ["rss", "sitemap", "robotstxt"]
+# Rendered: every page of the Jekyll site, the redirects, the sitemap and
+# robots.txt. The home page also writes feed.xml, generate-csv.csv and the
+# host-level _redirects file (output formats below).
+disableKinds = ["rss"]
+enableRobotsTXT = true
 
 # The redirect stubs (/hacknights/99/, /2017/07/05/…) imply sections that
 # have no page of their own.
@@ -30,7 +31,25 @@ tag = "tags"
 category = "categories"
 
 [outputs]
-home = ["html", "redirects"]
+home = ["html", "feed", "wpcsv", "redirects"]
+
+# Atom feed of the latest meetups, at /feed.xml.
+[mediaTypes."application/atom+xml"]
+suffixes = ["xml"]
+[outputFormats.feed]
+mediaType = "application/atom+xml"
+baseName = "feed"
+isPlainText = true
+rel = "alternate"
+
+# The WordPress import CSV of all meetups, at /generate-csv.csv.
+[mediaTypes."text/csv"]
+suffixes = ["csv"]
+[outputFormats.wpcsv]
+mediaType = "text/csv"
+baseName = "generate-csv"
+isPlainText = true
+notAlternative = true
 
 [mediaTypes."text/redirects"]
 delimiter = ""
@@ -50,6 +69,10 @@ publishDate = ["publishDate"]
 description = "Civic Tech Toronto is a vibrant and diverse community of Torontonians engaged in understanding and creating solutions for civic challenges through technology, design, and other innovative means."
 editBase = "https://github.com/CivicTechTO/archives"
 editBranch = "main"
+authorName = "Civic Tech Toronto"
+authorEmail = "hi@civictech.ca"
+# Entries in feed.xml, as `feed.limit` in Jekyll's _config.yml.
+feedLimit = 25
 # Written into feedback.md's script; CI sets it from the FEEDBACK_TOKEN
 # secret via the HUGO_PARAMS_FEEDBACKTOKEN environment variable.
 feedbackToken = ""
@@ -147,6 +170,9 @@ target = "static/assets/js"
 [[module.mounts]]
 source = "../assets/images"
 target = "static/assets/images"
+[[module.mounts]]
+source = "../llms.txt"
+target = "static/llms.txt"
 [[module.mounts]]
 source = "layouts"
 target = "layouts"

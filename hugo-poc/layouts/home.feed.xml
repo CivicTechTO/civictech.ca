@@ -1,0 +1,71 @@
+{{- /* Atom feed of the latest meetups, ported from Jekyll's feed.xml.
+  Meetups keep their substance in front matter, so each entry body is
+  assembled the way events/page.html lays it out. This is a plain-text
+  output format, so every value is escaped explicitly. */ -}}
+{{- $meetups := first site.Params.feedLimit (sort (where site.RegularPages "Section" "events") "Date" "desc") -}}
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
+  <title type="text">{{ site.Title | htmlEscape }} | Meetups</title>
+  <subtitle>{{ site.Params.description | plainify | replaceRE `\n` "" | strings.TrimSpace | htmlEscape }}</subtitle>
+  <id>{{ "/feed.xml" | absURL }}</id>
+  <link rel="self" type="application/atom+xml" href="{{ "/feed.xml" | absURL }}" />
+  <link rel="alternate" type="text/html" href="{{ "/events/" | absURL }}" />
+  <updated>{{ now.Format "2006-01-02T15:04:05-07:00" }}</updated>
+  <author><name>{{ site.Params.authorName | htmlEscape }}</name><email>{{ site.Params.authorEmail | htmlEscape }}</email></author>
+  <icon>{{ "/assets/images/favicon.ico" | absURL }}</icon>
+  <rights>© {{ now.Year }} {{ site.Title | htmlEscape }}</rights>
+  <generator uri="https://gohugo.io/" version="{{ hugo.Version }}">Hugo</generator>
+{{- range $meetup := $meetups }}
+  {{- $speakers := partial "wikilinks.html" (dict "links" .Params.speakers "section" "people") }}
+  {{- $venues := partial "wikilinks.html" (dict "links" .Params.venue "section" "venues") }}
+  {{- $description := "" }}
+  {{- with .Description }}{{ $description = replace (replace . "[[" "") "]]" "" }}{{ end }}
+  {{- $image := "" }}
+  {{- with .Params.image }}
+    {{- if in . "://" }}{{ $image = . }}
+    {{- else }}{{ with partialCached "event-image.html" . . }}{{ $image = (.Resize (cond (eq .MediaType.SubType "png") "800x png" "800x jpg")).Permalink }}{{ end }}
+    {{- end }}
+  {{- end }}
+  <entry>
+    <title type="text">{{ partial "title.html" . | default .Params.topic | htmlEscape }}</title>
+    <link rel="alternate" type="text/html" href="{{ .Permalink }}" />
+    <id>{{ .Permalink }}</id>
+    <published>{{ .Date.Format "2006-01-02T15:04:05-07:00" }}</published>
+    <updated>{{ (.Params.last_modified_at | default .Date | time.AsTime).Format "2006-01-02T15:04:05-07:00" }}</updated>
+    {{- range $speakers }}
+    <author><name>{{ partial "title.html" . | htmlEscape }}</name><uri>{{ .Permalink }}</uri></author>
+    {{- end }}
+    {{- if not $speakers }}
+    <author><name>{{ site.Params.authorName | htmlEscape }}</name></author>
+    {{- end }}
+    {{- range .Params.tags }}
+    {{- $parts := split . "/" }}
+    <category term="{{ . | htmlEscape }}" label="{{ index $parts (sub (len $parts) 1) | replaceRE "-" " " | lower | strings.FirstUpper | htmlEscape }}" />
+    {{- end }}
+    {{- with $description }}
+    <summary type="html">{{ . | markdownify | plainify | htmlUnescape | replaceRE `\s*\n\s*` " " | strings.TrimSpace | htmlEscape }}</summary>
+    {{- end }}
+    {{- with $image }}
+    <media:thumbnail url="{{ . }}" />
+    <media:content medium="image" url="{{ . }}" />
+    {{- end }}
+    {{- $body := "" }}
+    {{- with $image }}{{ $body = printf `%s<p><img src="%s" alt="%s" /></p>` $body . (htmlEscape $meetup.Params.topic) }}{{ end }}
+    {{- with $description }}{{ $body = printf "%s%s" $body ($meetup.RenderString (dict "display" "block") .) }}{{ end }}
+    {{- with $speakers }}
+      {{- $body = printf "%s<h2>Speakers</h2>" $body }}
+      {{- range . }}
+        {{- $about := "" }}
+        {{- with .Description }}{{ $about = printf " — %s" (replace (replace . "[[" "") "]]" "" | markdownify | plainify | htmlUnescape | replaceRE `\s*\n\s*` " " | strings.TrimSpace) }}{{ end }}
+        {{- $body = printf "%s\n        <p><a href=\"%s\">%s</a>%s</p>" $body .Permalink (partial "title.html" .) $about }}
+      {{- end }}
+    {{- end }}
+    {{- $body = printf "%s<h2>Details</h2>\n      <p>Date: %s</p>" $body (.Date.Format "January 2, 2006") }}
+    {{- range $venues }}{{ $body = printf `%s<p>Location: <a href="%s">%s</a></p>` $body .Permalink (partial "title.html" .) }}{{ end }}
+    {{- with .Params.eventUrl }}{{ $body = printf `%s<p><a href="%s">%s</a></p>` $body . (cond ($meetup.Date.After now) "Register for this meetup" "Event page") }}{{ end }}
+    {{- with .Params.youtubeID }}{{ $body = printf `%s<p><a href="https://www.youtube.com/watch?v=%s">Watch the recording</a></p>` $body . }}{{ end }}
+    {{- $body = printf "%s%s" $body (partial "content.html" .) }}
+    <content type="html" xml:base="{{ .Permalink }}">{{ $body | strings.TrimSpace | htmlEscape }}</content>
+  </entry>
+{{- end }}
+</feed>
