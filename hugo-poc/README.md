@@ -55,53 +55,12 @@ Where the time goes:
 
 ## Bugs found in the live Jekyll site
 
-These turned up while comparing outputs. Each was checked against
-https://civictech.ca on 2026-10-29 and against git history for signs of
-intent, and each can be fixed in Jekyll independently of any migration.
-
-- **Invalid JSON-LD on every meetup page.** `_includes/jsonld.html` is
-  missing a closing brace.
-- **`/venues/` lists 11 of 74 venues.** `_pages/list-venues.md` lowercases
-  each category for the group heading, then matches venues against the
-  lowercased value. Venue categories have been capitalized
-  (`venue-category/Academic`) since they were added to the archives in
-  2025-11, so seven groups render as empty headings.
-- **`/organizations/` lists 50 of 130.** Jekyll gives every document
-  `categories: []` when the key is missing, and an empty list is truthy in
-  Liquid. So the template's "Other Organizations" section for uncategorized
-  organizations has never rendered. Six organizations with an empty list
-  entry (e.g. Gida) form a blank " Organizations" group.
-- **Four old meetup URLs redirect to the wrong meetup.** Archive commit
-  2e82a26 ("Hacknight to Meetup event naming migration", 2026-01-16) added
-  each old blog URL for meetup N (299, 358, 364, 366) to meetup N+1 as well.
-  The URL's date and slug match N. The archive data should drop the
-  duplicate from N+1; `_data/redirects.csv` already does.
-- **Category pages missing, plus an empty tag page.** The generate scripts
-  (2025-06) only read block lists, but venue categories are scalars, so
-  `/categories/venue-category/academic/` and `…/park/` are 404 although 16
-  and 2 venues use them. The scripts also scan `archives/utilities/`, which
-  publishes an empty `/tags/topic/example/`.
-- **Category namespace pages never show counts.**
-  `_layouts/category-namespace.html` compares the bare value (`speaker`)
-  against namespaced categories (`role/speaker`). Tag namespace pages,
-  which compare the full tag, do show counts.
-- **Meetup images have an empty `alt`.** `_layouts/meetup.html` reuses the
-  list pages' `alt="{{ event.topic }}"`, but there is no `event` on a meetup
-  page. Its `sizes` attribute is also malformed:
-  jekyll_picture_tag wants media queries without parentheses in
-  `_data/picture.yml`, and the unconditional size under `size:`. Browsers
-  drop the bad `sizes` entry and there's a single WebP candidate, so that
-  half has little effect.
-- **`feed.xml` summaries show a literal `&amp;`** (e.g. meetup #557):
-  `markdownify | strip_html | xml_escape` escapes `&` twice.
-- **Two 2016 announcements render a broken table with literal `**`.**
-  kramdown reads their bold "date | time | place" lines as table rows.
-- **`/projects/` uses `reject`,** which neither Jekyll 4.3.4 nor Liquid
-  4.0.4 provides, so Liquid silently passes every project through. No
-  effect today, since no project is tagged `from/breakout`.
-- **`CLAUDE.md` and `GEMINI.md` are served at civictech.ca** (`README.md`
-  returns 404). `exclude:` lists the other repo docs but predates these two
-  files (2026-02). Probably unintended, but harmless.
+Comparing the two builds turned up 13 bugs in the live site, including
+invalid JSON-LD on every meetup page, venue and organization list pages
+missing most entries, and `og:image` URLs that 404. They are logged, with
+cause, evidence and suggested fix, in
+[`docs/plans/2026-10-29-jekyll-site-bug-log.md`](../docs/plans/2026-10-29-jekyll-site-bug-log.md).
+The Hugo build avoids all of them.
 
 ## What's mounted
 
