@@ -1,0 +1,14 @@
+{{- /* Old Jekyll URL → Hugo URL for every page whose URL changed. Jekyll used
+  the file name verbatim (minus trailing dots), so "/people/Lilly Tong/";
+  Hugo sanitizes it to "/people/Lilly-Tong/". Meetup URLs don't change.
+  Paths are returned decoded. */ -}}
+{{- $redirects := slice }}
+{{- range slice "people" "venues" "projects" "organizations" }}
+  {{- range where site.RegularPages "Section" . }}
+    {{- $old := printf "/%s/%s/" .Section (replaceRE `\.+$` "" .File.ContentBaseName) }}
+    {{- if ne $old .RelPermalink }}
+      {{- $redirects = $redirects | append (dict "from" $old "to" .RelPermalink) }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+{{- return $redirects }}

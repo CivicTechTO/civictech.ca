@@ -1,0 +1,8 @@
+{{- /* Host-level redirects (Netlify / Cloudflare Pages `_redirects`). Unused on
+  GitHub Pages, which only serves the meta-refresh pages and 404.html. */ -}}
+{{- range after 1 (resources.Get "redirects.csv" | transform.Unmarshal) }}
+  {{- printf "%s %s 301\n" (index . 0) (index . 1) }}
+{{- end }}
+{{- range partialCached "legacy-urls.html" . }}
+  {{- printf "%s %s 301\n" (urls.Parse .from).EscapedPath .to }}
+{{- end }}

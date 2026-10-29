@@ -80,6 +80,21 @@ Where the time goes:
   Derivatives are cached in `resources/_gen`. That is the counterpart of
   caching `_site/assets/thumbs` in CI.
 
+## Legacy URLs
+
+Hugo can't write a file at a path containing a space, so it can't put
+redirect stubs at the old Jekyll URLs. Instead, `_partials/legacy-urls.html`
+derives an old→new map from the file names (830 entries; Jekyll used the
+name minus trailing dots). It's published two ways:
+
+- **`404.html`** carries the map and forwards with `location.replace`. That
+  works on GitHub Pages, but only for browsers: crawlers see a 404. The page
+  is 72 KB, 23 KB gzipped. The current Jekyll site has no `404.html` at all.
+- **`_redirects`** is Netlify / Cloudflare Pages format: the CSV rows plus
+  the legacy map as real 301s, 1,847 rules in all. GitHub Pages ignores it.
+  Cloudflare Pages caps static redirects at 2,000, so it is close to that
+  limit.
+
 ## Differences from the Jekyll output
 
 Checked page by page against `_site/` (main-content text and link targets for
@@ -88,8 +103,7 @@ all 567 meetups and 613 people). What remains is listed here.
 - **Person/venue/project/organization URLs change.** Hugo sanitizes paths:
   spaces become `-`, and `()`, `,`, `'`, `+`, `&` are dropped, so
   `/people/Lilly Tong/` becomes `/people/Lilly-Tong/`. Meetup URLs are
-  unchanged. A real migration needs redirects from the old space-encoded
-  URLs, or a slug scheme agreed for the archives.
+  unchanged. Old URLs are forwarded; see "Legacy URLs" below.
 - **Markdown renderer.** Goldmark and kramdown differ in a handful of meetup
   bodies. kramdown accepts pipe tables without a separator row, and its smart
   quotes differ in about 6 places.

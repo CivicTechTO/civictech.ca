@@ -12,8 +12,21 @@ disablePathToLower = true
 # which Jekyll ignores.
 disableAliases = true
 # Only meetup pages, person pages and their redirects are rendered, so the
-# page set matches the Jekyll subset build used for timing comparison.
-disableKinds = ["home", "section", "taxonomy", "term", "rss", "sitemap", "robotstxt", "404"]
+# page set matches the Jekyll subset build used for timing comparison. The
+# home page is kept only for the _redirects output below.
+disableKinds = ["section", "taxonomy", "term", "rss", "sitemap", "robotstxt"]
+
+[outputs]
+home = ["redirects"]
+
+[mediaTypes."text/redirects"]
+delimiter = ""
+
+[outputFormats.redirects]
+mediaType = "text/redirects"
+baseName = "_redirects"
+isPlainText = true
+notAlternative = true
 
 # Jekyll uses `published: false` to unpublish a page; Hugo would read it as a
 # publish date, so only publishDate is accepted here.

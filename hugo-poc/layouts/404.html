@@ -1,0 +1,18 @@
+{{ define "main" }}
+  {{- /* GitHub Pages can't serve the old space-containing URLs from Hugo's
+    output, so they land here and are forwarded client-side. */ -}}
+  {{- $map := dict }}
+  {{- range partialCached "legacy-urls.html" . }}{{ $map = merge $map (dict .from .to) }}{{ end }}
+  <article>
+    <h1>Page not found</h1>
+    <p>Try the <a href="/events/">meetups</a> or <a href="/">home page</a>.</p>
+  </article>
+  <script>
+    (function () {
+      var moved = {{ $map | jsonify | safeJS }};
+      var path = decodeURIComponent(location.pathname).replace(/index\.html$/, "");
+      if (path.slice(-1) !== "/") path += "/";
+      if (moved[path]) location.replace(moved[path] + location.search + location.hash);
+    })();
+  </script>
+{{ end }}
