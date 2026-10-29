@@ -1,0 +1,17 @@
+{{- range $org := partial "featured.html" "organizations" }}
+<div>
+<hgroup>
+<h4>{{ partial "title.html" $org }}</h4>
+{{- with $org.Params.social }}{{ with .website }}
+<p>
+{{- with $org.Params.image }}
+<div class="meetup-thumbnail">
+<img src="/assets/images/organizations/{{ . }}" alt="{{ partial "title.html" $org }} Logo" class="meetup-image">
+</div>
+{{- end }}
+<a href="{{ . }}">Visit {{ partial "title.html" $org }} website</a>
+</p>
+{{- end }}{{ end }}
+</hgroup>
+</div>
+{{- end }}

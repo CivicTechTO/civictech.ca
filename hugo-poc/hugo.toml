@@ -30,7 +30,7 @@ tag = "tags"
 category = "categories"
 
 [outputs]
-home = ["redirects"]
+home = ["html", "redirects"]
 
 [mediaTypes."text/redirects"]
 delimiter = ""
@@ -50,6 +50,9 @@ publishDate = ["publishDate"]
 description = "Civic Tech Toronto is a vibrant and diverse community of Torontonians engaged in understanding and creating solutions for civic challenges through technology, design, and other innovative means."
 editBase = "https://github.com/CivicTechTO/archives"
 editBranch = "main"
+# Written into feedback.md's script; CI sets it from the FEEDBACK_TOKEN
+# secret via the HUGO_PARAMS_FEEDBACKTOKEN environment variable.
+feedbackToken = ""
 
 # Tags and categories are namespaced ("topic/open-data"), and each namespace
 # gets an index page at /tags/<namespace>/. Jekyll derived these lists with
@@ -67,6 +70,11 @@ venues = "/venues/:contentbasename/"
 organizations = "/organizations/:contentbasename/"
 announcements = "/announcements/:contentbasename/"
 resources = "/resources/:contentbasename/"
+
+# Allow HTML content files (feedback.html, below). Raw HTML in Markdown is
+# already passed through (`unsafe = true`), and all content is first-party.
+[security]
+allowContent = ['! ^text/org$']
 
 [imaging]
 jpeg.quality = 75
@@ -101,6 +109,18 @@ target = "content/resources"
 [[module.mounts]]
 source = "content"
 target = "content"
+# Site pages without Liquid are used as they are. about-us.md (Liquid loops)
+# has a shortcode version in content/, and index.md and list-*.md are
+# templates in layouts/.
+[[module.mounts]]
+source = "../_pages"
+target = "content"
+files = ["code-of-conduct.md", "get-involved.md"]
+# feedback.md is HTML in a .md file. Its indented form markup after blank
+# lines would be code blocks in CommonMark, so it's mounted as HTML content.
+[[module.mounts]]
+source = "../_pages/feedback.md"
+target = "content/feedback.html"
 [[module.mounts]]
 source = "../archives/images/events"
 target = "assets/images/events"

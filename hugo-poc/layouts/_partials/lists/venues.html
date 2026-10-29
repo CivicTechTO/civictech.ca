@@ -1,4 +1,4 @@
-{{- $venues := sort .Pages "File.Path" }}
+{{- $venues := partial "sort-by-path.html" .Pages }}
 {{- $categories := slice }}
 {{- $uncategorized := slice }}
 {{- range $venues }}

@@ -1,10 +1,10 @@
 {{- /* Builds a wikilink → pages map once per (sections, fields) pair. Called
   via partialCached, so the whole site is scanned once rather than once per
   page as backlinks.html does in Jekyll. Pages keep collection order: meetups
-  by date, everything else by file path. */ -}}
+  by date, everything else by file path (byte order, as Jekyll). */ -}}
 {{- $index := newScratch }}
 {{- range .sections }}
-  {{- $pages := sort (where site.RegularPages "Section" .) "File.Path" }}
+  {{- $pages := partial "sort-by-path.html" (where site.RegularPages "Section" .) }}
   {{- if eq . "events" }}{{ $pages = sort $pages "Date" }}{{ end }}
   {{- range $page := $pages }}
     {{- $targets := slice }}

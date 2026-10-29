@@ -1,0 +1,8 @@
+{{- range partial "featured.html" "people" }}
+<hgroup>
+<a href="{{ .RelPermalink }}"><h4>{{ partial "title.html" . }}</h4></a>
+<p>
+{{ with partial "wikilink-names.html" .Params.organization }}{{ delimit . ", " }}{{ else }}Unassociated{{ end }}
+</p>
+</hgroup>
+{{- end }}

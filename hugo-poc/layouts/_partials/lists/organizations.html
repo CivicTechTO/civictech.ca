@@ -1,4 +1,4 @@
-{{- $orgs := sort .Pages "File.Path" }}
+{{- $orgs := partial "sort-by-path.html" .Pages }}
 {{- $categories := slice }}
 {{- $uncategorized := slice }}
 {{- range $orgs }}

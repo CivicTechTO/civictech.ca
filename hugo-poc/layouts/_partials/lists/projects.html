@@ -1,4 +1,4 @@
-{{- $projects := sort .Pages "File.Path" }}
+{{- $projects := partial "sort-by-path.html" .Pages }}
 {{- $open := slice }}
 {{- $breakout := slice }}
 {{- $other := slice }}

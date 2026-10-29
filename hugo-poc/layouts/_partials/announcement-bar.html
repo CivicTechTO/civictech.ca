@@ -1,0 +1,8 @@
+{{- /* The newest announcement marked `feature: true`, shown on the home page. */ -}}
+{{- with first 1 (sort (where (where site.RegularPages "Section" "announcements") "Params.feature" true) "Date" "desc") }}
+  {{- with index . 0 }}
+  <div class="announcement-bar">
+    <a href="{{ .RelPermalink }}"><strong>Announcement:</strong> {{ partial "title.html" . }}&nbsp;&rarr;</a>
+  </div>
+  {{- end }}
+{{- end }}

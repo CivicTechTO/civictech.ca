@@ -4,7 +4,7 @@
   </header>
 
   <div class="card-list">
-    {{- range sort .Pages "Date" "desc" }}
+    {{- range partial "newest-first.html" .Pages }}
       <article class="card card-row">
         <div class="row-content">
           <div>

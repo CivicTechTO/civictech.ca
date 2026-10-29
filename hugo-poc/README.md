@@ -3,7 +3,8 @@
 An exploration of moving civictech.ca from Jekyll to Hugo. It renders a page
 for every record in all seven archive collections (meetups, people, projects,
 venues, organizations, announcements, resources), each collection's list page
-(`/events/`, `/projects/`, …), the redirect stubs, and the tag and category
+(`/events/`, `/projects/`, …), the home page and site pages, the redirect
+stubs, and the tag and category
 pages that `make generate` produces for Jekyll.
 
 Nothing in `archives/` is modified. Everything is mounted read-only from the
@@ -127,9 +128,26 @@ Where the time goes:
     Jekyll used `reject`, which isn't a Jekyll 4 filter and silently returned
     every project. No project is tagged `from/breakout` today, so the output
     is the same.
-  Item order differs in places (projects, announcements, one resource
-  group). Jekyll sorts by date, then by byte-order path, while Hugo uses
-  collation.
+- **Ordering.** Jekyll orders a collection's documents by byte-order path
+  (uppercase before lowercase), and Hugo's `sort` collates instead.
+  `_partials/sort-by-path.html` sorts on the hex-encoded path to get byte
+  order. `_partials/newest-first.html` reproduces Liquid's
+  `sort: "date" | reverse`, which also reverses same-date ties. The one
+  order that can't be matched is projects': Jekyll compares `date` and falls
+  back to path when either side has none. Mixing dated and undated projects
+  makes that comparison inconsistent, so its result depends on Ruby's sort
+  internals. Open and featured projects are listed by path here.
+- **Home and site pages.** `layouts/home.html` ports `_pages/index.md` and
+  the announcement bar. `code-of-conduct.md` and `get-involved.md` have no
+  Liquid and are mounted from `_pages/` as they are. `feedback.md` is HTML in
+  a `.md` file whose indented form markup would become code blocks under
+  CommonMark, so it is mounted as `feedback.html` (this needs
+  `security.allowContent` to allow `text/html`). Its one Liquid value, the
+  feedback token, comes from `HUGO_PARAMS_FEEDBACKTOKEN`. `about-us.md`
+  embeds two Liquid loops in its prose. `sync-about-us.rb` writes
+  `content/about-us.md` from it, with the `featured-speakers` and
+  `featured-supporters` shortcodes in their place. Until the Jekyll site is
+  retired, re-run it after editing the Jekyll page.
 - **Images.** `_partials/picture.html` mirrors the jekyll_picture_tag
   `events` preset: a 690px WebP in `srcset` plus an 800px JPEG/PNG fallback.
   Derivatives are cached in `resources/_gen`. That is the counterpart of

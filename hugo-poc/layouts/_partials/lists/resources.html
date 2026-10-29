@@ -1,4 +1,4 @@
-{{- $resources := sort .Pages "File.Path" }}
+{{- $resources := partial "sort-by-path.html" .Pages }}
 {{- $categories := slice }}
 {{- range $resources }}{{ $categories = $categories | append (partial "category-values.html" .) }}{{ end }}
 {{- $categories = sort (uniq $categories) }}

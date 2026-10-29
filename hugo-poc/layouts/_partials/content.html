@@ -1,6 +1,6 @@
-{{- /* A page's rendered content. A few archive bodies use Jekyll-only syntax
-  (Liquid includes, kramdown link attributes) that Goldmark would print as
-  text; those pages are translated and re-rendered. Anything else of that
+{{- /* A page's rendered content. A few bodies use Jekyll-only syntax
+  (Liquid includes, kramdown link attributes, one Liquid variable) that
+  Goldmark would print as text; those are translated. Anything else of that
   shape is reported so it doesn't slip through. */ -}}
 {{- if findRE `\{%|\{:` .RawContent 1 }}
   {{- $raw := .RawContent }}
@@ -12,6 +12,9 @@
     {{- warnf "%s: untranslated Jekyll syntax %v" $.File.Path . }}
   {{- end }}
   {{- .RenderString (dict "display" "block") $raw }}
+{{- else if in .RawContent "{{ site.feedback_token }}" }}
+  {{- /* feedback.md's only Liquid: the token CI writes into the config. */}}
+  {{- replace .Content "{{ site.feedback_token }}" site.Params.feedbackToken | safeHTML }}
 {{- else }}
   {{- .Content }}
 {{- end }}

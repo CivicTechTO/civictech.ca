@@ -7,7 +7,7 @@
   <aside>
   <nav>
   <ul>
-    {{- range sort .Pages "File.Path" }}
+    {{- range partial "sort-by-path.html" .Pages }}
     <li><a href="{{ .RelPermalink }}">{{ partial "title.html" . }}</a></li>
     {{- end }}
   </ul>

@@ -1,9 +1,6 @@
-{{- $today := now.Format "2006-01-02" }}
-{{- $future := slice }}
-{{- $past := slice }}
-{{- range .Pages }}
-  {{- if ge (.Date.Format "2006-01-02") $today }}{{ $future = $future | append . }}{{ else }}{{ $past = $past | append . }}{{ end }}
-{{- end }}
+{{- $split := partial "meetups-by-time.html" . }}
+{{- $future := $split.future }}
+{{- $past := $split.past }}
 
 <section>
   <header>
@@ -11,34 +8,8 @@
   </header>
   {{- with $future }}
   <div id="meetupsGrid" class="card-grid">
-    {{- range $event := first 3 (sort . "Date") }}
-      <article class="card">
-        <div class="row-content row-content-column">
-          {{- with .Params.image }}
-            <div class="meetup-thumbnail">
-              <a href="{{ $event.RelPermalink }}">
-                {{ partial "picture.html" (dict "src" . "alt" $event.Params.topic) }}
-              </a>
-            </div>
-          {{- end }}
-          <div>
-            <small>{{ .Date.Format "January 02, 2006" }} – Meetup #{{ .Params.number }}</small>
-            <br/>
-            <a href="{{ .RelPermalink }}"><strong>{{ .Params.topic }}</strong></a>
-            {{ partial "topic-tags.html" .Params.tags }}
-            {{- with .Params.speakers }}
-              <p>
-                {{ partial "speaker-names.html" . }}
-              </p>
-            {{- end }}
-          </div>
-        </div>
-        <div class="card-footer">
-          {{- with .Params.eventUrl }}
-            <a role="button" class="outline" href="{{ . }}" target="_blank" rel="noopener">Registration<span aria-hidden="true">&nbsp;↗</span></a>
-          {{- end }}
-        </div>
-      </article>
+    {{- range first 3 (sort . "Date") }}
+      {{- partial "meetup-upcoming-card.html" . }}
     {{- end }}
   </div>
   {{- end }}

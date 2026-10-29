@@ -1,0 +1,7 @@
+{{- /* Up to 9 pages in a section categorized meta/feature, as about-us.md
+  selected them (`sort: "date" | reverse`). */ -}}
+{{- $pages := slice }}
+{{- range where site.RegularPages "Section" . }}
+  {{- if in (partial "category-values.html" .) "meta/feature" }}{{ $pages = $pages | append . }}{{ end }}
+{{- end }}
+{{- return first 9 (partial "newest-first.html" $pages) }}

@@ -1,0 +1,148 @@
+{{ define "main" }}
+{{ partial "announcement-bar.html" . }}
+<article class="grid">
+  <figure>
+    <img
+      src="/assets/images/CivicTechTO-InPerson.jpg"
+      alt="Picture of a group of people sitting listening to a presentation at a Civic Tech Toronto Meetup"
+      width="1037"
+      height="758"
+      style="border-radius: 4px;"
+    />
+  </figure>
+  <div>
+    <hgroup>
+    <h1>Community for public good.</h1>
+    <p>Every Tuesday from 7pm to 9pm – in person and online.</p>
+    </hgroup>
+    <p>We meet every Tuesday to work on projects, hear from thoughtful speakers, and connect with others who care about how technology can improve our communities.</p>
+    <p>You don’t need to be in tech to join us—everyone’s welcome, no matter your background or experience.</p>
+    <p>Our events are hybrid – join us in person or online.</p>
+    <div class="button-list">
+      <a role="button" class="outline" href="https://guild.host/ctto/events" target="_blank">Sign up on Guild<span aria-hidden="true">&nbsp;↗</span></a>
+      <a role="button" class="secondary outline" href="/events">See past events</a>
+    </div>
+  </div>
+</article>
+
+{{- $split := partial "meetups-by-time.html" . }}
+
+<section>
+  <h2>Events</h2>
+  {{- with $split.future }}
+  <header>
+    <h3>Upcoming</h3>
+  </header>
+  <div id="meetupsGrid" class="card-grid">
+    {{- range first 3 (sort . "Date") }}
+      {{- partial "meetup-upcoming-card.html" . }}
+    {{- end }}
+  </div>
+    <p>All upcoming events will be listed on the <a href="https://guild.host/civic-tech-toronto/events" target="_blank" rel="noopener">Events Registration Page<span aria-hidden="true">&nbsp;↗</span></a></p>
+  {{- end }}
+
+  <header>
+    <h3>Recent</h3>
+  </header>
+  <div id="pastMeetupsList" class="grid">
+    {{- range $event := first 3 (sort $split.past "Date" "desc") }}
+      <article class="card card-row">
+        <div class="row-content row-content-column">
+          {{- with $event.Params.image }}
+            <div class="meetup-thumbnail">
+              <a href="{{ $event.RelPermalink }}">
+                {{ partial "picture.html" (dict "src" . "alt" $event.Params.topic) }}
+              </a>
+            </div>
+          {{- end }}
+          <div>
+            <small>{{ $event.Date.Format "January 02, 2006" }} — Meetup #{{ $event.Params.number }}</small>
+            <br/>
+            <a href="{{ $event.RelPermalink }}"><strong>{{ $event.Params.topic }}</strong></a>
+            {{ partial "topic-tags.html" $event.Params.tags }}
+            {{- with $event.Params.speakers }}
+              {{ partial "speaker-names.html" . }}
+            {{- end }}
+          </div>
+        </div>
+      </article>
+    {{- end }}
+  </div>
+
+  <div class="frontpage-action">
+    <a href="/events">See all Meetups here.</a>
+  </div>
+</section>
+
+<section>
+  <header>
+    <h2>Current Featured Projects</h2>
+  </header>
+  <div class="grid">
+    {{- range partial "sort-by-path.html" (where site.RegularPages "Section" "projects") }}
+      {{- if and (in (partial "category-values.html" .) "meta/feature") (not .Params.feature) }}
+      <article class="card card-row">
+      <div>
+          {{- with .Params.image }}
+          <img class="ogimage" src="{{ . }}" alt="">
+          {{- end }}
+          </div>
+        <div class="row-content">
+          <div>
+            <h3><a href="{{ .RelPermalink }}">{{ partial "title.html" . }}</a></h3>
+            {{- with .Params.summary }}
+              <p>{{ . }}</p>
+            {{- end }}
+            {{ partial "topic-tags.html" .Params.tags }}
+          </div>
+        </div>
+      </article>
+      {{- end }}
+    {{- end }}
+  </div>
+
+  <div class="frontpage-action">
+    <a href="/projects">See all projects here.</a>
+  </div>
+</section>
+
+<section>
+  <header>
+    <h2>Explore Topics</h2>
+  </header>
+  <div class="feautured-topic-links">
+    {{- range hugo.Data.featured_topics.topics }}
+      <a role="button" class="outline" href="/tags/topic/{{ .slug }}/">
+        {{ .title }}
+      </a>
+    {{- end }}
+  </div>
+  <div class="frontpage-action">
+    <a href="/tags/topic">See all topics here.</a>
+  </div>
+</section>
+
+<section>
+  <hgroup>
+  <h2>Calls to Action</h2>
+  <p>Things to click!</p>
+  </hgroup>
+  <div class="grid">
+    <article>
+      <h3>About Us</h3>
+      <p>Learn about CivicTech Toronto.</p>
+      <a role="button" href="/about-us">About Us</a>
+    </article>
+    <article>
+      <h3>See Resources</h3>
+      <p>See resources useful for engaging in CivicTech.</p>
+      <a role="button" href="/resources">See Resources</a>
+    </article>
+    <article>
+      <h3>Get Involved</h3>
+      <p>Find out ways to get involved with the community.</p>
+      <a role="button" href="/get-involved">Get Involved</a>
+    </article>
+  </div>
+</section>
+{{ end }}

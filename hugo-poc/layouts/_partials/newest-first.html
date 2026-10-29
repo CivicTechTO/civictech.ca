@@ -1,0 +1,4 @@
+{{- /* Liquid's `sort: "date" | reverse` over a collection in Jekyll's
+  document order: a stable date sort, then reversed, so pages with the same
+  date come out in reverse path order. */ -}}
+{{- return collections.Reverse (sort (partial "sort-by-path.html" .) "Date") }}

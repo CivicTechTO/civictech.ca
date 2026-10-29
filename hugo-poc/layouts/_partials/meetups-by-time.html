@@ -1,0 +1,9 @@
+{{- /* Meetups split into "future" (today or later, by calendar day, as
+  Jekyll compared them) and "past". Unsorted. */ -}}
+{{- $today := now.Format "2006-01-02" }}
+{{- $future := slice }}
+{{- $past := slice }}
+{{- range where site.RegularPages "Section" "events" }}
+  {{- if ge (.Date.Format "2006-01-02") $today }}{{ $future = $future | append . }}{{ else }}{{ $past = $past | append . }}{{ end }}
+{{- end }}
+{{- return dict "future" $future "past" $past }}

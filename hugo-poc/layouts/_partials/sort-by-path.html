@@ -1,0 +1,7 @@
+{{- /* Pages sorted by file path in byte order, as Jekyll orders a
+  collection's documents. Hugo's `sort` collates strings (case-insensitive),
+  so it would put "bikespace.md" before "Civic Dashboard.md"; sorting on the
+  hex encoding of the path gives byte order instead. */ -}}
+{{- $keyed := slice }}
+{{- range . }}{{ $keyed = $keyed | append (dict "key" (printf "%x" .File.Path) "page" .) }}{{ end }}
+{{- return apply (sort $keyed "key") "index" "." "page" }}
