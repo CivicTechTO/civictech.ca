@@ -40,6 +40,10 @@ generate-pages:
 # Generate all content
 generate: generate-data generate-pages
 
+# Check that every archive redirect_from is in _data/redirects.csv
+check-redirects:
+	ruby $(SCRIPTS_DIR)/redirects.rb check
+
 # Validate that meetup image references resolve to source files
 validate:
 	$(SCRIPTS_DIR)/validate_images.sh
@@ -52,4 +56,4 @@ update:
 clean:
 	rm -rf _site .jekyll-metadata
 
-.PHONY: all bundle serve serve-incremental generate-data generate-pages generate validate update-submodules clean
+.PHONY: all bundle serve serve-incremental generate-data generate-pages generate validate check-redirects update-submodules clean

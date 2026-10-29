@@ -52,7 +52,7 @@ Where the time goes:
 | `archives/_people` | `content/people` | yes, `/people/:file/` |
 | `archives/_projects`, `_venues`, `_organizations` | `content/…` | no (`build.render = "link"`). Read only so wikilinks and backlinks resolve. |
 | `archives/images/events` | `assets/images/events` | processed by Hugo's image pipeline |
-| `archives/_meetups` (again) | `assets/meetup-sources` | raw sources, read for `redirect_from` |
+| `_data/redirects.csv` | `assets/redirects.csv` | one redirect page per row |
 | `archives/_people` (again) | `assets/people-sources` | raw sources, read for `social` key order |
 | `_data`, `_includes/icons`, `_includes/logo.svg`, `assets/css`, `assets/js` | data / assets / static | shared with the Jekyll site |
 
@@ -66,10 +66,15 @@ Where the time goes:
   `backlinks.html` then does a map lookup. Jekyll's `backlinks.html` rescans
   every meetup and project for each of the ~1,400 pages that include it,
   which is most of its cached build time.
-- **`redirect_from`.** Hugo only honours its own `aliases` key, so
-  `content/_content.gotmpl` (a content adapter) reads the raw meetup front
-  matter and adds one `redirect` page per entry. The markup is the same as
-  jekyll-redirect-from's.
+- **Redirects.** These come from `_data/redirects.csv`, not from the
+  archives. The meetup `redirect_from` data is historical: the dated blog
+  permalinks stop in May 2025 and `/hacknights/N/` after #530. So it was
+  exported once with `ruby _scripts/redirects.rb export`, and the CSV is now
+  owned by this repo. `make check-redirects` fails if the archives ever add a
+  `redirect_from` the CSV lacks. `content/_content.gotmpl` adds one
+  `redirect` page per row, with the same markup as jekyll-redirect-from. The
+  export also fixed four 2021–2022 URLs listed on both meetup N and N+1:
+  Jekyll sent them to N+1, and they now go to N, the meetup the slug names.
 - **Images.** `_partials/picture.html` mirrors the jekyll_picture_tag
   `events` preset: a 690px WebP in `srcset` plus an 800px JPEG/PNG fallback.
   Derivatives are cached in `resources/_gen`. That is the counterpart of

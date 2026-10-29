@@ -67,10 +67,6 @@ target = "content/organizations"
 [[module.mounts]]
 source = "content"
 target = "content"
-# Raw meetup sources, read by the redirect content adapter to find redirect_from.
-[[module.mounts]]
-source = "../archives/_meetups"
-target = "assets/meetup-sources"
 [[module.mounts]]
 source = "../archives/images/events"
 target = "assets/images/events"
@@ -83,6 +79,11 @@ target = "assets/logo.svg"
 [[module.mounts]]
 source = "../_data"
 target = "data"
+# Hugo data files must be maps; the CSV is read as an asset instead.
+files = ["! redirects.csv"]
+[[module.mounts]]
+source = "../_data/redirects.csv"
+target = "assets/redirects.csv"
 [[module.mounts]]
 source = "../assets/css"
 target = "static/assets/css"
