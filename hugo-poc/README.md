@@ -134,7 +134,8 @@ would remove the workarounds.
   exist. It's excluded from the mount.
 - 6 images named `.png` are WebP (528–530) or AVIF (549, 551, 552) data.
   libvips sniffs them; Hugo goes by extension, so `_partials/event-image.html`
-  re-types them by magic bytes.
+  re-types them by magic bytes. Only `.png` files are read for this; reading
+  every image added about 1.2s of CPU to each cached build.
 - `_people/Maayan Ziv.md` has an unquoted `organization: [[AccessNow]]`, which
   YAML reads as a nested list. Jekyll never resolves it; the POC flattens it.
 - `aliases:` in person files holds alternate names (Obsidian). In Hugo that
