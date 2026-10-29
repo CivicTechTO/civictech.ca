@@ -1,11 +1,14 @@
 # Hugo proof of concept
 
-An exploration of moving civictech.ca from Jekyll to Hugo. It renders a page
-for every record in all seven archive collections (meetups, people, projects,
-venues, organizations, announcements, resources), each collection's list page
-(`/events/`, `/projects/`, …), the home page and site pages, the redirect
-stubs, and the tag and category
-pages that `make generate` produces for Jekyll.
+An exploration of moving civictech.ca from Jekyll to Hugo. It builds
+everything the Jekyll site publishes:
+- a page for every record in all seven archive collections (meetups, people,
+  projects, venues, organizations, announcements, resources)
+- each collection's list page (`/events/`, `/projects/`, …)
+- the home page and site pages
+- the redirect stubs
+- the tag and category pages that `make generate` produces for Jekyll
+- `feed.xml`, `sitemap.xml`, `robots.txt`, `llms.txt` and `generate-csv.csv`
 
 Nothing in `archives/` is modified. Everything is mounted read-only from the
 submodule via `module.mounts` in `hugo.toml`.
@@ -152,6 +155,20 @@ Where the time goes:
   `content/about-us.md` from it, with the `featured-speakers` and
   `featured-supporters` shortcodes in their place. Until the Jekyll site is
   retired, re-run it after editing the Jekyll page.
+- **Feed, sitemap and other files.** These are output formats of the home
+  page in `hugo.toml`. `feed.xml` (`home.feed.xml`) ports the hand-rolled
+  Atom feed of the 25 latest meetups: titles, dates, authors, categories and
+  content text match Jekyll's. Two differences. Summaries are escaped once
+  (Jekyll double-escaped `&` as `&amp;amp;`), and line breaks become spaces
+  so list items don't run together. Images point at the 800px derivative,
+  not the original under `/archives/images/`. That was the only reference to
+  the originals, so Hugo doesn't publish the 152 MB `archives/images/` copy
+  that Jekyll does. `generate-csv.csv` (`home.wpcsv.csv`) is byte-identical.
+  `robots.txt` and `llms.txt` are identical. The sitemap is Hugo's own and
+  lists the same pages, except for the URL changes and term-page
+  differences noted elsewhere. Jekyll also publishes `redirects.json` (a
+  jekyll-redirect-from by-product) and, because `_config.yml` doesn't exclude
+  them, the repo's `CLAUDE.md` and `GEMINI.md`. Hugo publishes none of these.
 - **Images.** `_partials/picture.html` mirrors the jekyll_picture_tag
   `events` preset: a 690px WebP in `srcset` plus an 800px JPEG/PNG fallback.
   Derivatives are cached in `resources/_gen`. That is the counterpart of
