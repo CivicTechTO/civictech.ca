@@ -76,16 +76,20 @@ Where the time goes:
   every meetup and project for each of the ~1,400 pages that include it,
   which is most of its cached build time.
 - **Redirects.** These come from `_data/redirects.csv`, not from the
-  archives. The meetup `redirect_from` data is historical: the dated blog
-  permalinks stop in May 2025 and `/hacknights/N/` after #530. So it was
-  exported once with `ruby _scripts/redirects.rb export`, and the CSV is now
-  owned by this repo. `make check-redirects` fails if the archives ever add a
-  `redirect_from` the CSV lacks. The `redirect_from` entries of the site's
-  own `_pages` (`/hacknights/`, `/get-in-touch/`, `/volunteer-with-us/`) were
-  added to the CSV by hand. `content/_content.gotmpl` adds one
-  `redirect` page per row, with the same markup as jekyll-redirect-from. The
-  export also fixed four 2021–2022 URLs listed on both meetup N and N+1:
-  Jekyll sent them to N+1, and they now go to N, the meetup the slug names.
+  archives. The `redirect_from` data in meetups and announcements is
+  historical: no dated permalinks after 2025, no `/hacknights/N/` after
+  #530. So it is exported with `ruby _scripts/redirects.rb export`, and the
+  CSV is owned by this repo. `make check-redirects` fails if the archives
+  ever add a `redirect_from` the CSV lacks. Each `to` is either a site path
+  (`/events/`, used for the three rows added by hand from `_pages`) or an
+  archive record (`_meetups/99.md`). `_partials/redirect-target.html`
+  resolves a record to its page's current URL, and an unresolvable record
+  fails the build. That way the CSV doesn't depend on a URL scheme: the two
+  announcements whose URLs change in Hugo are redirected to the new URLs
+  without editing the CSV. `content/_content.gotmpl` adds one `redirect`
+  page per row, with the same markup as jekyll-redirect-from. The export also
+  fixed four 2021–2022 URLs listed on both meetup N and N+1: Jekyll sent them
+  to N+1, and they now go to N, the meetup the slug names.
 - **Tags and categories.** These are Hugo taxonomies, so `make generate`
   and its committed output (`_data/tags.yml`, `_data/categories.yml`,
   `tags/`, `categories/`) aren't needed. Terms keep their namespace in the

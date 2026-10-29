@@ -1,0 +1,15 @@
+{{- /* Resolves a redirects.csv `to` value to a URL path. A site path
+  ("/events/") is used as is; an archive record ("_meetups/99.md") becomes
+  that page's current URL. A record that doesn't resolve stops the build. */ -}}
+{{- $to := . }}
+{{- if not (hasPrefix $to "/") }}
+  {{- $parts := split (strings.TrimSuffix ".md" $to) "/" }}
+  {{- $section := strings.TrimPrefix "_" (index $parts 0) }}
+  {{- if eq $section "meetups" }}{{ $section = "events" }}{{ end }}
+  {{- with site.GetPage (printf "/%s/%s" $section (index $parts 1)) }}
+    {{- $to = .RelPermalink }}
+  {{- else }}
+    {{- errorf "redirects.csv: %q is not a page" $to }}
+  {{- end }}
+{{- end }}
+{{- return $to }}

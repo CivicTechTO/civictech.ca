@@ -3,69 +3,81 @@
 
 # Manages _data/redirects.csv, the site's list of legacy URL redirects.
 #
-# The meetup redirects used to live only in each meetup's `redirect_from`
-# front matter in the archives submodule. That data is historical: the dated
-# blog permalinks stop in May 2025 and the /hacknights/N/ ones after #530. So
-# it was exported once to _data/redirects.csv, which this repo now owns and
-# edits directly.
+# Old URLs used to live only in `redirect_from` front matter in the archives
+# submodule (meetups and announcements). That data is historical: the dated
+# blog permalinks stop in 2025 and the /hacknights/N/ ones after #530. So it
+# was exported to _data/redirects.csv, which this repo now owns and edits
+# directly.
 #
-#   ruby _scripts/redirects.rb export   # one-time export; overwrites the CSV,
-#                                       # including rows added by hand since
-#   ruby _scripts/redirects.rb check    # fails if the archives gained a
+#   ruby _scripts/redirects.rb export   # rewrite the archive-derived rows,
+#                                       # keeping rows added by hand
+#   ruby _scripts/redirects.rb check    # fail if the archives gained a
 #                                       # redirect_from the CSV doesn't have
 #
-# Rows added by hand after the export: the redirect_from entries of the
-# site's own _pages (/hacknights/, /get-in-touch/, /volunteer-with-us/).
+# Columns are `from,to`. `from` is an old URL path, normalized to a leading
+# and trailing slash. `to` is either a site path ("/events/") or an archive
+# record ("_meetups/99.md"). The site generator resolves a record to the
+# record's current URL, so the CSV doesn't depend on any URL scheme. Rows
+# added by hand use site paths: the redirect_from entries of the site's own
+# _pages (/hacknights/, /get-in-touch/, /volunteer-with-us/).
 #
-# Paths are normalized to a leading and trailing slash. When two meetups
-# claim the same old URL, the export picks the meetup whose number appears in
-# the URL's `hacknight-N` slug. Four 2021–2022 URLs were listed on both
-# meetup N and N+1, and N+1 used to win.
+# When two meetups claim the same old URL, the export picks the meetup whose
+# number appears in the URL's `hacknight-N` slug. Four 2021–2022 URLs were
+# listed on both meetup N and N+1, and N+1 used to win.
 
 require "csv"
 require "date"
 require "yaml"
 
 ARCHIVES_DIR = ENV.fetch("ARCHIVES_DIR", "archives")
-MEETUPS_DIR = File.join(ARCHIVES_DIR, "_meetups")
 CSV_PATH = ENV.fetch("REDIRECTS_CSV", "_data/redirects.csv")
 
 def normalize(path)
   "/#{path.to_s.strip.delete_prefix('/').delete_suffix('/')}/"
 end
 
-# Returns { from => [meetup file numbers] } for every published meetup.
+# Returns { from => [archive records] } for every published document, where
+# a record is its path relative to the archives ("_meetups/99.md").
 def archive_redirects
   claims = Hash.new { |h, k| h[k] = [] }
-  Dir[File.join(MEETUPS_DIR, "*.md")].each do |file|
+  Dir[File.join(ARCHIVES_DIR, "_*", "*.md")].each do |file|
     front_matter = File.read(file)[/\A---\n(.*?)\n---/m, 1] or next
     data = YAML.safe_load(front_matter, permitted_classes: [Date, Time])
     next if data["published"] == false
 
-    meetup = File.basename(file, ".md")
-    Array(data["redirect_from"]).each { |from| claims[normalize(from)] << meetup }
+    record = file.delete_prefix("#{ARCHIVES_DIR}/")
+    Array(data["redirect_from"]).each { |from| claims[normalize(from)] << record }
   end
   claims
 end
 
 def export
-  rows = archive_redirects.map do |from, meetups|
-    meetup =
-      if meetups.uniq.size == 1
-        meetups.first
+  rows = archive_redirects.map do |from, records|
+    record =
+      if records.uniq.size == 1
+        records.first
       else
         slug_number = from[/hacknight-(\d+)/, 1]
-        meetups.find { |m| m == slug_number } or
-          abort "❌ #{from} is claimed by meetups #{meetups.join(', ')} and its slug names none of them"
+        records.find { |r| r == "_meetups/#{slug_number}.md" } or
+          abort "❌ #{from} is claimed by #{records.join(', ')} and its slug names none of them"
       end
-    [from, "/events/#{meetup}/", meetup.to_i]
+    [from, record]
   end
+  # Meetups by number, then everything else by path.
+  rows.sort_by! { |from, record| [record.start_with?("_meetups/") ? 0 : 1, record[/\d+/].to_i, record, from] }
+
+  # Keep rows added by hand, unless an archive row now covers the same URL.
+  derived = rows.map(&:first)
+  by_hand = File.exist?(CSV_PATH) ? CSV.read(CSV_PATH, headers: true).reject { |row| row["to"].start_with?("_") } : []
+  replaced, by_hand = by_hand.partition { |row| derived.include?(normalize(row["from"])) }
+  puts "ℹ️  #{replaced.size} hand-added row(s) replaced by archive rows" if replaced.any?
 
   CSV.open(CSV_PATH, "w") do |csv|
     csv << %w[from to]
-    rows.sort_by { |from, _, meetup| [meetup, from] }.each { |from, to, _| csv << [from, to] }
+    rows.each { |row| csv << row }
+    by_hand.each { |row| csv << [row["from"], row["to"]] }
   end
-  puts "✅ Wrote #{rows.size} redirects to #{CSV_PATH}"
+  puts "✅ Wrote #{rows.size} archive redirects and kept #{by_hand.size} added by hand in #{CSV_PATH}"
 end
 
 def check
