@@ -1,0 +1,36 @@
+{{- $orgs := sort .Pages "File.Path" }}
+{{- $categories := slice }}
+{{- $uncategorized := slice }}
+{{- range $orgs }}
+  {{- with partial "category-values.html" . }}{{ $categories = $categories | append . }}{{ else }}{{ $uncategorized = $uncategorized | append . }}{{ end }}
+{{- end }}
+
+{{- range $category := sort (uniq $categories) }}
+<section>
+  <header>
+    <h2>{{ $category | replaceRE "-" " " | strings.FirstUpper }} Organizations</h2>
+  </header>
+
+  <div class="card-list">
+    {{- range $orgs }}
+      {{- if in (partial "category-values.html" .) $category }}
+        {{- partial "org-card.html" . }}
+      {{- end }}
+    {{- end }}
+  </div>
+</section>
+{{- end }}
+
+{{- with $uncategorized }}
+<section>
+  <header>
+    <h2>Other Organizations</h2>
+  </header>
+
+  <div class="card-list">
+    {{- range . }}
+      {{- partial "org-card.html" . }}
+    {{- end }}
+  </div>
+</section>
+{{- end }}

@@ -1,0 +1,54 @@
+{{- $resources := sort .Pages "File.Path" }}
+{{- $categories := slice }}
+{{- range $resources }}{{ $categories = $categories | append (partial "category-values.html" .) }}{{ end }}
+{{- $categories = sort (uniq $categories) }}
+
+<section>
+  <ul>
+    {{- range $categories }}
+      <li>
+        <a href="#{{ . | replaceRE `[^a-z0-9]+` "-" }}">
+          {{ . | replaceRE "-" " " | strings.FirstUpper }}
+        </a>
+      </li>
+    {{- end }}
+  </ul>
+</section>
+
+{{- range $category := $categories }}
+<section>
+  <header class="sticky">
+    <h2 id="{{ $category | replaceRE `[^a-z0-9]+` "-" }}">
+      {{ $category | replaceRE "-" " " | strings.FirstUpper }}
+    </h2>
+  </header>
+
+  <div id="resourcesList" class="card-list">
+    {{- range $resource := $resources }}
+      {{- if in (partial "category-values.html" .) $category }}
+      <article class="card card-row">
+        <div class="row-content">
+          <div>
+            <h3>
+              {{- with .Params.website }}
+                <a href="{{ . }}" target="_BLANK">{{ partial "title.html" $resource }}</a>
+              {{- else }}
+                {{ partial "title.html" . }}
+              {{- end }}
+            </h3>
+
+            {{- with .Description }}
+              <p>{{ . }}</p>
+            {{- end }}
+
+            {{- with .Params.tags }}
+              {{ partial "topic-tags.html" . }}
+            {{- end }}
+          </div>
+        </div>
+      </article>
+      {{- end }}
+    {{- end }}
+  </div>
+</section>
+{{- end }}

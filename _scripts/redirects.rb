@@ -9,9 +9,13 @@
 # it was exported once to _data/redirects.csv, which this repo now owns and
 # edits directly.
 #
-#   ruby _scripts/redirects.rb export   # one-time export; overwrites the CSV
+#   ruby _scripts/redirects.rb export   # one-time export; overwrites the CSV,
+#                                       # including rows added by hand since
 #   ruby _scripts/redirects.rb check    # fails if the archives gained a
 #                                       # redirect_from the CSV doesn't have
+#
+# Rows added by hand after the export: the redirect_from entries of the
+# site's own _pages (/hacknights/, /get-in-touch/, /volunteer-with-us/).
 #
 # Paths are normalized to a leading and trailing slash. When two meetups
 # claim the same old URL, the export picks the meetup whose number appears in

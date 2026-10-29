@@ -1,0 +1,34 @@
+<section>
+  <header>
+    <h2>Latest Announcements</h2>
+  </header>
+
+  <div class="card-list">
+    {{- range sort .Pages "Date" "desc" }}
+      <article class="card card-row">
+        <div class="row-content">
+          <div>
+            <h3><a href="{{ .RelPermalink }}">{{ partial "title.html" . }}</a></h3>
+            <p><small>
+              {{ if not .Date.IsZero }}{{ .Date.Format "January 02, 2006" }}{{ end }}
+              {{- with .Params.author }}
+                • <span>
+                  {{ replaceRE `^\[\[|\]\]$` "" (string .) }}
+                </span>
+              {{- end }}
+              </small>
+            </p>
+            {{- with .Params.summary }}
+              <p>{{ . }}</p>
+            {{- else }}
+              <p>{{ partial "truncatewords.html" (dict "text" (partial "content.html" . | plainify) "n" 30) }}</p>
+            {{- end }}
+          </div>
+          <div class="row-actions">
+            <a role="button" href="{{ .RelPermalink }}">Read More</a>
+          </div>
+        </div>
+      </article>
+    {{- end }}
+  </div>
+</section>

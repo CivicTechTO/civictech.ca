@@ -1,0 +1,11 @@
+{{- /* A page's categories as a lowercased list, accepting a string or a
+  list and dropping empty values. Jekyll's list pages matched these with
+  Liquid `contains`, which is case-sensitive and does substring matching on
+  strings, so several venues and organizations never appeared. */ -}}
+{{- $values := slice }}
+{{- with .Params.categories }}
+  {{- range (cond (reflect.IsSlice .) . (slice .)) }}
+    {{- with . }}{{ $values = $values | append (lower (string .)) }}{{ end }}
+  {{- end }}
+{{- end }}
+{{- return $values }}

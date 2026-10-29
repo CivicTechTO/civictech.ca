@@ -1,0 +1,10 @@
+{{- /* Title, summary and badges of a project in the /projects/ list. Takes
+  dict "page" and "namespaces" (category namespaces to badge). */ -}}
+{{- with .page }}
+            <h3><a href="{{ .RelPermalink }}">{{ partial "title.html" . }}</a></h3>
+            {{- with .Params.summary }}
+              <p>{{ . }}</p>
+            {{- end }}
+            {{ partial "topic-tags.html" .Params.tags }}
+            {{ partial "namespaced-categories.html" (dict "categories" .Params.categories "namespaces" $.namespaces) }}
+{{- end }}

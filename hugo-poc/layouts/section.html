@@ -1,0 +1,25 @@
+{{ define "main" }}
+  {{- /* Collection list pages, in the wrapper Jekyll's _layouts/page.html
+    gives the _pages/list-*.md pages. */}}
+  <nav aria-label="breadcrumb">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li>{{ .Title }}</li>
+    </ul>
+  </nav>
+
+  <article class="mobilenegativemargin">
+    <header>
+      <hgroup>
+        <h1>{{ .Title }}</h1>
+        {{- with .Params.summary }}
+          <p>{{ . }}</p>
+        {{- end }}
+      </hgroup>
+    </header>
+
+    <section class="page-content">
+      {{ partial (printf "lists/%s.html" .Section) . }}
+    </section>
+  </article>
+{{ end }}

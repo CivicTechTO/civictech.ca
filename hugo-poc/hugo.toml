@@ -10,10 +10,20 @@ buildFuture = true
 # Some person files carry Obsidian `aliases` (alternate names, not URLs),
 # which Jekyll ignores.
 disableAliases = true
-# Rendered: every collection's pages, the redirects, and the tag and category
-# pages that `make generate` produces for Jekyll. The home page is kept only
-# for the _redirects output below.
-disableKinds = ["section", "rss", "sitemap", "robotstxt"]
+# Rendered: every collection's pages and list pages, the redirects, and the
+# tag and category pages that `make generate` produces for Jekyll. The home
+# page is kept only for the _redirects output below.
+disableKinds = ["rss", "sitemap", "robotstxt"]
+
+# The redirect stubs (/hacknights/99/, /2017/07/05/…) imply sections that
+# have no page of their own.
+[[cascade]]
+  [cascade.build]
+    render = "never"
+    list = "never"
+  [cascade.target]
+    kind = "section"
+    path = "{/hacknights,/20[0-9][0-9]}"
 
 [taxonomies]
 tag = "tags"

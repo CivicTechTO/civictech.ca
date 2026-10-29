@@ -1,0 +1,25 @@
+      <article class="card card-row">
+        <div class="row-content">
+          <div>
+            <h3><a href="{{ .RelPermalink }}">{{ partial "title.html" . }}</a></h3>
+
+            {{- with .Params.address }}
+              <p><small>{{ . }}</small></p>
+            {{- end }}
+
+            {{- with .Params.organization }}
+              <p><small>Hosted by:
+                {{ delimit (partial "wikilink-names.html" .) ", " }}
+              </small></p>
+            {{- end }}
+
+            {{- with .Params.tags }}
+              {{ partial "topic-tags.html" . }}
+            {{- end }}
+          </div>
+
+          <div class="row-actions">
+            <a role="button" href="{{ .RelPermalink }}">View</a>
+          </div>
+        </div>
+      </article>

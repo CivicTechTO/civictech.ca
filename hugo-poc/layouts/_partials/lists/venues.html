@@ -1,0 +1,36 @@
+{{- $venues := sort .Pages "File.Path" }}
+{{- $categories := slice }}
+{{- $uncategorized := slice }}
+{{- range $venues }}
+  {{- with partial "category-values.html" . }}{{ $categories = $categories | append . }}{{ else }}{{ $uncategorized = $uncategorized | append . }}{{ end }}
+{{- end }}
+
+{{- with $uncategorized }}
+<section>
+  <header>
+    <h2>Venues</h2>
+  </header>
+
+  <div class="card-list">
+    {{- range . }}
+      {{- partial "venue-card.html" . }}
+    {{- end }}
+  </div>
+</section>
+{{- end }}
+
+{{- range $category := sort (uniq $categories) }}
+<section>
+  <header>
+    <h2>{{ $category | replaceRE "-" " " | strings.FirstUpper }} Venues</h2>
+  </header>
+
+  <div class="card-list">
+    {{- range $venues }}
+      {{- if in (partial "category-values.html" .) $category }}
+        {{- partial "venue-card.html" . }}
+      {{- end }}
+    {{- end }}
+  </div>
+</section>
+{{- end }}

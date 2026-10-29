@@ -3,5 +3,5 @@
 {{- with partialCached "event-image.html" .src .src }}
   {{- $webp := .Resize "690x webp" }}
   {{- $fallback := .Resize (cond (eq .MediaType.SubType "png") "800x png" "800x jpg") }}
-  <img alt="{{ $.alt }}" class="{{ $.class }}" src="{{ $fallback.RelPermalink }}" srcset="{{ $webp.RelPermalink }} 690w" sizes="(max-width: 600px) 100vw, 690px" width="{{ .Width }}" height="{{ .Height }}" loading="lazy">
+  <img alt="{{ $.alt }}"{{ with $.class }} class="{{ . }}"{{ end }} src="{{ $fallback.RelPermalink }}" srcset="{{ $webp.RelPermalink }} 690w" sizes="(max-width: 600px) 100vw, 690px" width="{{ .Width }}" height="{{ .Height }}" loading="lazy">
 {{- end }}

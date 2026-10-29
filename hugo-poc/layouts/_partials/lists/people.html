@@ -1,0 +1,17 @@
+<section>
+  <header>
+    <h2>People</h2>
+  </header>
+
+  <div class="card-list">
+  <aside>
+  <nav>
+  <ul>
+    {{- range sort .Pages "File.Path" }}
+    <li><a href="{{ .RelPermalink }}">{{ partial "title.html" . }}</a></li>
+    {{- end }}
+  </ul>
+  </nav>
+  </aside>
+  </div>
+</section>

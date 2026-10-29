@@ -1,0 +1,22 @@
+      <article class="card card-row">
+        <div class="row-content">
+          <div>
+            <h3><a href="{{ .RelPermalink }}">{{ partial "title.html" . }}</a></h3>
+
+            {{- with .Description }}
+              <p>{{ . }}</p>
+            {{- end }}
+
+            {{- with .Params.tags }}
+              {{ partial "topic-tags.html" . }}
+            {{- end }}
+          </div>
+
+          <div class="row-actions">
+            {{- with .Params.website }}
+              <a role="button" class="outline" href="{{ . }}" target="_blank" rel="noopener">Website</a>
+            {{- end }}
+            <a role="button" href="{{ .RelPermalink }}">View</a>
+          </div>
+        </div>
+      </article>

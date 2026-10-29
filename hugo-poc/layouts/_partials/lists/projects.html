@@ -1,0 +1,70 @@
+{{- $projects := sort .Pages "File.Path" }}
+{{- $open := slice }}
+{{- $breakout := slice }}
+{{- $other := slice }}
+{{- range $projects }}
+  {{- if in (partial "category-values.html" .) "contributors/open" }}{{ $open = $open | append . }}{{ end }}
+  {{- /* Jekyll used `reject`, which isn't a Jekyll 4 filter, so "Other"
+    listed every project. Here it excludes the breakout projects. */}}
+  {{- if in (.Params.tags | default slice) "from/breakout" }}{{ $breakout = $breakout | append . }}{{ else }}{{ $other = $other | append . }}{{ end }}
+{{- end }}
+
+{{- with $open }}
+<section>
+  <header>
+    <h2 id="featured">Current Open Projects</h2>
+  </header>
+  <p>These are some of our currently community projects open to new contributors.</p>
+
+  <div class="card-grid">
+    {{- range . }}
+      <article class="card">
+        {{- with .Params.image }}
+            <img class="ogimage listed" src="{{ . }}" alt="">
+        {{- end }}
+        <div class="card-body">
+          {{ partial "project-card-body.html" (dict "page" . "namespaces" (slice "status" "contributors" "format")) }}
+        </div>
+        <div class="card-footer">
+          {{- with .Params.project_website }}
+            <a role="button" class="outline" href="{{ . }}" target="_blank" rel="noopener">Website</a>
+          {{- end }}
+        </div>
+      </article>
+    {{- end }}
+  </div>
+</section>
+{{- end }}
+
+{{- range $group := slice
+  (dict "id" "breakout" "heading" "Projects Originating from CivicTech Toronto" "pages" $breakout "namespaces" (slice "status" "contributors" "format"))
+  (dict "id" "community" "heading" "Other Community Projects" "pages" $other "namespaces" (slice "status" "contributors")) }}
+{{- with $group.pages }}
+<section>
+  <header class="sticky">
+    <h2 id="{{ $group.id }}">{{ $group.heading }} ({{ len . }})</h2>
+  </header>
+  <div class="card-list">
+    {{- range . }}
+      {{- if not .Params.feature }}
+      <article class="card card-row">
+        <div class="row-content">
+          {{- with .Params.image }}
+            <img class="ogimage listed" src="{{ . }}" alt="">
+          {{- end }}
+          <div>
+            {{ partial "project-card-body.html" (dict "page" . "namespaces" $group.namespaces) }}
+          </div>
+          <div class="row-actions">
+            {{- with .Params.project_website }}
+              <a role="button" class="outline" href="{{ . }}" target="_blank" rel="noopener">Website</a>
+            {{- end }}
+          </div>
+        </div>
+      </article>
+      {{- end }}
+    {{- end }}
+  </div>
+</section>
+{{- end }}
+{{- end }}

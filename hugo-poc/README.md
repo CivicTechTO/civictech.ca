@@ -2,8 +2,9 @@
 
 An exploration of moving civictech.ca from Jekyll to Hugo. It renders a page
 for every record in all seven archive collections (meetups, people, projects,
-venues, organizations, announcements, resources), the redirect stubs, and the
-tag and category pages that `make generate` produces for Jekyll.
+venues, organizations, announcements, resources), each collection's list page
+(`/events/`, `/projects/`, …), the redirect stubs, and the tag and category
+pages that `make generate` produces for Jekyll.
 
 Nothing in `archives/` is modified. Everything is mounted read-only from the
 submodule via `module.mounts` in `hugo.toml`.
@@ -78,7 +79,9 @@ Where the time goes:
   permalinks stop in May 2025 and `/hacknights/N/` after #530. So it was
   exported once with `ruby _scripts/redirects.rb export`, and the CSV is now
   owned by this repo. `make check-redirects` fails if the archives ever add a
-  `redirect_from` the CSV lacks. `content/_content.gotmpl` adds one
+  `redirect_from` the CSV lacks. The `redirect_from` entries of the site's
+  own `_pages` (`/hacknights/`, `/get-in-touch/`, `/volunteer-with-us/`) were
+  added to the CSV by hand. `content/_content.gotmpl` adds one
   `redirect` page per row, with the same markup as jekyll-redirect-from. The
   export also fixed four 2021–2022 URLs listed on both meetup N and N+1:
   Jekyll sent them to N+1, and they now go to N, the meetup the slug names.
@@ -107,6 +110,26 @@ Where the time goes:
   those pages only; any other `{%`/`{:` in a body is reported with `warnf`.
   Raw HTML passes through (`unsafe = true`), as with kramdown. Content images
   get `loading="lazy"` from a render hook, as jekyll-loading-lazy did.
+- **List pages.** The `_pages/list-*.md` pages are Liquid inside Markdown,
+  which Hugo can't run. They become section pages: `layouts/section.html`
+  wraps `_partials/lists/<section>.html`, and `content/<section>/_index.md`
+  sets the title. Liquid that computed values never output (topic lists,
+  unused captures) was dropped. Where Jekyll's output was plainly broken, the
+  port does what the template meant to do:
+  - **`/venues/`** lists all 74 venues. Jekyll showed 11: categories were
+    lowercased for the group headings but matched case-sensitively, so seven
+    groups rendered empty.
+  - **`/organizations/`** lists all 130. Jekyll showed 50: an empty
+    `categories:` list is truthy in Liquid, so those organizations were
+    neither categorized nor "Other". An empty category also produced a blank
+    " Organizations" group.
+  - **`/projects/`** "Other Community Projects" excludes breakout projects.
+    Jekyll used `reject`, which isn't a Jekyll 4 filter and silently returned
+    every project. No project is tagged `from/breakout` today, so the output
+    is the same.
+  Item order differs in places (projects, announcements, one resource
+  group). Jekyll sorts by date, then by byte-order path, while Hugo uses
+  collation.
 - **Images.** `_partials/picture.html` mirrors the jekyll_picture_tag
   `events` preset: a 690px WebP in `srcset` plus an 800px JPEG/PNG fallback.
   Derivatives are cached in `resources/_gen`. That is the counterpart of

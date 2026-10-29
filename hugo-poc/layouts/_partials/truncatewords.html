@@ -1,0 +1,6 @@
+{{- /* Liquid's truncatewords: the first n whitespace-separated words, with
+  "..." appended when anything was cut. Takes dict "text" and "n". */ -}}
+{{- $words := split (replaceRE `\s+` " " .text | strings.TrimSpace) " " }}
+{{- $out := delimit $words " " }}
+{{- if gt (len $words) .n }}{{ $out = printf "%s..." (delimit (first .n $words) " ") }}{{ end }}
+{{- return $out }}
