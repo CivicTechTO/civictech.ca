@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """Check the Hugo POC's built site for problems a page-by-page look would miss.
 
-Usage: python3 hugo-poc/check_output.py [public-dir]   (default hugo-poc/public)
+Usage: python3 scripts/check_output.py [public-dir]   (default public/)
 
 Standard library only. Exits non-zero and lists each failure. Checks:
   jsonld     every ld+json block parses; meetups are Events; no literal entities
   feed       feed.xml is Atom with complete entries; summaries have no entities
   redirects  every _redirects target exists, and each old URL is served by a
              redirect stub or the 404.html map with the same target;
-             every _data/redirects.csv row is included
+             every assets/redirects.csv row is included
   links      internal href/src/srcset and og/twitter image URLs resolve
   entities   no double-escaped entities (&amp;rsquo;) in HTML
 """
@@ -26,7 +26,7 @@ from urllib.parse import unquote, urlsplit
 
 BASE = "https://civictech.ca"
 ROOT = Path(__file__).resolve().parent.parent
-PUBLIC = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "hugo-poc" / "public"
+PUBLIC = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "public"
 ENTITY = re.compile(r"&(?:[a-zA-Z]+|#\d+);")
 DOUBLE_ESCAPED = re.compile(r"&amp;(?:[a-zA-Z]+|#\d+);")
 ATOM = "{http://www.w3.org/2005/Atom}"
@@ -202,15 +202,15 @@ def check_redirects():
                 fail("redirects", f"{old}: stub goes to {served}, _redirects to {new}")
         elif moved.get(unquote(old)) != new:
             fail("redirects", f"{old}: no stub and 404.html map has {moved.get(unquote(old))}")
-    with open(ROOT / "_data" / "redirects.csv", newline="", encoding="utf-8") as f:
+    with open(ROOT / "assets" / "redirects.csv", newline="", encoding="utf-8") as f:
         for row in csv.DictReader(f):
             if row["from"] not in rules:
-                fail("redirects", f"{row['from']}: in _data/redirects.csv but not _redirects")
+                fail("redirects", f"{row['from']}: in assets/redirects.csv but not _redirects")
 
 
 if __name__ == "__main__":
     if not (PUBLIC / "index.html").is_file():
-        sys.exit(f"No built site at {PUBLIC}; run hugo in hugo-poc/ first.")
+        sys.exit(f"No built site at {PUBLIC}; run hugo first.")
     check_pages()
     check_feed()
     check_redirects()

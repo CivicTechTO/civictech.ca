@@ -1,0 +1,26 @@
+{{- /* Stops the build if a page's `redirect_from` front matter names an old
+  URL that assets/redirects.csv doesn't redirect. The CSV is the site's list
+  of redirects; this catches the daily archives update adding one there.
+
+  ARCHIVE-COMPAT(redirect-from): remove once the archive refactor drops
+  `redirect_from`, leaving the CSV as the only source. */ -}}
+{{- $norm := `^/*(.*?)/*$` }}
+{{- $known := slice }}
+{{- range after 1 (resources.Get "redirects.csv" | transform.Unmarshal) }}
+  {{- $known = $known | append (replaceRE $norm "/$1/" (index . 0)) }}
+{{- end }}
+{{- $missing := slice }}
+{{- range site.RegularPages }}
+  {{- $page := . }}
+  {{- with .Params.redirect_from }}
+    {{- range cond (reflect.IsSlice .) . (slice .) }}
+      {{- $from := replaceRE $norm "/$1/" (strings.TrimSpace (string .)) }}
+      {{- if not (in $known $from) }}
+        {{- $missing = $missing | append (printf "%s (%s)" $from $page.File.Path) }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+{{- with $missing }}
+  {{- errorf "redirect_from URLs missing from assets/redirects.csv; add a row for each:\n  %s" (delimit . "\n  ") }}
+{{- end }}

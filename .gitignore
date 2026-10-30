@@ -1,20 +1,6 @@
-# Core Jekyll Local Development Exclusions
-_site
-.sass-cache
-.jekyll-cache
-.jekyll-metadata
+# Hugo build output and processed-image cache
+/public/
+/resources/
+/.hugo_build.lock
 
-# Exclusions of Automatically Generated Content Folders (constructed during Github Pages Workflows)
-# For local development executions see .github/workflows/pages.yml
-# tags
-# categories
-
-# Addtional Appended Ignores
 .DS_Store
-
-# Ruby vendor directory
-vendor/bundle
-.bundle
-
-# Local config override (contains secrets)
-_config.local.yml

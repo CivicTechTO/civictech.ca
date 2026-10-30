@@ -1,4 +1,4 @@
-{{- /* One redirect page per row of _data/redirects.csv, the way
+{{- /* One redirect page per row of assets/redirects.csv, the way
   jekyll-redirect-from writes them. */ -}}
 {{- $rows := resources.Get "redirects.csv" | transform.Unmarshal }}
 {{- range after 1 $rows }}
