@@ -4,13 +4,19 @@ on:
   pull_request:
     branches:
       - main
+      # The Hugo site is developed on v2 alongside the Jekyll site on main
+      # until the switch; see docs/hugo-migration.md.
+      - v2
 
 permissions:
   contents: read
 
+env:
+  HUGO_VERSION: 0.169.0
+
 jobs:
   build:
-    name: Build Jekyll site
+    name: Build Hugo site
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository (with submodules)
@@ -18,32 +24,40 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.2'
-          bundler-cache: true
-          cache-version: 0
-
-      - name: Install system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libvips libvips-dev imagemagick
-
-      - name: Generate tag and category data
-        run: make generate
-
       - name: Validate meetup image references
         run: make validate
 
-      - name: Build Jekyll site
-        run: bundle exec jekyll build
+      - name: Install Hugo
+        run: |
+          wget -q -O "${RUNNER_TEMP}/hugo.deb" \
+            "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb"
+          sudo dpkg -i "${RUNNER_TEMP}/hugo.deb"
+          hugo version
+
+      # Hugo keeps processed images in resources/_gen and skips any it
+      # already has, so a warm cache makes the build about 1s instead of
+      # about 14s.
+      - name: Cache processed images
+        uses: actions/cache@v4
+        with:
+          path: resources/_gen
+          key: hugo-gen-${{ env.HUGO_VERSION }}-${{ hashFiles('archives/images/**', 'layouts/_partials/picture.html', 'layouts/_partials/event-image.html') }}
+          restore-keys: |
+            hugo-gen-${{ env.HUGO_VERSION }}-
+
+      # Also fails if the archives add a redirect_from that
+      # assets/redirects.csv lacks (layouts/_partials/check-redirect-from.html).
+      - name: Build Hugo site
+        run: hugo --gc
+
+      - name: Check built output
+        run: python3 scripts/check_output.py
 
       - name: Upload built site artifact
         uses: actions/upload-artifact@v4
         with:
           name: site
-          path: _site/
+          path: public/
           retention-days: 1
           if-no-files-found: error
 
@@ -59,7 +73,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: site
-          path: _site/
+          path: public/
 
       - name: Install Pa11y
         run: npm install -g pa11y@9
@@ -72,23 +86,28 @@ jobs:
         run: |
           FAILED=0
 
+          # Served over HTTP so root-relative CSS and scripts load.
+          python3 -m http.server 8080 -d public >/dev/null 2>&1 &
+          curl -s --retry 10 --retry-connrefused -o /dev/null http://localhost:8080/
+
           run_pa11y() {
             local label="$1"
             local subdir="$2"
             local file
             if [ -z "$subdir" ]; then
-              file=$(find _site/ -maxdepth 1 -name "index.html" 2>/dev/null | head -1)
+              file=$(find public -maxdepth 1 -name "index.html" 2>/dev/null | head -1)
             else
-              file=$(find "_site/$subdir" -name "index.html" 2>/dev/null | sort 2>/dev/null | head -1)
+              file=$(find "public/$subdir" -name "index.html" 2>/dev/null | sort 2>/dev/null | head -1)
             fi
             if [ -z "$file" ]; then
-              echo "SKIP [$label]: no file found at _site/$subdir"
+              echo "SKIP [$label]: no file found at public/$subdir"
               echo "{\"pageUrl\":\"$file\",\"documentTitle\":\"$label\",\"issues\":[]}" > "/tmp/pa11y_${label}.json"
               return
             fi
+            local url="http://localhost:8080/${file#public/}"
             echo ""
-            echo "=== $label: $file ==="
-            pa11y --reporter json --standard WCAG2AA "$file" > "/tmp/pa11y_${label}.json" 2>/dev/null || FAILED=1
+            echo "=== $label: $url ==="
+            pa11y --reporter json --standard WCAG2AA "$url" > "/tmp/pa11y_${label}.json" 2>/dev/null || FAILED=1
           }
 
           run_pa11y "Homepage"     ""
