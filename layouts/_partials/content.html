@@ -15,11 +15,6 @@
     {{- warnf "%s: untranslated Jekyll syntax %v" $.File.Path . }}
   {{- end }}
   {{- .RenderString (dict "display" "block") $raw }}
-{{- else if in .RawContent "{{ site.feedback_token }}" }}
-  {{- /* JEKYLL-TRANSITION(site-pages): feedback.md's only Liquid is the
-    token Jekyll's CI writes into _config.yml. At cutover, give the page a
-    shortcode or layout for it and drop this branch. */}}
-  {{- replace .Content "{{ site.feedback_token }}" site.Params.feedbackToken | safeHTML }}
 {{- else }}
   {{- .Content }}
 {{- end }}

@@ -1,17 +1,9 @@
-{{- /* JEKYLL-TRANSITION(footer-order): Hugo iterates data maps in key
-  order, so the YAML key order of _data/footer_social.yml is recovered from
-  the raw file. The file is a map because Jekyll's footer include iterates
-  one. At cutover, make it a list. */ -}}
 {{- $footer := hugo.Data.footer_social }}
-{{- $keys := slice }}
-{{- with resources.Get "data-raw/footer_social.yml" }}
-  {{- range findRESubmatch `(?m)^([A-Za-z0-9_-]+):` .Content }}{{ $keys = $keys | append (index . 1) }}{{ end }}
-{{- end }}
 {{- if $footer }}
 <section class="social-links">
   <div class="social-button-group">
-    {{- range $key := $keys }}
-      {{- $details := index $footer $key }}
+    {{- range $details := $footer }}
+      {{- $key := $details.id }}
       {{- $data := index hugo.Data.social_links $key }}
       {{- with $details.url }}
         {{- $rel := "noopener" }}

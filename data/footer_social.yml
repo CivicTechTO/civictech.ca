@@ -1,42 +1,41 @@
-slack:
+# Footer social links, in display order. `id` matches data/social_links.yml.
+- id: slack
   label: Slack
   url: "http://link.civictech.ca/slack"
   icon: slack.svg
 
-guild:
+- id: guild
   label: Guild
   url: "https://guild.host/ctto/events"
   icon: guild.svg
 
-
-github:
+- id: github
   label: GitHub
   url: "https://github.com/civictechto"
   icon: github.svg
 
-youtube:
+- id: youtube
   label: YouTube
   url: "https://www.youtube.com/c/CivicTechTO"
   icon: youtube.svg
 
-bluesky:
+- id: bluesky
   label: Bluesky
   url: "https://bsky.app/profile/civictechto.bsky.social"
   icon: bluesky.svg
 
-mastodon:
+- id: mastodon
   label: Mastodon
   url: "https://thecanadian.social/@CivicTechTO"
   icon: mastodon.svg
   rel: "me"
 
-
-instagram:
+- id: instagram
   label: Instagram
   url: "https://www.instagram.com/civictechto/"
   icon: instagram.svg
 
-linkedin:
+- id: linkedin
   label: LinkedIn
   url: "https://www.linkedin.com/company/civictechto/"
   icon: linkedin.svg

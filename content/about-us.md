@@ -1,8 +1,4 @@
 ---
-# JEKYLL-TRANSITION(about-us-copy): generated from _pages/about-us.md by
-# sync-about-us.rb, with its two Liquid loops replaced by the
-# featured-speakers and featured-supporters shortcodes. Don't edit here;
-# edit the Jekyll page and re-run the script until cutover.
 title: "About Us"
 ---
 
