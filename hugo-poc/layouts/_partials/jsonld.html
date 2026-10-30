@@ -17,7 +17,9 @@
     {{- $ld = merge $ld (dict "affiliation" $orgs) }}
   {{- end }}
 {{- else if in $tags "type/meetup" }}
-  {{- $text := .Description | default .Content | plainify | replaceRE `\n` "" }}
+  {{- /* htmlUnescape: rendered .Content carries entities (&rsquo;, &amp;) that
+    plainify keeps, and a JSON string would show them literally. */ -}}
+  {{- $text := .Description | default .Content | plainify | htmlUnescape | replaceRE `\n` "" }}
   {{- $words := split (trim $text " \t") " " }}
   {{- if gt (len $words) 50 }}{{ $text = printf "%s..." (delimit (first 50 $words) " ") }}{{ end }}
   {{- $date := .Date.Format "2006-01-02 15:04:05 -0700" }}

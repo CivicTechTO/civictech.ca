@@ -21,7 +21,7 @@
             {{- with .Params.summary }}
               <p>{{ . }}</p>
             {{- else }}
-              <p>{{ partial "truncatewords.html" (dict "text" (partial "content.html" . | plainify) "n" 30) }}</p>
+              <p>{{ partial "truncatewords.html" (dict "text" (partial "content.html" . | plainify | htmlUnescape) "n" 30) }}</p>
             {{- end }}
           </div>
           <div class="row-actions">
