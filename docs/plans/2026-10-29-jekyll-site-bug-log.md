@@ -30,6 +30,7 @@ register in `hugo-poc/README.md`.
 | 11 | Malformed `sizes` on meetup images | Low | this repo |
 | 12 | `CLAUDE.md` and `GEMINI.md` are published | Low | this repo |
 | 13 | `/projects/` uses a filter that doesn't exist | None today | this repo |
+| 14 | `/resources/` repeats one `id` in every group | Low | this repo |
 
 ---
 
@@ -207,3 +208,15 @@ project. There's no visible effect today, because no project is tagged
 
 **Fix:** `where_exp: "item", "item.tags contains 'from/breakout'"` with
 `unless` in the loop, or build the list with a `for`/`unless`.
+
+## 14. `/resources/` repeats one `id` in every group
+
+**Where:** `_pages/list-resources.md`.
+
+Each category group's list is `<div id="resourcesList" class="card-list">`,
+so the page has 13 elements with the same `id`. Pa11y (WCAG 2 AA, rule F77)
+reports it on https://civictech.ca/resources/ (checked 2026-10-30). Nothing
+in the CSS or JavaScript uses the `id`; it has been there since the page moved
+to `_pages/`.
+
+**Fix:** drop the `id`.

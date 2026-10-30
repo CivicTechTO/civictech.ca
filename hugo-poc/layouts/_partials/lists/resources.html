@@ -23,7 +23,7 @@
     </h2>
   </header>
 
-  <div id="resourcesList" class="card-list">
+  <div class="card-list">
     {{- range $resource := $resources }}
       {{- if in (partial "category-values.html" .) $category }}
       <article class="card card-row">
