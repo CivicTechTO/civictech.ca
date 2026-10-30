@@ -1,7 +1,0 @@
-{% assign featured_announcements = site.announcements | where: "feature", true | sort: "date" | reverse %}
-{% if page.url == "/" and featured_announcements.size > 0 %}
-  {% assign announcement = featured_announcements[0] %}
-  <div class="announcement-bar">
-    <a href="{{ announcement.url }}"><strong>Announcement:</strong> {{ announcement.title }}&nbsp;&rarr;</a>
-  </div>
-{% endif %}
