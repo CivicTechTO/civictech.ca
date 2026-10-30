@@ -22,9 +22,36 @@ hugo server            # http://localhost:1313/events/99/
 Requires Hugo extended ≥ 0.153 (tested with 0.169.0).
 
 CI (`.github/workflows/hugo-poc.yml`) builds the POC on every pull request
-alongside the Jekyll build, and runs `make check-redirects`. It caches
-`resources/_gen` (processed images) the way `pages.yml` caches
-`_site/assets/thumbs`. Nothing is deployed.
+alongside the Jekyll build, runs `make check-redirects`, and then checks the
+output (below). It caches `resources/_gen` (processed images) the way
+`pages.yml` caches `_site/assets/thumbs`. Nothing is deployed.
+
+### Output checks
+
+```bash
+python3 hugo-poc/check_output.py              # after `hugo` in hugo-poc/
+```
+
+Standard-library Python, run against `public/`. It fails on:
+- JSON-LD that doesn't parse, meetup pages without a complete `Event`, or
+  literal HTML entities in JSON-LD strings
+- a `feed.xml` that isn't Atom, entries missing a field or with a link to a
+  page that wasn't built, or literal entities in summaries; a missing feed
+  discovery link
+- a `_redirects` target that wasn't built, an old URL that neither a
+  redirect stub nor the `404.html` map forwards to the same target, or a
+  `_data/redirects.csv` row missing from `_redirects`
+- internal `href`, `src`, `srcset`, `og:image` or `twitter:image` URLs that
+  don't resolve (case-sensitively, as on a web host)
+- double-escaped entities such as `&amp;rsquo;` in any page
+
+CI also runs [Pa11y](https://pa11y.org/) (WCAG 2 AA) on one page of each
+type, listed in `.pa11yci.json`. Locally:
+
+```bash
+python3 -m http.server 8080 -d hugo-poc/public &
+npx pa11y-ci@4.1.1 --config hugo-poc/.pa11yci.json
+```
 
 ## Build time (measured 2026-10-29, Apple Silicon, Ruby 3.2.2, Hugo 0.169.0)
 
@@ -55,7 +82,7 @@ Where the time goes:
 
 ## Bugs found in the live Jekyll site
 
-Comparing the two builds turned up 13 bugs in the live site, including
+Comparing the two builds turned up 14 bugs in the live site, including
 invalid JSON-LD on every meetup page, venue and organization list pages
 missing most entries, and `og:image` URLs that 404. They are logged, with
 cause, evidence and suggested fix, in
@@ -206,6 +233,18 @@ Checked against `_site/`:
 - every redirect stub's target
 - the feed entry by entry
 - the sitemap's URL set
+
+These comparisons were one-off scripts and aren't committed, because they
+need a Jekyll build; the output checks above guard the Hugo side.
+
+A visual review in Chrome (2026-10-30) compared one page of every type,
+every list page, the tag and category indexes and the site pages with
+civictech.ca: screenshots plus page height, heading positions, image sizes
+and link counts. The menu, theme switcher, mobile menu, phone-width layout
+(390px) and `404.html` forwarding were checked by hand. At 390px,
+`/projects/bikespace/` and `/code-of-conduct/` scroll sideways on both sites
+(shared CSS, not the port). The feed passes the
+W3C Feed Validator and parses with feedparser, as the live feed does.
 
 Apart from the deliberate fixes described above, this is what remains.
 

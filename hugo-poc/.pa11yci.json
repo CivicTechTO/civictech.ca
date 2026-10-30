@@ -1,0 +1,31 @@
+{
+  "defaults": {
+    "standard": "WCAG2AA",
+    "timeout": 60000,
+    "chromeLaunchConfig": { "args": ["--no-sandbox"] }
+  },
+  "urls": [
+    "http://localhost:8080/",
+    "http://localhost:8080/events/",
+    "http://localhost:8080/events/557/",
+    "http://localhost:8080/people/",
+    "http://localhost:8080/people/lilly-tong/",
+    "http://localhost:8080/projects/",
+    "http://localhost:8080/projects/bikespace/",
+    "http://localhost:8080/venues/",
+    "http://localhost:8080/venues/bdo-canada-llp-toronto-offices/",
+    "http://localhost:8080/organizations/",
+    "http://localhost:8080/organizations/architech/",
+    "http://localhost:8080/announcements/",
+    "http://localhost:8080/announcements/codeacross-toronto-2016-recap/",
+    "http://localhost:8080/resources/",
+    "http://localhost:8080/resources/community-beta-city-yeg/",
+    "http://localhost:8080/tags/",
+    "http://localhost:8080/categories/",
+    "http://localhost:8080/categories/role/speaker/",
+    "http://localhost:8080/about-us/",
+    "http://localhost:8080/feedback/",
+    "http://localhost:8080/code-of-conduct/",
+    "http://localhost:8080/get-involved/"
+  ]
+}

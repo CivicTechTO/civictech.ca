@@ -53,6 +53,19 @@ jobs:
         working-directory: hugo-poc
         run: hugo --gc --templateMetrics
 
+      - name: Check built output
+        run: python3 hugo-poc/check_output.py
+
+      # Uses the runner's Chrome rather than downloading one for Puppeteer.
+      - name: Accessibility check (Pa11y)
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: "true"
+          PUPPETEER_EXECUTABLE_PATH: /usr/bin/google-chrome
+        run: |
+          python3 -m http.server 8080 -d hugo-poc/public >/dev/null 2>&1 &
+          curl -s --retry 10 --retry-connrefused -o /dev/null http://localhost:8080/
+          npx --yes pa11y-ci@4.1.1 --config hugo-poc/.pa11yci.json
+
       - name: Upload built site artifact
         uses: actions/upload-artifact@v4
         with:
