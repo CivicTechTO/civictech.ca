@@ -14,7 +14,7 @@ permissions:
 jobs:
   comment:
     name: Post Pa11y report comment
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     env:
       REPORT_DIR: /tmp/pa11y-report
     if: >-
@@ -26,11 +26,13 @@ jobs:
     steps:
       - name: Download Pa11y report artifact from CI run
         id: download
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         continue-on-error: true
         with:
           name: pa11y-report
           run-id: ${{ github.event.workflow_run.id }}
+          # Without a token, run-id is ignored and the current run is searched.
+          github-token: ${{ github.token }}
           path: ${{ env.REPORT_DIR }}
 
       - name: Check report file

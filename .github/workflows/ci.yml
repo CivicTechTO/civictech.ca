@@ -17,10 +17,10 @@ env:
 jobs:
   build:
     name: Build Hugo site
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout repository (with submodules)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           submodules: recursive
 
@@ -38,7 +38,7 @@ jobs:
       # already has, so a warm cache makes the build about 1s instead of
       # about 14s.
       - name: Cache processed images
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: resources/_gen
           key: hugo-gen-${{ env.HUGO_VERSION }}-${{ hashFiles('archives/images/**', 'layouts/_partials/picture.html', 'layouts/_partials/event-image.html') }}
@@ -54,7 +54,7 @@ jobs:
         run: python3 scripts/check_output.py
 
       - name: Upload built site artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: site
           path: public/
@@ -63,14 +63,15 @@ jobs:
 
   accessibility:
     name: Accessibility (Pa11y)
-    runs-on: ubuntu-latest
+    # Pinned: the AppArmor workaround below is for Ubuntu 24.04.
+    runs-on: ubuntu-24.04
     needs: build
     permissions:
       contents: read
       pull-requests: write
     steps:
       - name: Download built site artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: site
           path: public/
@@ -218,7 +219,7 @@ jobs:
           EOF
 
       - name: Upload Pa11y report artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: pa11y-report
           path: /tmp/pa11y_report.md

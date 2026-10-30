@@ -26,17 +26,17 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout repository (with submodules)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           submodules: recursive
 
       - name: Setup Pages
         id: pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Install Hugo
         run: |
@@ -46,7 +46,7 @@ jobs:
           hugo version
 
       - name: Cache processed images
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: resources/_gen
           key: hugo-gen-${{ env.HUGO_VERSION }}-${{ hashFiles('archives/images/**', 'layouts/_partials/picture.html', 'layouts/_partials/event-image.html') }}
@@ -60,7 +60,7 @@ jobs:
           HUGO_PARAMS_FEEDBACKTOKEN: ${{ secrets.FEEDBACK_TOKEN }}
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: public/
 
@@ -68,9 +68,9 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: build
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
