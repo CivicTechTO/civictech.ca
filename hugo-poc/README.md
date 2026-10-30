@@ -221,6 +221,11 @@ Apart from the deliberate fixes described above, this is what remains.
   announcements' bold "date | time | place" lines into broken tables with
   literal `**`; Goldmark renders them as intended. Smart quotes differ in
   about 10 places, and footnote back-links use `↩︎` rather than `↩`.
+  Goldmark also opens the footnote block with an `<hr>`, which adds a rule
+  and 20px to pages with footnotes (e.g. `/projects/bikespace/`).
+- **Category namespace order** on `/categories/` is alphabetical. Jekyll's
+  order is whatever order `make generate`'s scripts find files in, which
+  differs between the committed `_data/categories.yml` and the live build.
 - **Undated documents** (most projects, resources, venues) show no date in
   backlinks and tag/category lists, and sort last. Jekyll gives them the build
   date (a quirk of `Document#date`), which also sorts them first.
