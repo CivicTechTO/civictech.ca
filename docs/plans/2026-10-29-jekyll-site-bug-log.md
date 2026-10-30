@@ -13,7 +13,7 @@ independently of any migration.
 
 The Hugo build already avoids every one of these. Archive data problems that
 only matter to Hugo are tracked separately, in the "Interim workarounds"
-register in `hugo-poc/README.md`.
+register in `docs/hugo-migration.md`.
 
 | # | Bug | Impact | Fix in |
 | --- | --- | --- | --- |

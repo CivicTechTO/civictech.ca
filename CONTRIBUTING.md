@@ -38,13 +38,14 @@ Contributions to improve the website pages, functionality, design, or developer 
 
 #### Making Changes
 
-- Website pages are located in `_pages/`
-- Test your changes locally by running `bundle exec jekyll serve`
-- Preview at [localhost:4000](http://localhost:4000) before submitting
+- Website pages are located in `content/`, templates in `layouts/`, and styles and scripts in `static/assets/`
+- Test your changes locally by running `hugo server`
+- Preview at [localhost:1313](http://localhost:1313) before submitting
+- Run `make check` to catch broken links, redirects, structured data and feed problems
 
 #### Submitting a Pull Request
 
-1. **Test locally** - Make sure the site builds and displays correctly
+1. **Test locally** - Make sure the site builds, `make check` passes, and pages display correctly
 2. **Write a clear description** - Explain what your changes do and why
 3. **Link to related issues** - If your PR addresses an issue, reference it
 4. **Be responsive** - Be prepared to discuss and iterate on your changes
@@ -81,22 +82,15 @@ If you're working with archive content:
 git submodule update --remote --merge
 ```
 
-### Generating Category and Tag Data
+### Tags and Categories
 
-After making changes to archive content, you may need to regenerate category and tag data:
-
-```bash
-./_scripts/generate_category_data.sh
-./_scripts/generate_tag_data.sh
-./_scripts/generate_category_pages.sh
-./_scripts/generate_tag_pages.sh
-```
+Tag and category pages are built by Hugo from the archive front matter, so there's nothing to regenerate. A new namespace (the part before the `/`, as in `topic/open-data`) must be added to `params.namespaces` in `hugo.toml`; the build stops with a message if one is missing.
 
 ## License
 
 This project uses a dual-license structure:
 
-- **Code contributions** (Jekyll templates, scripts, stylesheets, etc.) are licensed under the **MIT License**
+- **Code contributions** (Hugo templates, scripts, stylesheets, etc.) are licensed under the **MIT License**
 - **Content contributions** (website pages, documentation, archive content) are licensed under **CC BY-NC-SA 4.0**
 
 By contributing to this project, you agree that your contributions will be licensed under the appropriate license based on the type of contribution. See [LICENSE](LICENSE) for full details.

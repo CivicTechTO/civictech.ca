@@ -1,60 +1,30 @@
-# Makefile for CivicTech.ca GitHub Pages Migration Evaluation
-
-REPO_URL=https://github.com/CivicTechTO/civictechto.github.io.git
-JEKYLL=bundle exec jekyll
-SCRIPTS_DIR=./_scripts
+# Makefile for civictech.ca (Hugo)
 
 # Default target
 all: serve
 
-# Install Ruby dependencies
-install:
-	bundle install
-
-# Start Jekyll server (uses _config.local.yml if present)
+# Start the Hugo development server at http://localhost:1313/
 serve:
-	@if [ -f _config.local.yml ]; then \
-		$(JEKYLL) serve --config _config.yml,_config.local.yml; \
-	else \
-		$(JEKYLL) serve; \
-	fi
+	hugo server
 
-# Start Jekyll server with incremental regeneration
-serve-incremental:
-	@if [ -f _config.local.yml ]; then \
-		$(JEKYLL) serve --incremental --config _config.yml,_config.local.yml; \
-	else \
-		$(JEKYLL) serve --incremental; \
-	fi
+# Build the site into public/
+build:
+	hugo --gc
 
-# Generate category and tag data
-generate-data:
-	$(SCRIPTS_DIR)/generate_category_data.sh
-	$(SCRIPTS_DIR)/generate_tag_data.sh
-
-# Generate category and tag pages
-generate-pages:
-	$(SCRIPTS_DIR)/generate_category_pages.sh
-	$(SCRIPTS_DIR)/generate_tag_pages.sh
-
-# Generate all content
-generate: generate-data generate-pages
-
-# Check that every archive redirect_from is in _data/redirects.csv.
-# ARCHIVE-COMPAT(redirect-from): remove once the archives drop redirect_from.
-check-redirects:
-	ruby $(SCRIPTS_DIR)/redirects.rb check
+# Check the built site: JSON-LD, feed, redirects, internal links, entities
+check: build
+	python3 scripts/check_output.py
 
 # Validate that meetup image references resolve to source files
 validate:
-	$(SCRIPTS_DIR)/validate_images.sh
+	bash scripts/validate_images.sh
 
-# Update Git submodules
+# Update the archives submodule to its latest commit
 update:
 	git submodule update --remote --merge
 
-# Clean Jekyll output
+# Remove the build output and the processed-image cache
 clean:
-	rm -rf _site .jekyll-metadata
+	rm -rf public resources
 
-.PHONY: all bundle serve serve-incremental generate-data generate-pages generate validate check-redirects update-submodules clean
+.PHONY: all serve build check validate update clean

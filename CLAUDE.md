@@ -4,84 +4,64 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is the [civictech.ca](https://civictech.ca) website — a Jekyll 4 static site for Civic Tech Toronto, hosted on GitHub Pages.
+This is the [civictech.ca](https://civictech.ca) website — a Hugo static site for Civic Tech Toronto, hosted on GitHub Pages.
 
 ## Development Commands
 
 ```bash
-# Install Ruby dependencies
-make install          # or: bundle install
-
-# Start development server
-make serve            # http://localhost:4000
-make serve-incremental  # faster rebuilds
-
-# Regenerate tag/category data and pages (required after content changes)
-make generate
-
-# Update archives submodule to latest
-make update           # or: git submodule update --remote --merge
-
-# Clean build artifacts
-make clean
+make serve      # hugo server, http://localhost:1313
+make build      # hugo --gc, writes public/
+make check      # build, then scripts/check_output.py
+make validate   # meetup image references resolve
+make update     # bump the archives submodule
+make clean      # remove public/ and resources/ (processed-image cache)
 ```
 
-The `make generate` step must be run before serving if you've changed content in the `archives/` submodule, as it runs four shell scripts that extract tags and categories from front matter and write them to `_data/` and `tags/`/`categories/` directories.
+Requires Hugo extended ≥ 0.153 (CI pins 0.169.0) and Python 3 for the checks. No Ruby.
 
 ## Architecture
 
 ### Content Lives in a Git Submodule
 
-All actual content (meetups, projects, people, organizations, venues, resources) lives in the `archives/` submodule — a separate repository updated daily by CI. The main repo contains only templates, styles, scripts, and site configuration. When working with content, always remember to initialize submodules:
+All actual content (meetups, projects, people, organizations, venues, resources, announcements) lives in the `archives/` submodule — a separate repository updated daily by CI. Hugo mounts it read-only through `module.mounts` in `hugo.toml`; never modify files in `archives/` from this repo. Initialize it with:
 
 ```bash
 git submodule update --init --recursive
 ```
 
-### Jekyll Collections
+### Collections and URLs
 
-Defined in `_config.yml`, collections map to these URL paths:
-- `archives/_meetups/` → `/events/`
+Mounted in `hugo.toml`, with permalinks from each file's name (Hugo lowercases and hyphenates them):
+- `archives/_meetups/` → `/events/` (`390.md` and `Weather Report Card.md` are excluded; see below)
 - `archives/_projects/` → `/projects/`
 - `archives/_people/` → `/people/`
 - `archives/_organizations/` → `/organizations/`
 - `archives/_venues/` → `/venues/`
 - `archives/_resources/` → `/resources/`
-- `_announcements/` → `/announcements/`
+- `archives/_announcements/` → `/announcements/`
 
-### Data Generation Pipeline
+Site pages are in `content/`. Templates are in `layouts/` (per-collection `layouts/<section>/page.html`, shared pieces in `layouts/_partials/`). Static CSS, JS and images are in `static/assets/`; meetup images are processed from `archives/images/events/`.
 
-Tags and categories are not manually maintained — they're generated from collection front matter by bash scripts in `_scripts/`:
+### Tags and Categories
 
-1. `generate_tag_data.sh` → writes `_data/tags.yml`
-2. `generate_tag_pages.sh` → writes `tags/*.html`
-3. `generate_category_data.sh` → writes `_data/categories.yml`
-4. `generate_category_pages.sh` → writes `categories/*.html`
+Hugo taxonomies (`tags`, `categories`) built from front matter. Terms are namespaced (`topic/open-data`); each namespace must be listed in `params.namespaces` in `hugo.toml`, or the build stops. `content/_content.gotmpl` adds a page per namespace.
 
-The CI build (`.github/workflows/pages.yml`) always runs `make generate` before `jekyll build`. Do not manually edit files in `tags/`, `categories/`, or `_data/tags.yml`/`_data/categories.yml` — they will be overwritten.
+### Redirects
 
-### Image Validation
+Old URLs are listed in `assets/redirects.csv` (`from,to`; `to` is a site path or an archive record like `_meetups/99.md`). The build writes a redirect page per row, and `404.html` forwards the old mixed-case/space URLs in JavaScript (GitHub Pages can't serve those paths). The build stops if an archive `redirect_from` is missing from the CSV.
 
-`_scripts/validate_images.sh` (exposed as `make validate`) checks that every meetup's `image:` front matter resolves to a file in `archives/images/events/`, skipping external `http(s)` URLs. It exits non-zero on a missing source and runs on pull requests via `ci.yml`. It is intentionally **not** part of `make generate` or `pages.yml`, so a missing image never blocks the production deploy. Run `bash _scripts/test_validate_images.sh` to exercise the validator against fixtures.
+### Workarounds
 
-### Navigation and Site Data
-
-Site-wide data is in `_data/`:
-- `navigation.yml` — header/footer nav structure
-- `footer_social.yml` — social links with `rel` attribute support (used for Mastodon verification)
-- `featured_topics.yml` — homepage featured topics
-
-### Image Handling
-
-The `jekyll_picture_tag` plugin processes images from `archives/images/` and writes generated thumbnails to `_site/assets/thumbs/` (inside the build output). This requires `libvips` and `imagemagick` to be installed locally. The thumbnails are not committed to git — they are regenerated at build time.
-
-`jekyll_picture_tag` only generates a derivative when its output file is absent in the Jekyll destination (`_site/assets/thumbs`), which Jekyll preserves across builds via `keep_files`. CI caches that directory (`actions/cache`, keyed on `archives/images/**`) so unchanged builds regenerate nothing. Generated filenames embed an MD5 of the source image, so a changed source regenerates correctly; `make clean` forces a full local rebuild.
+Code that works around archive data Hugo can't read as Jekyll did is labelled `ARCHIVE-COMPAT(<id>)` and listed in `docs/hugo-migration.md`. Each goes away with the planned archive refactor; don't remove one before the archive data is fixed.
 
 ## CI/CD
 
-- **`pages.yml`**: Triggers on push to `main`. Runs `make generate`, then `jekyll build`, then deploys to GitHub Pages.
-- **`update-submodule.yml`**: Runs daily at midnight UTC, creates a PR to bump the `archives` submodule to its latest master commit.
+- **`ci.yml`**: on pull requests to `main` and `v2`. Runs `make validate`, builds with Hugo, runs `scripts/check_output.py`, then Pa11y (WCAG 2 AA) and posts a report comment.
+- **`pages.yml`**: on push to `main` (and weekly). Builds with Hugo and deploys `public/` to GitHub Pages. The feedback page's token comes from the `FEEDBACK_TOKEN` secret via `HUGO_PARAMS_FEEDBACKTOKEN`.
+- **`update-submodule.yml`**: daily, opens a PR bumping the `archives` submodule.
 
-## Ruby Version
+Processed images are cached in `resources/_gen` (keyed on `archives/images/**`).
 
-The project requires Ruby 3.2.2 (specified in `.ruby-version`). Use `rbenv` or `rvm` to manage this.
+## Branches
+
+Until the switch to Hugo, `main` is the live Jekyll site and `v2` is this Hugo version. See "Working on v2" in `docs/hugo-migration.md` for keeping the two in step.

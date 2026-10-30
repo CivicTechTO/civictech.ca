@@ -10,121 +10,96 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for how to contribute to this website.
 
 ## Local Development
 
-This site is built with Jekyll, which requires Ruby. Follow these steps to get set up:
+This site is built with [Hugo](https://gohugo.io). Image processing is built into Hugo, so there is nothing else to install.
 
-1. **Install Ruby**
+1. **Install Hugo (extended edition, 0.153 or later)**
 
-   **This project requires Ruby 3.2.2** (specified in `.ruby-version`).
-
-   We strongly recommend installing Ruby using a Ruby version manager like [RBENV](https://rbenv.org).
-
-   Verify your Ruby version:
+   On **macOS** with [Homebrew](https://brew.sh):
 
    ```bash
-   ruby -v
-   # Should show: ruby 3.2.2
+   brew install hugo
    ```
 
-2. **Clone the Repository**
+   For other platforms, see the [Hugo installation guide](https://gohugo.io/installation/). Verify the version:
 
    ```bash
-   git clone https://github.com/CivicTechTO/civictech.ca.git
+   hugo version
+   # Should show v0.153.0 or later, with "+extended"
+   ```
+
+2. **Clone the Repository (with the archives submodule)**
+
+   ```bash
+   git clone --recurse-submodules https://github.com/CivicTechTO/civictech.ca.git
    cd civictech.ca
    ```
 
-2. **Install Dependencies**
-
-   Bundler manages Ruby gem dependencies:
+   If you already cloned without submodules:
 
    ```bash
-   gem install bundler
-   bundle install
+   git submodule update --init --recursive
    ```
-
-   If you see errors about missing Ruby version, make sure you've completed the Prerequisites section above.
-
-   **Additional dependencies for image processing:**
-
-   If using **macOS**, you can get libvips from [homebrew](https://brew.sh):
-
-   ```sh
-   brew install vips imagemagick
-   ```
-
-   > [!TIP]
-   >
-   > Additional Resources
-   >
-   > - [GitHub Pages documentation](https://docs.github.com/en/pages)
-   > - [Jekyll installation guide](https://jekyllrb.com/docs/installation/)
-
 
 3. **Run the Local Server**
 
-   Standard mode:
-
    ```bash
-   bundle exec jekyll serve
-   ```
-
-   Or use [incremental regeneration](https://jekyllrb.com/docs/configuration/incremental-regeneration/) (faster but less stable):
-
-   ```bash
-   bundle exec jekyll serve --incremental
+   hugo server        # or: make serve
    ```
 
 4. **View the Site**
 
-   Open your browser to [localhost:4000](http://localhost:4000)
+   Open your browser to [localhost:1313](http://localhost:1313)
+
+The first build processes every meetup image and takes 10–15 seconds. Processed images are cached in `resources/`, so later builds take about a second; `make clean` clears the cache.
+
+### Checking Your Changes
+
+```bash
+make check      # build, then check JSON-LD, the feed, redirects, links and entities
+make validate   # check that every meetup image: front matter points at a real file
+```
+
+CI runs both on pull requests, plus a [Pa11y](https://pa11y.org/) accessibility check (WCAG 2 AA) on one page of each type, and posts the Pa11y report as a comment.
 
 ### Common Issues
 
-**Ruby Version Management**
-If you encounter Ruby version conflicts, use a Ruby version manager like [RVM](https://rvm.io/rvm/install) or rbenv. Check `.ruby-version` for the required version.
+**Missing pages or images**
+The content lives in the `archives/` submodule. If it's empty, run `git submodule update --init --recursive`.
 
-**Bundle Install Errors**
-Ensure your Ruby environment matches the `Gemfile` requirements. Older gem versions may not be compatible with newer Ruby versions.
+**"redirect_from URLs missing from assets/redirects.csv"**
+The archives added an old URL to a record's `redirect_from`. Add a row to `assets/redirects.csv` for each URL listed (see [docs/hugo-migration.md](docs/hugo-migration.md#legacy-urls)).
 
-**Jekyll-GitHub Pages Compatibility**
-GitHub Pages restricts Jekyll plugins for security. See [supported versions](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/about-github-pages-and-jekyll#plugins) for details.
-
-**Validating Meetup Images**
-Run `make validate` to check that every meetup's `image:` front matter points at a real file in `archives/images/events/`. CI runs this on pull requests to `main` (including the daily submodule-update PR) and fails if a referenced image is missing, so broken references are caught before they reach the site.
-
-**Image Derivative Caching**
-CI caches generated image thumbnails (`_site/assets/thumbs`) keyed on the contents of `archives/images/`, so unchanged images are not regenerated. Locally, `_site` persists between builds, so repeat builds are already incremental — running `make clean` wipes `_site` and forces a full regeneration on the next build.
+**Old URLs on a local server**
+macOS file names aren't case-sensitive, so `hugo server` answers old mixed-case URLs such as `/people/Lilly%20Tong/` directly. On the live site they are forwarded by `404.html`.
 
 ## Development Scripts
 
 ### Update Submodule
 
 ```bash
-git submodule update --remote --merge
-```
-
-### Generate Categories and Tags Data
-
-```bash
-./_scripts/generate_category_data.sh
-./_scripts/generate_tag_data.sh
-```
-
-### Generate Category and Tag Pages
-
-```bash
-./_scripts/generate_category_pages.sh
-./_scripts/generate_tag_pages.sh
+make update     # or: git submodule update --remote --merge
 ```
 
 ## Project Structure
 
-This site uses Jekyll with content managed in the `archives/` submodule. The archives contain historical data about events, people, projects, and organizations. See [archives/README.md](archives/README.md) for more details.
+Content is managed in the `archives/` submodule, which holds the historical data about events, people, projects, and organizations. See [archives/README.md](archives/README.md) for more details. Hugo mounts it read-only (`module.mounts` in `hugo.toml`).
+
+| Path | What it holds |
+| --- | --- |
+| `hugo.toml` | Site configuration, including the archive mounts |
+| `layouts/` | Templates |
+| `content/` | Site pages (about, code of conduct, feedback, …) and list page settings |
+| `data/` | Navigation, footer and social link data |
+| `assets/` | Files Hugo processes: icons, logo, `redirects.csv` |
+| `static/` | Files copied as they are: CSS, JavaScript, images, `llms.txt` |
+| `scripts/` | Output and image checks |
+| `docs/` | Plans and notes, including [the move from Jekyll](docs/hugo-migration.md) |
 
 ## License
 
 This project uses a dual-license structure:
 
-- **Code** (Jekyll templates, scripts, stylesheets, etc.): [MIT License](LICENSE)
+- **Code** (Hugo templates, scripts, stylesheets, etc.): [MIT License](LICENSE)
 - **Content** (website pages, documentation, archive content): [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
 See [LICENSE](LICENSE) for full details.

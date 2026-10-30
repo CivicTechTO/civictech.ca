@@ -1,57 +1,78 @@
-# Hugo proof of concept
+# Moving civictech.ca from Jekyll to Hugo
 
-An exploration of moving civictech.ca from Jekyll to Hugo. It builds
-everything the Jekyll site publishes:
+The `v2` branch is civictech.ca rebuilt with Hugo. It builds everything the
+Jekyll site on `main` publishes:
 - a page for every record in all seven archive collections (meetups, people,
   projects, venues, organizations, announcements, resources)
 - each collection's list page (`/events/`, `/projects/`, …)
 - the home page and site pages
 - the redirect stubs
-- the tag and category pages that `make generate` produces for Jekyll
+- the tag and category pages that `make generate` produced for Jekyll
 - `feed.xml`, `sitemap.xml`, `robots.txt`, `llms.txt` and `generate-csv.csv`
 
 Nothing in `archives/` is modified. Everything is mounted read-only from the
-submodule via `module.mounts` in `hugo.toml`.
+submodule via `module.mounts` in `hugo.toml`. How to build and check it is in
+the [README](../README.md). This document records how the Jekyll site maps to
+Hugo, what differs, the workarounds pending the archive refactor, and how
+`v2` is kept alongside `main` until the switch.
+
+Decisions (2026-10-30): hosting stays on GitHub Pages for the near to mid
+term; person, venue, project, organization, announcement and resource URLs
+become lowercase (old URLs are forwarded); the archive refactor happens after
+the switch. The exploration that led here is on the `explore/hugo-migration`
+branch, where Hugo lived in `hugo-poc/` beside Jekyll.
+
+## Working on v2
+
+`main` stays the live Jekyll site, and `v2` is the Hugo site. CI builds both:
+pull requests to `main` run the Jekyll build, and pull requests to `v2` the
+Hugo build. Nothing deploys from `v2` (`pages.yml` runs on pushes to `main`).
+
+Merge `main` into `v2` regularly, at least after each change to `main` other
+than an archives bump:
 
 ```bash
-cd hugo-poc
-hugo                   # writes public/
-hugo server            # http://localhost:1313/events/99/
+git switch v2
+git merge main
+make check
 ```
 
-Requires Hugo extended ≥ 0.153 (tested with 0.169.0).
+What to expect:
+- **Archives bumps** (the daily `update-submodule.yml` PRs go to `main`)
+  merge cleanly. If the build then stops with "redirect_from URLs missing
+  from assets/redirects.csv", add a row per URL to `assets/redirects.csv`.
+- **Changes to files that moved** (`assets/css`, `assets/js` and
+  `assets/images` are `static/assets/…` on v2; `_data/*.yml` is `data/`;
+  `_includes/icons` and `logo.svg` are under `assets/`; the site pages are
+  in `content/`) follow the rename and merge cleanly. `footer_social.yml` is
+  a list on v2, so a change to it needs redoing by hand.
+- **Changes to Jekyll templates** (`_layouts/`, `_includes/`,
+  `_pages/*.md` with Liquid) conflict, because v2 deleted those files. Port
+  the change to the matching file in `layouts/` (collection layouts are
+  `layouts/<section>/page.html`, includes are `layouts/_partials/`, list
+  pages are `layouts/_partials/lists/`), then `git rm` the Jekyll file to
+  resolve.
 
-CI (`.github/workflows/hugo-poc.yml`) builds the POC on every pull request
-alongside the Jekyll build, runs `make check-redirects`, and then checks the
-output (below). It caches `resources/_gen` (processed images) the way
-`pages.yml` caches `_site/assets/thumbs`. Nothing is deployed.
+Fixes to the live-site bugs in
+[`plans/2026-10-29-jekyll-site-bug-log.md`](plans/2026-10-29-jekyll-site-bug-log.md)
+are made in Jekyll on `main`; v2 already avoids all of them, so resolve those
+conflicts in favour of v2.
 
-### Output checks
+## Switching to Hugo
 
-```bash
-python3 hugo-poc/check_output.py              # after `hugo` in hugo-poc/
-```
-
-Standard-library Python, run against `public/`. It fails on:
-- JSON-LD that doesn't parse, meetup pages without a complete `Event`, or
-  literal HTML entities in JSON-LD strings
-- a `feed.xml` that isn't Atom, entries missing a field or with a link to a
-  page that wasn't built, or literal entities in summaries; a missing feed
-  discovery link
-- a `_redirects` target that wasn't built, an old URL that neither a
-  redirect stub nor the `404.html` map forwards to the same target, or a
-  `_data/redirects.csv` row missing from `_redirects`
-- internal `href`, `src`, `srcset`, `og:image` or `twitter:image` URLs that
-  don't resolve (case-sensitively, as on a web host)
-- double-escaped entities such as `&amp;rsquo;` in any page
-
-CI also runs [Pa11y](https://pa11y.org/) (WCAG 2 AA) on one page of each
-type, listed in `.pa11yci.json`. Locally:
-
-```bash
-python3 -m http.server 8080 -d hugo-poc/public &
-npx pa11y-ci@4.1.1 --config hugo-poc/.pa11yci.json
-```
+1. Pause template changes on `main`. Merge `main` into `v2` one last time;
+   CI must pass.
+2. Tag the last Jekyll commit on `main` as `v1.0.0`.
+3. Open a pull request from `v2` to `main` and merge it with a merge commit
+   (not squash), so both histories are kept. `pages.yml` on `main` then
+   builds and deploys with Hugo.
+4. Check the deploy: run `make check`, open a few pages of each type, and try
+   old URLs (`/people/Lilly%20Tong/`, `/hacknights/1/`, a dated blog URL).
+5. Tag `v2.0.0`, with release notes covering the URL changes and the new
+   requirements (Hugo instead of Ruby).
+6. Remove `v2` from the branches in `ci.yml` and delete the branch.
+7. Start the archive refactor; each `ARCHIVE-COMPAT` entry below lists the
+   archive change that retires it.
 
 ## Build time (measured 2026-10-29, Apple Silicon, Ruby 3.2.2, Hugo 0.169.0)
 
@@ -86,7 +107,7 @@ Comparing the two builds turned up 14 bugs in the live site, including
 invalid JSON-LD on every meetup page, venue and organization list pages
 missing most entries, and `og:image` URLs that 404. They are logged, with
 cause, evidence and suggested fix, in
-[`docs/plans/2026-10-29-jekyll-site-bug-log.md`](../docs/plans/2026-10-29-jekyll-site-bug-log.md).
+[`plans/2026-10-29-jekyll-site-bug-log.md`](plans/2026-10-29-jekyll-site-bug-log.md).
 The Hugo build avoids all of them.
 
 ## What's mounted
@@ -96,13 +117,12 @@ The Hugo build avoids all of them.
 | `archives/_meetups` | `content/events` | `/events/:file/` |
 | `archives/_people`, `_projects`, `_venues`, `_organizations`, `_announcements`, `_resources` | `content/<collection>` | `/<collection>/:file/` |
 | `archives/images/events` | `assets/images/events` | processed by Hugo's image pipeline |
-| `_data/redirects.csv` | `assets/redirects.csv` | one redirect page per row |
 | `archives/_people`, `_projects`, `_organizations` (again) | `assets/sources/…` | raw sources, read for `social` key order |
-| `_pages/code-of-conduct.md`, `get-involved.md`; `_pages/feedback.md` | `content/…`; `content/feedback.html` | site pages without Liquid |
-| `_data`, `_includes/icons`, `_includes/logo.svg`, `assets/css`, `assets/js`, `assets/images`, `llms.txt` | data / assets / static | shared with the Jekyll site |
+| `static/assets/images/organizations` | `assets/org-logos` | so `og:image` can check a logo exists |
 
-Files in `hugo-poc/content/` are Hugo-only: section titles (`_index.md`),
-the home page title, and the shortcode version of `about-us.md`.
+Everything else is in Hugo's usual directories: `content/` (site pages,
+section titles in `_index.md`), `data/`, `assets/` (icons, logo,
+`redirects.csv`) and `static/`.
 
 ## How the Jekyll behaviour maps
 
@@ -114,14 +134,14 @@ the home page title, and the shortcode version of `about-us.md`.
   `backlinks.html` then does a map lookup. Jekyll's `backlinks.html` rescans
   every meetup and project for each of the ~1,400 pages that include it,
   which is most of its cached build time.
-- **Redirects.** These come from `_data/redirects.csv`, not from the
+- **Redirects.** These come from `assets/redirects.csv`, not from the
   archives. The `redirect_from` data in meetups and announcements is
   historical: no dated permalinks after 2025, no `/hacknights/N/` after
-  #530. So it is exported with `ruby _scripts/redirects.rb export`, and the
-  CSV is owned by this repo. `make check-redirects` fails if the archives
-  ever add a `redirect_from` the CSV lacks. Each `to` is either a site path
-  (`/events/`, used for the three rows added by hand from `_pages`) or an
-  archive record (`_meetups/99.md`). `_partials/redirect-target.html`
+  #530. So it was exported once into the CSV, which this repo owns. The
+  build stops if the archives ever add a `redirect_from` the CSV lacks
+  (`_partials/check-redirect-from.html`). Each `to` is either a site path
+  (`/events/`, used for the three rows added by hand from the site pages) or
+  an archive record (`_meetups/99.md`). `_partials/redirect-target.html`
   resolves a record to its page's current URL, and an unresolvable record
   fails the build. That way the CSV doesn't depend on a URL scheme: the two
   announcements whose URLs change in Hugo are redirected to the new URLs
@@ -181,16 +201,15 @@ the home page title, and the shortcode version of `about-us.md`.
   makes that comparison inconsistent, so its result depends on Ruby's sort
   internals. Open and featured projects are listed by path here.
 - **Home and site pages.** `layouts/home.html` ports `_pages/index.md` and
-  the announcement bar. `code-of-conduct.md` and `get-involved.md` have no
-  Liquid and are mounted from `_pages/` as they are. `feedback.md` is HTML in
-  a `.md` file whose indented form markup would become code blocks under
-  CommonMark, so it is mounted as `feedback.html` (this needs
+  the announcement bar. `code-of-conduct.md` and `get-involved.md` had no
+  Liquid and moved to `content/` as they were. `feedback.md` is HTML in a
+  `.md` file whose indented form markup would become code blocks under
+  CommonMark, so it is `content/feedback.html` (this needs
   `security.allowContent` to allow `text/html`). Its one Liquid value, the
-  feedback token, comes from `HUGO_PARAMS_FEEDBACKTOKEN`. `about-us.md`
-  embeds two Liquid loops in its prose. `sync-about-us.rb` writes
-  `content/about-us.md` from it, with the `featured-speakers` and
-  `featured-supporters` shortcodes in their place. Until the Jekyll site is
-  retired, re-run it after editing the Jekyll page.
+  feedback token, is the `feedback-token` shortcode, set from
+  `HUGO_PARAMS_FEEDBACKTOKEN`. `about-us.md` embedded two Liquid loops in its
+  prose; `content/about-us.md` has the `featured-speakers` and
+  `featured-supporters` shortcodes in their place.
 - **Feed, sitemap and other files.** These are output formats of the home
   page in `hugo.toml`. `feed.xml` (`home.feed.xml`) ports the hand-rolled
   Atom feed of the 25 latest meetups: titles, dates, authors, categories and
@@ -235,7 +254,7 @@ Checked against `_site/`:
 - the sitemap's URL set
 
 These comparisons were one-off scripts and aren't committed, because they
-need a Jekyll build; the output checks above guard the Hugo side.
+need a Jekyll build; `scripts/check_output.py` guards the Hugo side.
 
 A visual review in Chrome (2026-10-30) compared one page of every type,
 every list page, the tag and category indexes and the site pages with
@@ -272,7 +291,7 @@ Apart from the deliberate fixes described above, this is what remains.
   "ASL19"). Jekyll titleizes the slug ("Ghazaleh mohseni", "Asl19").
 - **Image `alt` and `sizes`.** Jekyll's meetup layout passes `event.topic`,
   which is undefined, so `alt` is empty. Its `sizes` attribute is malformed.
-  The POC emits the topic and a valid `sizes`.
+  Hugo emits the topic and a valid `sizes`.
 - **JSON-LD** is built as a map and serialized with `jsonify`. Jekyll's
   hand-assembled meetup JSON-LD is missing a closing brace and fails to parse
   on every meetup page.
@@ -284,14 +303,13 @@ Apart from the deliberate fixes described above, this is what remains.
 Workarounds are labelled in the code so they can be found and removed:
 
 ```bash
-grep -rn 'ARCHIVE-COMPAT\|JEKYLL-TRANSITION' hugo-poc _scripts Makefile .github
+grep -rn 'ARCHIVE-COMPAT' hugo.toml layouts content scripts .github
 ```
 
 ### `ARCHIVE-COMPAT`: pending the archive refactor
 
 Each of these works around data in the archives submodule. The archive
-change listed would be a breaking change for the Jekyll site, so it's a
-change for the migration. Once it's made, delete the workaround. "New cases"
+change listed would break the Jekyll site, so it's made after the switch. Once it's made, delete the workaround. "New cases"
 says whether a fresh instance of the problem would be caught.
 
 | ID | Problem in the archives | Workaround | Archive change that removes it | New cases |
@@ -309,16 +327,12 @@ says whether a fresh instance of the problem would be caught.
 | `category-shape` | `categories` is a scalar in venues and a list elsewhere, mixes case, and some lists have empty entries | normalized (`_partials/category-values.html`) | lowercase lists, no empty entries | handled |
 | `unnamespaced-categories` | `supporter` (34 organizations), `civictech`, `closed`, `feature`, `school` have no namespace | kept off index pages; no namespace breadcrumb (`_partials/namespaces.html`, `term.html`) | namespace them | handled |
 | `jekyll-content-syntax` | two announcements use Liquid `embed_youtube` includes and a kramdown `{:target}` attribute | translated (`_partials/content.html`) | plain Markdown/HTML | `warnf` at build |
-| `redirect-from` | meetups and announcements carry `redirect_from`, now owned by `_data/redirects.csv` | `redirects.rb export`/`check`, `make check-redirects`, CI step | drop `redirect_from` from the archives | CI fails |
-| `duplicate-redirects` | four old URLs are listed on meetup N and N+1 (299/300, 358/359, 364/365, 366/367) | export picks the meetup the slug names (`_scripts/redirects.rb`) | delete the line from N+1 | export fails |
+| `redirect-from` | meetups and announcements carry `redirect_from`, now owned by `assets/redirects.csv` | build stops on one the CSV lacks (`_partials/check-redirect-from.html`) | drop `redirect_from` from the archives | build fails |
+| `duplicate-redirects` | four old URLs are listed on meetup N and N+1 (299/300, 358/359, 364/365, 366/367) | the CSV maps each to the meetup the slug names | delete the line from N+1 | not checked |
 
-### `JEKYLL-TRANSITION`: until cutover
+### `JEKYLL-TRANSITION`: done on v2
 
-These exist only because Jekyll still publishes the site and shares files
-with Hugo.
-
-| ID | Why | At cutover |
-| --- | --- | --- |
-| `site-pages` | site pages live in `_pages/` for Jekyll: they're mounted, `feedback.md` is mounted as HTML (with `security.allowContent`), and its feedback token is substituted in `_partials/content.html` | move the pages into `content/`, rename `feedback.md` to `.html`, give the token a shortcode |
-| `about-us-copy` | `about-us.md` has Liquid loops, so `sync-about-us.rb` writes a shortcode copy to `content/about-us.md` | keep the copy, delete the script |
-| `footer-order` | `_data/footer_social.yml` is a map for Jekyll's footer include, so its order is read from the raw file | make it a list |
+While Hugo lived beside Jekyll in `hugo-poc/`, three more workarounds
+(`site-pages`, `about-us-copy`, `footer-order`) let the two share files. On
+`v2` the site pages moved into `content/`, `sync-about-us.rb` was deleted,
+and `data/footer_social.yml` became a list, so none remain.
