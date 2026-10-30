@@ -1,8 +1,5 @@
 ---
 title: "Get Involved"
-layout: page
-permalink: "/get-involved/"
-redirect_from: /volunteer-with-us/
 ---
 
 Civic Tech Toronto is bringing together an enthusiastic pack of people, to work together, learn together and create civic tech. There are several ways you can get involved in Civic Tech TO!
