@@ -30,7 +30,7 @@ Requirements:
           <ul>
             {% for item in site.data.navigation.main %}
               <li>
-                <a href="{{ item.url | relative_url }}">
+                <a href="{{ item.url | relative_url }}"{% include nav-aria-current.html url=item.url collection=item.collection %}>
                   {{ item.label }}
                 </a>
               </li>
@@ -71,7 +71,7 @@ Requirements:
     <ul>
       {% for item in site.data.navigation.main %}
         <li>
-          <a href="{{ item.url | relative_url }}">
+          <a href="{{ item.url | relative_url }}"{% include nav-aria-current.html url=item.url collection=item.collection %}>
             {{ item.label }}
           </a>
         </li>
