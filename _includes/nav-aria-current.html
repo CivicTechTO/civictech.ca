@@ -1,0 +1,21 @@
+{%- comment -%}
+Usage:
+  <a href="..."{% include nav-aria-current.html url=item.url collection=item.collection %}>
+
+Prints an aria-current attribute for a navigation link, or nothing:
+  - aria-current="page" when the link points at the page being viewed
+  - aria-current="true" when the link is a collection list (e.g. /events)
+    and the page being viewed is an item inside it (e.g. /events/569/)
+
+Navigation URLs in _data/navigation.yml may omit the trailing slash
+("/about-us") while page permalinks keep it ("/about-us/"), so both are
+compared with a trailing slash.
+{%- endcomment -%}
+{%- assign nav_current_url = include.url | append: '/' | replace: '//', '/' -%}
+{%- assign nav_current_len = nav_current_url | size -%}
+{%- assign nav_current_prefix = page.url | slice: 0, nav_current_len -%}
+{%- if page.url == nav_current_url -%}
+  {{ ' aria-current="page"' }}
+{%- elsif include.collection and nav_current_prefix == nav_current_url -%}
+  {{ ' aria-current="true"' }}
+{%- endif -%}
