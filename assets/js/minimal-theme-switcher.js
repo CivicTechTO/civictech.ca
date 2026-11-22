@@ -51,10 +51,10 @@ const themeSwitcher = {
   },
 
   // Set scheme
+  // "auto" is stored as is, so the site keeps following the OS theme
+  // instead of pinning whichever theme the OS used when it was chosen.
   set scheme(scheme) {
-    if (scheme == "auto") {
-      this._scheme = this.preferredColorScheme;
-    } else if (scheme == "dark" || scheme == "light") {
+    if (scheme == "auto" || scheme == "dark" || scheme == "light") {
       this._scheme = scheme;
     }
     this.applyScheme();
@@ -67,10 +67,14 @@ const themeSwitcher = {
   },
 
   // Apply scheme
+  // With no data-theme attribute, Pico applies prefers-color-scheme itself.
   applyScheme() {
-    document
-      .querySelector("html")
-      ?.setAttribute(this.rootAttribute, this.scheme);
+    const root = document.querySelector("html");
+    if (this.scheme == "auto") {
+      root?.removeAttribute(this.rootAttribute);
+    } else {
+      root?.setAttribute(this.rootAttribute, this.scheme);
+    }
   },
 
   // Store scheme to local storage
