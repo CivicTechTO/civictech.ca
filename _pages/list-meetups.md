@@ -77,7 +77,7 @@ redirect_from: /hacknights/
           {% if event.image %}
             <div class="meetup-thumbnail">
               <a href="{{ event.url }}">
-                {% picture events /events/{{ event.image }} alt="{{ event.topic }}" %}
+                {% picture events /events/{{ event.image }} alt="{{ event.topic | default: event.title | escape }}" %}
               </a>
             </div>
           {% endif %}
@@ -130,7 +130,7 @@ redirect_from: /hacknights/
           {% if event.image %}
             <div class="meetup-thumbnail">
               <a href="{{ event.url }}">
-                {% picture events /events/{{ event.image }} alt="{{ event.topic }}" %}
+                {% picture events /events/{{ event.image }} alt="{{ event.topic | default: event.title | escape }}" %}
               </a>
             </div>
           {% endif %}
