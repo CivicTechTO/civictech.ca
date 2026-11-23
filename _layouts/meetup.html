@@ -89,7 +89,7 @@ layout: base
 
       <aside>
         {% if page.image %}
-          {% picture events /events/{{ page.image }} alt="{{ page.topic | default: page.title | escape }}" class="meetup-image" %}
+          {% picture events /events/{{ page.image }} alt="" class="meetup-image" %}
         {% endif %}
         <h2>Details</h2>
         {% if page.eventUrl %}
